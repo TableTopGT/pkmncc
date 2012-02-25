@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import java.lang.String;
 
-import org.tabletop.pokemon.Charizard;
-
 public class Game implements ApplicationListener {
 	public static int SCREEN_WIDTH = 1280;
 	public static int SCREEN_HEIGHT = 800;
@@ -25,8 +23,6 @@ public class Game implements ApplicationListener {
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
 		menuBatch = new SpriteBatch();
 		mainMenu = new Stage(SCREEN_WIDTH, SCREEN_HEIGHT, false, menuBatch);
-//		Charizard test1 = new Charizard();
-//		test1.element = "lol";
 	}
 
 	@Override
