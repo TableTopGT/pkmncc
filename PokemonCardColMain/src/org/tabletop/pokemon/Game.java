@@ -1,10 +1,12 @@
 package org.tabletop.pokemon;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.audio.Music;
 import java.lang.String;
 
 public class Game implements ApplicationListener {
@@ -15,7 +17,8 @@ public class Game implements ApplicationListener {
 	Stage mainMenu;
 	SpriteBatch menuBatch;
 	Actor startButton, exitButton;
-
+	Music introMusic;
+	
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
@@ -23,6 +26,9 @@ public class Game implements ApplicationListener {
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
 		menuBatch = new SpriteBatch();
 		mainMenu = new Stage(SCREEN_WIDTH, SCREEN_HEIGHT, false, menuBatch);
+		
+		introMusic = Gdx.audio.newMusic(Gdx.files.getFileHandle("music/title.mp3", FileType.Internal));
+		introMusic.play();
 	}
 
 	@Override
