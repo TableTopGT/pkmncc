@@ -12,6 +12,8 @@ public class Player {
 	public Trainer thisTrainer = null;
 	public boolean myTurn = false;
 	
+	public enum EnergyType {FIRE, WATER, FIGHTING, PSYCHIC, LIGHTING, GRASS};
+	
 	public void attack (Player defender){
 		
 	}

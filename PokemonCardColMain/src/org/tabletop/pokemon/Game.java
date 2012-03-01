@@ -30,6 +30,8 @@ public class Game implements ApplicationListener {
 	Texture startScreen, battleScreen;
 	Screen state;
 	
+	
+	
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
@@ -98,14 +100,16 @@ public class Game implements ApplicationListener {
 				//set winner to null
 				winner = null;
 				
-				//create a new battle				
+				/*create a new battle				
 				Battle thisBattle= new Battle();
 				
 				//do nothing until the battle is over
 				do {} while (thisBattle.getBattleOver() == false);
 				
 				//set winner to winner of battle
-				winner = thisBattle.getWinner();
+				winner = thisBattle.getWinner();*/
+				
+				
 				
 				//exit battle case
 				runOnce = false;
