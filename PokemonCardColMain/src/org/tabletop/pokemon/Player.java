@@ -20,13 +20,13 @@ public class Player {
 	public void addCard(Card playedCard){
 
 		if(playedCard instanceof Trainer){
-			addTrainer(playedCard);
+			this.addTrainer( (Trainer) playedCard);
 		}
 		else if(playedCard instanceof Pokemon){
-			addPokemon(playedCard);
+			this.addPokemon( (Pokemon) playedCard);
 		}
 		else if (playedCard instanceof Energy){
-			addEnergy(playedCard);
+			this.addEnergy( (Energy) playedCard);
 		}
 	}
 	

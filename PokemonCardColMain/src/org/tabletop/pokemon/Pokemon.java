@@ -14,7 +14,9 @@ public class Pokemon extends Card {
 	protected String element;
 	protected String evolvePokemon;
 	protected boolean evolvable;
-	public String[] energy;
+	public Energy[] energy;
 	
-	
+	public void main(Player thisPlayer){
+		owner = thisPlayer;
+	}
 }
