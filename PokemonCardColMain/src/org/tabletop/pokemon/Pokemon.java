@@ -1,7 +1,7 @@
 package org.tabletop.pokemon;
 import org.tabletop.pokemon.Player;
 
-public class Pokemon {
+public class Pokemon extends Card {
 	// Pokemon virtual member methods
 	public void ActionOne(Player target){
 		
@@ -14,4 +14,7 @@ public class Pokemon {
 	protected String element;
 	protected String evolvePokemon;
 	protected boolean evolvable;
+	public String[] energy;
+	
+	
 }

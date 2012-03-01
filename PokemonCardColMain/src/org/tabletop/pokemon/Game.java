@@ -19,6 +19,9 @@ public class Game implements ApplicationListener {
 	// State machine variables
 	public enum Screen {START, BATTLE};
 	boolean runOnce = true;
+	Player winner = null; 
+	
+	Battle thisBattle;
 
 	Stage mainMenu;
 	SpriteBatch menuBatch, batch;
@@ -68,6 +71,9 @@ public class Game implements ApplicationListener {
 				batch.draw(startScreen, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 				batch.end();
 				
+				//set winner to null
+				winner = null;
+								
 				runOnce = false;
 			}
 			
@@ -89,6 +95,19 @@ public class Game implements ApplicationListener {
 				batch.draw(battleScreen, SCREEN_WIDTH/2-15, SCREEN_HEIGHT/2-15);
 				batch.end();
 				
+				//set winner to null
+				winner = null;
+				
+				//create a new battle				
+				Battle thisBattle= new Battle();
+				
+				//do nothing until the battle is over
+				do {} while (thisBattle.getBattleOver() == false);
+				
+				//set winner to winner of battle
+				winner = thisBattle.getWinner();
+				
+				//exit battle case
 				runOnce = false;
 			}
 			break;
