@@ -6,6 +6,7 @@ public class RFIDListener {
 		
 		// Reads of the output of the RFID reader
 		RFIDTag = this.getTag();
+		return RFIDTag;
 		}
 	
 	
