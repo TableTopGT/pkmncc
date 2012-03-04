@@ -49,14 +49,11 @@ public class Game implements ApplicationListener {
 		// TODO Auto-generated method stub
 		SCREEN_WIDTH = Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
+		
+		// Import textures
 		prototype = new Texture(Gdx.files.internal("images/badlogic.jpg"));
-		menuBatch = new SpriteBatch();
-//		exitButton = new Button(unpressedRegion, pressedRegion);
-		mainMenu = new Stage(SCREEN_WIDTH, SCREEN_HEIGHT, true, menuBatch);
-		unpressedRegion = new TextureRegion(prototype, 20, 20, prototype.getWidth(), prototype.getHeight());
-		pressedRegion = new TextureRegion(prototype, 20, 20, prototype.getWidth(), prototype.getHeight());
-		startButton = new Button(unpressedRegion, pressedRegion);
-		mainMenu.addActor(startButton);
+		
+		// Create the SpriteBatch
 		batch = new SpriteBatch();
 		
 		// Initialize music
@@ -95,7 +92,6 @@ public class Game implements ApplicationListener {
 				batch.begin();
 				batch.draw(startScreen, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 				batch.end();
-				
 				//set winner to null
 				winner = null;
 								
