@@ -2,22 +2,19 @@ package org.tabletop.pokemon;
 import org.tabletop.pokemon.Pokemon;
 
 public class Charizard extends Pokemon {
-	//element = "red";
-	public void ActionOne(Player target){
+	public void ActionOne(Player target) {
 		target.health = target.health - 5;
 	}
-	public void ActionTwo(Player target){
+	public void ActionTwo(Player target) {
 		
 	}
-	public Charizard(){
+	public Charizard() {
 		element = "red";
 		evolvable = false;
-		evolvePokemon = null;
+		evolution = null;
 	}
-	public Charizard(Player target){
+	public Charizard(Player target) {
+		this();
 		owner = target;
-		element = "red";
-		evolvable = false;
-		evolvePokemon = null;
 	}
 }

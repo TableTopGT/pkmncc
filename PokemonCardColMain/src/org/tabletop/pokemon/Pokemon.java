@@ -1,30 +1,28 @@
 package org.tabletop.pokemon;
 import org.tabletop.pokemon.Player;
 
-public class Pokemon extends Card {
+public abstract class Pokemon extends Card {
 	
-	public enum EnergyType {FIRE, WATER, FIGHTING, PSYCHIC, LIGHTING, GRASS};
-	public EnergyType[] myEnergy;
-	
-	// Pokemon virtual member methods
-	public void ActionOne(Player target){
-		
-	}
-	public void ActionTwo(Player target){
-		
-	}
 	// Pokemon Player Pointer
 	public Player owner;
-	protected String element;
-	protected String evolvePokemon;
-	protected boolean evolvable;
+	public String element;
+	public String evolution;
+	public boolean evolvable;
 	public Energy[] energy;
 	
-	public void main(Player thisPlayer){
+	// Default constructor
+	public Pokemon() {
+	}
+	
+	// Player constructor
+	public Pokemon(Player thisPlayer){
 		owner = thisPlayer;
 	}
 	
-	public void addEnergy(EnergyType addThisEnergy){
-		
+	// Pokemon virtual member methods
+	public abstract void ActionOne(Player target);
+	public abstract void ActionTwo(Player target);
+	
+	public void addEnergy(Energy addThisEnergy){
 	}
 }
