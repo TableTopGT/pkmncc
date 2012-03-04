@@ -29,17 +29,11 @@ public class Game implements ApplicationListener {
 	public enum Screen {START, BATTLE};
 	boolean runOnce = true;
 	Player winner = null; 
-	
-	Battle thisBattle;
 
-	Stage mainMenu;
-	SpriteBatch menuBatch, batch;
-	Button startButton, exitButton;
-	TextureRegion unpressedRegion, pressedRegion;
-	Texture prototype;
-	Texture startscreen;
+	SpriteBatch batch;
+	TextureRegion buttonRegion;
 	Music introMusic, battleMusic;
-	Texture startScreen, battleScreen;
+	Texture startScreen, startButton, exitButton;
 	Screen state;
 	
 	
@@ -50,25 +44,22 @@ public class Game implements ApplicationListener {
 		SCREEN_WIDTH = Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
 		
-		// Import textures
-		prototype = new Texture(Gdx.files.internal("images/badlogic.jpg"));
-		
 		// Create the SpriteBatch
 		batch = new SpriteBatch();
 		
 		// Initialize music
 		battleMusic = Gdx.audio.newMusic(Gdx.files.getFileHandle("music/25.mp3", FileType.Internal));
 
-		// Initialize textures (seems to dislike pngs)
-		startScreen =  new Texture(Gdx.files.internal("images/badlogic.jpg"));
-		battleScreen =  new Texture(Gdx.files.internal("images/pikachu.jpg"));
+		// Initialize Textures
+		startScreen =  new Texture(Gdx.files.internal("images/background.jpg"));
+		startButton =  new Texture(Gdx.files.internal("images/diabetesbluecircle.png"));
+		exitButton = new Texture(Gdx.files.internal("images/pikachu.jpg"));
+		buttonRegion = new TextureRegion(startScreen, startScreen.getWidth(), startScreen.getHeight());
 		
 		introMusic = Gdx.audio.newMusic(Gdx.files.getFileHandle("music/title.mp3", FileType.Internal));
 
 		// Initialize display screen
 		state = Screen.START;
-		// Above stage and button code is useless for now, ignore, below this line is new approach
-		//------------------------------------------------------------------------
 	}
 
 	@Override
@@ -80,8 +71,7 @@ public class Game implements ApplicationListener {
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		mainMenu.draw();
+//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		switch (state) {
 		case START:
 			if (runOnce) {
@@ -90,7 +80,9 @@ public class Game implements ApplicationListener {
 				
 				// Draw start screen
 				batch.begin();
-				batch.draw(startScreen, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+				batch.draw(startScreen, 1, 1);
+				batch.draw(startButton, (SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)+100);
+				batch.draw(startButton, (SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)-300);
 				batch.end();
 				//set winner to null
 				winner = null;
@@ -113,7 +105,7 @@ public class Game implements ApplicationListener {
 				
 				// Draw battle screen
 				batch.begin();
-				batch.draw(battleScreen, SCREEN_WIDTH/2-15, SCREEN_HEIGHT/2-15);
+				batch.draw(exitButton, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 				batch.end();
 				
 				//set winner to null
@@ -153,8 +145,6 @@ public class Game implements ApplicationListener {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		prototype.dispose();
-		mainMenu.dispose();
 	}
 
 }
