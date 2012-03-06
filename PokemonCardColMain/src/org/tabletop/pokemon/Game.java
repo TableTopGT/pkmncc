@@ -86,8 +86,8 @@ public class Game implements ApplicationListener {
 		// TODO Auto-generated method stub
 		switch (state) {
 		case START:
-			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			if (runOnce) {
+				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 				runOnce = false;
 				// Play music
 				introMusic.play();
