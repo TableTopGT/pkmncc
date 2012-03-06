@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -35,6 +37,8 @@ public class Game implements ApplicationListener {
 	Music introMusic, battleMusic;
 	Texture startScreen, startButton, exitButton;
 	Screen state;
+	Rectangle startBound, exitBound;
+	Vector3 touchPoint;
 	
 	
 	
@@ -43,6 +47,9 @@ public class Game implements ApplicationListener {
 		// TODO Auto-generated method stub
 		SCREEN_WIDTH = Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
+		
+		// Init. touchPoint
+		touchPoint = new Vector3();
 		
 		// Create the SpriteBatch
 		batch = new SpriteBatch();
@@ -57,6 +64,9 @@ public class Game implements ApplicationListener {
 		buttonRegion = new TextureRegion(startScreen, startScreen.getWidth(), startScreen.getHeight());
 		
 		introMusic = Gdx.audio.newMusic(Gdx.files.getFileHandle("music/title.mp3", FileType.Internal));
+		
+		// Intitialize Button Touch Boundaries
+		startBound = new Rectangle((SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)+100, startButton.getWidth(), startButton.getHeight());
 
 		// Initialize display screen
 		state = Screen.START;
