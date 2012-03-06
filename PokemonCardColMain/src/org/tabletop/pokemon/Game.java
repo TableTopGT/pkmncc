@@ -6,6 +6,7 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,6 +33,7 @@ public class Game implements ApplicationListener {
 	boolean runOnce = true;
 	Player winner = null; 
 
+	OrthographicCamera guiCam;
 	SpriteBatch batch;
 	TextureRegion buttonRegion;
 	Music introMusic, battleMusic;
@@ -48,7 +50,7 @@ public class Game implements ApplicationListener {
 		SCREEN_WIDTH = Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
 		
-		// Init. touchPoint
+		// Init. touchPoint and Button Boundaries
 		touchPoint = new Vector3();
 		
 		// Create the SpriteBatch
@@ -67,9 +69,13 @@ public class Game implements ApplicationListener {
 		
 		// Intitialize Button Touch Boundaries
 		startBound = new Rectangle((SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)+100, startButton.getWidth(), startButton.getHeight());
-
+		exitBound = new Rectangle((SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)-300, startButton.getWidth(), startButton.getHeight());
+		
 		// Initialize display screen
 		state = Screen.START;
+		
+		guiCam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+		guiCam.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
 	}
 
 	@Override
@@ -96,8 +102,16 @@ public class Game implements ApplicationListener {
 				batch.end();
 				//set winner to null
 				winner = null;
-								
+			
 				runOnce = false;
+				
+				if (Gdx.input.justTouched()) {
+                    guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+                    if (OverlapTester.pointInRectangle(startBound, touchPoint.x, touchPoint.y)) {
+                            return;
+                    }
+				}
 			}
 			
 			// Switch to next screen after 5 seconds
