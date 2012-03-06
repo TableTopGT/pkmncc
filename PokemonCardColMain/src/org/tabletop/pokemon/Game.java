@@ -61,15 +61,15 @@ public class Game implements ApplicationListener {
 
 		// Initialize Textures
 		startScreen =  new Texture(Gdx.files.internal("images/background.jpg"));
-		startButton =  new Texture(Gdx.files.internal("images/diabetesbluecircle.png"));
+		startButton =  new Texture(Gdx.files.internal("images/diabetesbluecircle256.jpg"));
 		exitButton = new Texture(Gdx.files.internal("images/pikachu.jpg"));
 		buttonRegion = new TextureRegion(startScreen, startScreen.getWidth(), startScreen.getHeight());
 		
 		introMusic = Gdx.audio.newMusic(Gdx.files.getFileHandle("music/title.mp3", FileType.Internal));
 		
 		// Intitialize Button Touch Boundaries
-		startBound = new Rectangle((SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)+100, startButton.getWidth(), startButton.getHeight());
-		exitBound = new Rectangle((SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)-300, startButton.getWidth(), startButton.getHeight());
+		startBound = new Rectangle(640-(startButton.getWidth())/2, 40, startButton.getWidth(), startButton.getHeight());
+		exitBound = new Rectangle(640-(startButton.getWidth())/2, 400-300, startButton.getWidth(), startButton.getHeight());
 		
 		// Initialize display screen
 		state = Screen.START;
@@ -94,9 +94,9 @@ public class Game implements ApplicationListener {
 				
 				// Draw start screen
 				batch.begin();
-				batch.draw(startScreen, 1, 1);
-				batch.draw(startButton, (SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)+100);
-				batch.draw(startButton, (SCREEN_WIDTH/2)-(startButton.getWidth())/2, (SCREEN_HEIGHT/2)-300);
+//				batch.draw(startScreen, 0, 0);
+				batch.draw(startButton, 640-(startButton.getWidth())/2, 400+100);
+				batch.draw(startButton, 640-(startButton.getWidth())/2, 400-300);
 				batch.end();
 				//set winner to null
 				winner = null;
@@ -106,7 +106,7 @@ public class Game implements ApplicationListener {
 		    	touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
 		        lastTouchX = Gdx.input.getX();
 		        lastTouchY = Gdx.input.getY();
-		        if(OverlapTester.pointInRectangle(startBound, touchPoint)){
+		        if(OverlapTester.pointInRectangle(640-(startButton.getWidth())/2, 400+100, startButton, touchPoint.x, touchPoint.y)){
 					introMusic.stop();
 					state = Screen.BATTLE;
 					runOnce = true;
@@ -117,7 +117,7 @@ public class Game implements ApplicationListener {
 		    	touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
 		        lastTouchX = Gdx.input.getX();
 		        lastTouchY = Gdx.input.getY();
-		        if(OverlapTester.pointInRectangle(startBound, touchPoint)){
+		        if(OverlapTester.pointInRectangle(640-(startButton.getWidth())/2, 400+100, startButton, touchPoint.x, touchPoint.y)){
 					introMusic.stop();
 					state = Screen.BATTLE;
 					runOnce = true;

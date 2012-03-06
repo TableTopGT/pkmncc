@@ -16,6 +16,7 @@
 
 package org.tabletop.pokemon;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -32,7 +33,10 @@ public class OverlapTester {
         }
 
         public static boolean pointInRectangle (Rectangle r, float x, float y) {
-                return r.x <= x && r.x + r.width >= x && r.y <= y && r.y + r.height >= y;
+                return r.x <= x && (r.x + r.width) >= x && r.y <= y && (r.y + r.height) >= y;
+        }
+        public static boolean pointInRectangle (float rx, float ry, Texture text, float x, float y) {
+        		return rx <= x && (rx + text.getWidth()) >= x && ry <= y && (ry + text.getHeight()) >= y;
         }
 }
 
