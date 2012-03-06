@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,26 +22,25 @@ import java.lang.String;
 public class Game implements ApplicationListener {
 	public static int SCREEN_WIDTH = 1280;
 	public static int SCREEN_HEIGHT = 800;
-	private static String buttonOne = "startButton";
     /** flag indicating whether we were initialized already **/
     private boolean isInitialized = false;
 
     /** the current screen **/
     private Screen screen;
+    int lastTouchX, lastTouchY;
 	
 	// State machine variables
 	public enum Screen {START, BATTLE};
 	boolean runOnce = true;
 	Player winner = null; 
 
-	OrthographicCamera guiCam;
 	SpriteBatch batch;
 	TextureRegion buttonRegion;
 	Music introMusic, battleMusic;
 	Texture startScreen, startButton, exitButton;
 	Screen state;
 	Rectangle startBound, exitBound;
-	Vector3 touchPoint;
+	Vector2 touchPoint;
 	
 	
 	
@@ -51,7 +51,7 @@ public class Game implements ApplicationListener {
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
 		
 		// Init. touchPoint and Button Boundaries
-		touchPoint = new Vector3();
+		touchPoint = new Vector2();
 		
 		// Create the SpriteBatch
 		batch = new SpriteBatch();
@@ -73,9 +73,6 @@ public class Game implements ApplicationListener {
 		
 		// Initialize display screen
 		state = Screen.START;
-		
-		guiCam = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-		guiCam.position.set(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
 	}
 
 	@Override
@@ -87,10 +84,11 @@ public class Game implements ApplicationListener {
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
-//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		switch (state) {
 		case START:
+			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			if (runOnce) {
+				runOnce = false;
 				// Play music
 				introMusic.play();
 				
@@ -102,24 +100,30 @@ public class Game implements ApplicationListener {
 				batch.end();
 				//set winner to null
 				winner = null;
-			
-				runOnce = false;
-				
-				if (Gdx.input.justTouched()) {
-                    guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-
-                    if (OverlapTester.pointInRectangle(startBound, touchPoint.x, touchPoint.y)) {
-                            return;
-                    }
-				}
 			}
 			
-			// Switch to next screen after 5 seconds
-			if (introMusic.getPosition() > 5) {
-				introMusic.stop();
-				state = Screen.BATTLE;
-				runOnce = true;
-			}
+		    if (Gdx.input.justTouched()) {
+		    	touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
+		        lastTouchX = Gdx.input.getX();
+		        lastTouchY = Gdx.input.getY();
+		        if(OverlapTester.pointInRectangle(startBound, touchPoint)){
+					introMusic.stop();
+					state = Screen.BATTLE;
+					runOnce = true;
+	            	return;
+		        }
+		    }
+		    else if (Gdx.input.isTouched()) {
+		    	touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
+		        lastTouchX = Gdx.input.getX();
+		        lastTouchY = Gdx.input.getY();
+		        if(OverlapTester.pointInRectangle(startBound, touchPoint)){
+					introMusic.stop();
+					state = Screen.BATTLE;
+					runOnce = true;
+	            	return;
+		        }
+		    }
 			break;
 		case BATTLE:
 			if (runOnce) {
