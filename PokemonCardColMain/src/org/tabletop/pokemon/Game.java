@@ -68,7 +68,7 @@ public class Game implements ApplicationListener {
 		introMusic = Gdx.audio.newMusic(Gdx.files.getFileHandle("music/title.mp3", FileType.Internal));
 		
 		// Intitialize Button Touch Boundaries
-		startBound = new Rectangle(640-(startButton.getWidth())/2, 40, startButton.getWidth(), startButton.getHeight());
+		startBound = new Rectangle(640-(startButton.getWidth())/2, 400+100, startButton.getWidth(), startButton.getHeight());
 		exitBound = new Rectangle(640-(startButton.getWidth())/2, 400-300, startButton.getWidth(), startButton.getHeight());
 		
 		// Initialize display screen
@@ -106,7 +106,7 @@ public class Game implements ApplicationListener {
 		    	touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
 		        lastTouchX = Gdx.input.getX();
 		        lastTouchY = Gdx.input.getY();
-		        if(OverlapTester.pointInRectangle(640-(startButton.getWidth())/2, 400+100, startButton, touchPoint.x, touchPoint.y)){
+		        if(OverlapTester.pointInRectangle(startBound, touchPoint)){
 					introMusic.stop();
 					state = Screen.BATTLE;
 					runOnce = true;
@@ -117,7 +117,7 @@ public class Game implements ApplicationListener {
 		    	touchPoint.set(Gdx.input.getX(), Gdx.input.getY());
 		        lastTouchX = Gdx.input.getX();
 		        lastTouchY = Gdx.input.getY();
-		        if(OverlapTester.pointInRectangle(640-(startButton.getWidth())/2, 400+100, startButton, touchPoint.x, touchPoint.y)){
+		        if(OverlapTester.pointInRectangle(startBound, touchPoint)){
 					introMusic.stop();
 					state = Screen.BATTLE;
 					runOnce = true;
