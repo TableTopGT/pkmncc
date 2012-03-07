@@ -1,20 +1,25 @@
 package org.tabletop.pokemon;
-import org.tabletop.pokemon.Pokemon;
+
 
 public class Charmander extends Pokemon {
-	public void ActionOne(Player target) {
-		
-	}
-	public void ActionTwo(Player target) {
-		
-	}
+
 	public Charmander() {
-		element = "red";
+		type = PokemonType.FIRE;
 		evolvable = true;
-		evolution = "Charizard";
+		evolution = "Charmeleon";
 	}
+	
 	public Charmander(Player target) {
 		this();
 		owner = target;
 	}
+
+	public void actionOne(Player target) {
+		target.health = target.health - 5;
+	}
+	
+	public void actionTwo(Player target) {
+		target.health = target.health - 5;
+	}
+	
 }

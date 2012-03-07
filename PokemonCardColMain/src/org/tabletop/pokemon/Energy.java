@@ -1,21 +1,18 @@
 package org.tabletop.pokemon;
-//this is a class to create energy cards
+
 public class Energy extends Card {
 
-	public enum EnergyType {FIRE, WATER, FIGHTING, PSYCHIC, LIGHTING, GRASS};
+	public static enum EnergyType {GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
 	
-	public EnergyType thisType;
+	private EnergyType type;
 
-	
-	//returns the type of energy
-	public EnergyType getType(){
-		return thisType;
+	public EnergyType getType() {
+		return type;
 	}
 
-	
-	//sets the energy to a specified type and return the Energy object
-	public Energy setType (EnergyType aType){	
-		thisType = aType;
+	// setter returns this for chaining
+	public Energy setType(EnergyType aType) {	
+		type = aType;
 		return this;
 	}
 
