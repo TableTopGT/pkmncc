@@ -3,7 +3,9 @@ package org.tabletop.pokemon;
 public class Charizard extends Pokemon {
 
 	public Charizard() {
+		super();
 		type = PokemonType.FIRE;
+		basic = false;
 		evolvable = false;
 		evolution = null;
 	}

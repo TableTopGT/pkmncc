@@ -4,7 +4,9 @@ package org.tabletop.pokemon;
 public class Charmeleon extends Pokemon {
 
 	public Charmeleon() {
+		super();
 		type = PokemonType.FIRE;
+		basic = false;
 		evolvable = true;
 		evolution = "Charizard";
 	}
