@@ -1,5 +1,8 @@
 package org.tabletop.pokemon;
 
+import org.tabletop.pokemon.pokedex.*;
+
+
 public class RFIDListener {
 	public static String RFIDTag;
 	public String getTag() {

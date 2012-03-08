@@ -1,4 +1,8 @@
-package org.tabletop.pokemon;
+package org.tabletop.pokemon.pokedex;
+
+import org.tabletop.pokemon.Player;
+import org.tabletop.pokemon.Pokemon;
+import org.tabletop.pokemon.Pokemon.PokemonType;
 
 public class Charizard extends Pokemon {
 

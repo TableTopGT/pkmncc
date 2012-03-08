@@ -1,5 +1,7 @@
-package org.tabletop.pokemon;
+package org.tabletop.pokemon.pokedex;
 
+import org.tabletop.pokemon.Player;
+import org.tabletop.pokemon.Pokemon;
 import org.tabletop.pokemon.Energy.*;
 
 public class Charmander extends Pokemon {
