@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.tabletop.pkmcc.Game"
+            android:name="org.tabletop.pkmncc.Game"
             android:label="@string/gamescreen_name">
         </activity>
     </application>

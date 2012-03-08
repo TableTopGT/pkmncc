@@ -1,4 +1,4 @@
-package org.tabletop.pkmcc;
+package org.tabletop.pkmncc;
 
 import org.tabletop.poke.R;
 

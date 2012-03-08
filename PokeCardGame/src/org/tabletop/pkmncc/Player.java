@@ -1,4 +1,4 @@
-package org.tabletop.pkmcc;
+package org.tabletop.pkmncc;
 
 public class Player {
 	public int health;

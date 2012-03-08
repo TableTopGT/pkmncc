@@ -1,8 +1,8 @@
 package org.tabletop.pkmncc.pokedex;
 
-import org.tabletop.pkmcc.Player;
-import org.tabletop.pkmcc.Pokemon;
-import org.tabletop.pkmcc.Pokemon.PokemonType;
+import org.tabletop.pkmncc.Player;
+import org.tabletop.pkmncc.Pokemon;
+import org.tabletop.pkmncc.Pokemon.PokemonType;
 
 
 public class Charmeleon extends Pokemon {
