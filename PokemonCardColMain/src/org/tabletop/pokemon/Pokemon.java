@@ -97,6 +97,10 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
+	public void removeEnergy() {
+		energy.remove(1);
+	}
+	
 	public void removeEnergy(Energy energyCard) {
 		energy.remove(energyCard);
 	}
