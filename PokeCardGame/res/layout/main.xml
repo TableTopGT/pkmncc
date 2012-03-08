@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@raw/background"
+    android:background="@raw/pikabackground"
     android:padding="20dip"
     >
     <LinearLayout
