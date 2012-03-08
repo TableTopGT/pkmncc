@@ -4,7 +4,7 @@ import org.tabletop.pkmncc.Pokemon.PokemonStatus;
 
 public class Player {
 
-	public int card;
+	public int card, health;
 	public Pokemon holder; //used for switching array positions (active <--> benched)
 	public Player otherPlayer;
 	public int i; //generic counter
