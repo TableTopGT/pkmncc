@@ -23,12 +23,12 @@ public class Charmander extends Pokemon {
 
 	public void actionOne(Player target) {
 		if (energy.contains(EnergyType.COLORLESS))
-			target.health -= action1.baseAttack;
+			target.pokeArr[0].removeHP(action1.baseAttack);
 	}
 	
 	public void actionTwo(Player target) {
 		if (energy.contains(EnergyType.COLORLESS) && energy.contains(EnergyType.FIRE))
-			target.health -= action2.baseAttack;
+			target.pokeArr[0].removeHP(action2.baseAttack);
 	}
 	
 }
