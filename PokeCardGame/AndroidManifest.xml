@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.tabletop.poke"
+    package="org.tabletop.pkmncc"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.tabletop.pkmncc.Game"
+            android:name=".Game"
             android:label="@string/gamescreen_name">
         </activity>
     </application>
