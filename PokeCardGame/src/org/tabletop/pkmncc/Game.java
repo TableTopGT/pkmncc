@@ -1,6 +1,6 @@
 package org.tabletop.pkmncc;
 
-import org.tabletop.poke.R;
+import org.tabletop.pkmncc.R;
 
 import android.app.Activity;
 import android.content.Context;
