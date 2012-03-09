@@ -36,43 +36,35 @@ public class RFIDListener {
 			thisCardType = CardType.POKEMONCARD;
 		}
 		else if (RFIDTag == "0444444440"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.COLORLESS);
+			newCard = new Energy(EnergyType.COLORLESS);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0555555550"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.DARKNESS);
+			newCard = new Energy(EnergyType.DARKNESS);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0666666660"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.FIGHTING);
+			newCard = new Energy(EnergyType.FIGHTING);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0777777770"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.FIRE);
+			newCard = new Energy(EnergyType.FIRE);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0888888880"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.GRASS);
+			newCard = new Energy(EnergyType.GRASS);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0999999990"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.LIGHTNING);
+			newCard = new Energy(EnergyType.LIGHTNING);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0121212120"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.METAL);
+			newCard = new Energy(EnergyType.METAL);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0131313130"){
-			newCard = new Energy();
-			((Energy) newCard).setType(EnergyType.WATER);
+			newCard = new Energy(EnergyType.WATER);
 			thisCardType = CardType.ENERGYCARD;
 		}
 		else if (RFIDTag == "0141414140"){
