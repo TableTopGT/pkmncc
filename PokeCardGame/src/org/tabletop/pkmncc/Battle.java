@@ -4,6 +4,7 @@ public class Battle {
 	public Player player1;
 	public Player player2;
 	public Player winner = null;
+	public RFIDListener cardListener;
 	
 	
 	public Battle(){
