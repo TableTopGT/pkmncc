@@ -33,9 +33,9 @@ public abstract class Pokemon extends Card {
 		// Give default values for weakness and resistance
 		public DefenseDesc(PokemonType weakness, int multAdder, PokemonType resistance, int subtracter) {
 			this.weakness = weakness;
-			this.multAdder = (multAdder > 0) ? multAdder : 2;
+			this.multAdder = (multAdder > 2) ? multAdder : 2;
 			this.resistance = resistance; 
-			this.subtracter = (subtracter > 0) ? subtracter : 30;
+			this.subtracter = (subtracter >= 10) ? subtracter : 30;
 		}
 
 	}
