@@ -1,12 +1,8 @@
 package org.tabletop.pkmncc.pokedex;
 
-import java.util.ArrayList;
-
-import org.tabletop.pkmncc.Energy;
 import org.tabletop.pkmncc.Energy.EnergyType;
 import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.Pokemon;
-import org.tabletop.pkmncc.Energy.*;
 
 public class Charmander extends Pokemon {
 
@@ -16,24 +12,22 @@ public class Charmander extends Pokemon {
 		basic = true;
 		evolvable = true;
 		evolution = "Charmeleon";
-		action1 = new ActionDesc("Scratch", 10);
-		action2 = new ActionDesc("Ember", 30);
+		action1 = new ActionDesc("Scratch", 10, EnergyType.COLORLESS);
+		action2 = new ActionDesc("Ember", 30, EnergyType.COLORLESS, EnergyType.FIRE);
 		defense = new DefenseDesc(PokemonType.WATER, 0, PokemonType.NONE, 0);
 	}
 	
-	public Charmander(Player target) {
+	public Charmander(Player owner) {
 		this();
-		owner = target;
+		this.owner = owner;
 	}
 
 	public void actionOne(Player target) {
-		if (energy.contains(EnergyType.COLORLESS))
-			attack(target, action1);
+		attack(target, action1);
 	}
 	
 	public void actionTwo(Player target) {
-		if (energy.contains(EnergyType.COLORLESS) && energy.contains(EnergyType.FIRE))
-			attack(target, action2);
+		attack(target, action2);
 	}
 	
 }

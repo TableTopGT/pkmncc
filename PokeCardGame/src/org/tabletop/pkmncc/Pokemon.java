@@ -17,8 +17,8 @@ public abstract class Pokemon extends Card {
 		public ArrayList<Energy> energyCost;
 		public String actionName;
 		public int baseAttack;
-		public ActionDesc(String actionName, int baseAttack) {
-			this.energyCost = null;
+		public ActionDesc(String actionName, int baseAttack, Energy.EnergyType... energyCost) {
+			this.energyCost = Energy.listFromArray(energyCost);
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
 		}
@@ -60,21 +60,21 @@ public abstract class Pokemon extends Card {
 	
 	
 	
-	// Constructors
+	/* Constructors */
 	public Pokemon() {
-		energy = new ArrayList<Energy>();
-		status = new PokemonStatus[3];
+		this.energy = new ArrayList<Energy>();
+		this.status = new PokemonStatus[3];
 		this.healAllStatus();
 	}
 	
-	public Pokemon(Player thisPlayer) {
+	public Pokemon(Player owner) {
 		this();
-		owner = thisPlayer;
+		this.owner = owner;
 	}
 	
 	
 	
-	// Abstract attack/ability methods
+	/* Abstract attack/ability methods */
 	public abstract void actionOne(Player target);
 	
 	public abstract void actionTwo(Player target);
@@ -101,7 +101,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Battle centered methods */
-	
 	// Determine if a pokemon can attack or retreat
 	public boolean canMove() {
 		return (status[0] != PokemonStatus.ASLEEP) && (status[0] != PokemonStatus.PARALYZED);
@@ -113,21 +112,29 @@ public abstract class Pokemon extends Card {
 
 	public int attack(Player opponent, ActionDesc action) {
 		// if we can move and not get hurt by our confusion
-		if (this.canMove() && !this.confusedEffect()) {
-			Pokemon enemy = opponent.pokeArr[0];
-			if (enemy.defense.weakness == this.type) {
-				if (defense.multAdder > 10)
-					return enemy.removeHP(action.baseAttack+defense.multAdder);
-				else
-					return enemy.removeHP(action.baseAttack*defense.multAdder);
-			} 
-			else if (enemy.defense.resistance == this.type)
-				return enemy.removeHP(action.baseAttack - defense.subtracter);
-			else
-				return enemy.removeHP(action.baseAttack);
-		} 
-		else
-			return 0;
+		if (energy.containsAll(action.energyCost)) {
+			if (this.canMove()) {
+				if (!this.confusedEffect()) {
+					Pokemon enemy = opponent.pokeArr[0];
+					if (enemy.defense.weakness == this.type) {
+						if (defense.multAdder > 10)
+							return enemy.removeHP(action.baseAttack+defense.multAdder);
+						else
+							return enemy.removeHP(action.baseAttack*defense.multAdder);
+					} 
+					else if (enemy.defense.resistance == this.type)
+						return enemy.removeHP(action.baseAttack - defense.subtracter);
+					else
+						return enemy.removeHP(action.baseAttack);
+				}
+				// Pokemon was hurt by it's confusion!
+				else return 0;
+			}
+			// Pokemon is paralyzed/asleep!
+			else return 0;
+		}
+		// Pokemon doesn't have enough energy!
+		else return 0;
 	}
 	
 	
@@ -160,7 +167,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Status-centered methods */
-	
 	public PokemonStatus[] getStatus() {
 		return status;
 	}
