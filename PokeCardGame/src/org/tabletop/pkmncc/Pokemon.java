@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 public abstract class Pokemon extends Card {
 	
-	// General information about Pokemon
-	// Note: NONE and HEALTHY aren't standard types/statuses
-	public static enum PokemonType {NONE, NORMAL, FIGHTING, FLYING, POISON, GROUND, ROCK, 
-		BUG, GHOST, STEEL, FIRE, WATER, GRASS, ELECTRIC, PSYCHIC, ICE, DRAGON, DARK};
-		
+	// General information about Pokemon		
+	// Note: NONE and HEALTHY aren't standard types/statuses		
+	public static enum PokemonType {NONE, GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
+
 	public static enum PokemonStatus {HEALTHY, ASLEEP, BURNED, CONFUSED, PARALYZED, POISONED};
 	
-
+	public static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
 	// Constant Pokemon characteristics
 	protected class ActionDesc {
