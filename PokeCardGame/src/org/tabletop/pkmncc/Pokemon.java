@@ -203,6 +203,7 @@ public abstract class Pokemon extends Card {
 		status[2] = PokemonStatus.HEALTHY;
 		status[1] = PokemonStatus.HEALTHY;
 		status[0] = PokemonStatus.HEALTHY;
+		oldstatus = PokemonStatus.HEALTHY;
 	}
 	
 	// all statuses except for confused are handled here
@@ -234,12 +235,11 @@ public abstract class Pokemon extends Card {
 				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
 				Condition Paralyzed during the in-between turns phase if your Pokémon
 				was Paralyzed since the beginning of your last turn.*/
-				if (oldstatus == status[0])
+				if (oldstatus == PokemonStatus.PARALYZED)
 					status[0] = PokemonStatus.HEALTHY;
-				else 
-					oldstatus = status[0];
 				break;
 			}
+		oldstatus = status[0];
 	}	 
 	
 	@SuppressWarnings("unused")

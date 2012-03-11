@@ -8,6 +8,8 @@ public class Charmander extends Pokemon {
 
 	public Charmander() {
 		super();
+		HP = 60;
+		retreatCost = 1;
 		type = PokemonType.FIRE;
 		basic = true;
 		evolvable = true;
