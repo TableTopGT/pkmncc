@@ -20,6 +20,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -31,10 +32,12 @@ public class Game extends Activity{
 	public Bitmap battleGround;
 	public AssetManager assetManager;
 	public InputStream inputStream;
-	public Paint dialogBoxPaint;
+	public Paint dialogBoxPaint, dialogButtonPaint;
 	public enum State {START, TURN, END};
 	public State gameState = State.START;
-	public RectF dialogBoxRect;
+	public RectF dialogBoxRect, dialogButton;
+	public float xCoord;
+	public float yCoord;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,11 +58,14 @@ public class Game extends Activity{
         
         // Setup Paint types
         dialogBoxPaint = new Paint();
-        dialogBoxPaint.setARGB(5, 100, 50, 0);
-//        dialogBoxPaint.setColor(Color.RED);
+        dialogButtonPaint = new Paint();
+//        dialogBoxPaint.setARGB(5, 100, 50, 0);
+        dialogBoxPaint.setColor(Color.RED);
+        dialogButtonPaint.setColor(Color.YELLOW);
 //        dialogBoxPaint.setStrokeWidth(5);
 //        dialogBoxPaint.setAntiAlias(false);
-        dialogBoxPaint.setStyle(Paint.Style.FILL);
+        dialogBoxPaint.setStyle(Paint.Style.FILL); 
+        dialogButtonPaint.setStyle(Paint.Style.FILL);
         
         // Setup Asset stream
         assetManager = this.getAssets();
@@ -93,10 +99,11 @@ public class Game extends Activity{
         		canvas.drawBitmap(battleGround, 0, 0, null);
         		
         		// Setup the DialogBox (not finished) and draw it
-        		dialogBoxRect = new RectF();
-        		dialogBoxRect.set((float)(width/2)-300, (float)(height/2)+200, (float)(width/2)+300, (float)(height/2)-200);
+        		dialogBoxRect = new RectF((float)(width/2)-300, (float)(height/2)+200, (float)(width/2)+300, (float)(height/2)-200);
+        		dialogButton = new RectF((float)(width/2)-200, (float)(height/2)-50, (float)(width/2)+200, (float)(height/2)-100);
 //        		canvas.drawRoundRect(dialogBoxRect, 2, 2, dialogBoxPaint);  << Not Working, won't draw, used regular Rect instead
         		canvas.drawRect(dialogBoxRect, dialogBoxPaint);
+        		canvas.drawRect(dialogButton, dialogButtonPaint);
 
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
@@ -114,6 +121,22 @@ public class Game extends Activity{
 	public void onPause(){
 		super.onPause();
 		battleMusic.stop();
+	}
+	
+	// This is called every time a touch occurs on screen, gets coords
+	@Override
+	public boolean onTouchEvent (MotionEvent event){
+		xCoord = event.getRawX();
+		yCoord = event.getRawY();
+		HandleTouch(event);
+		return true;
+	}
+	
+	// Handles a touch on the screen
+	public void HandleTouch(MotionEvent e){
+		if(OverlapTester.pointInRectangle(dialogButton, xCoord, yCoord)){
+			finish();
+		}
 	}
 	
 /*	@Override
