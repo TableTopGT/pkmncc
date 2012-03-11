@@ -78,7 +78,7 @@ public class Player {
 		}
 	}
 	
-	public void endTurn(){
+/*	public void endTurn(){
 		i = 0;
 		//if any of the pokemon are poisoned,subtract from their health 
 		while (i<5){
@@ -88,7 +88,7 @@ public class Player {
 		}
 		thisTrainer = null;
 	}
-	
+*/	
 	public void switchActive(int newActiveIndex){
 		holder = pokeArr[0];
 		pokeArr[0]=pokeArr[newActiveIndex];
