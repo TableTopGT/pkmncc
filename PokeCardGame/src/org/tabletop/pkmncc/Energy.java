@@ -1,8 +1,17 @@
 package org.tabletop.pkmncc;
 
+import java.util.ArrayList;
+
 public class Energy extends Card {
 
 	public static enum EnergyType {GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
+	
+	public static ArrayList<Energy> listFromArray(Energy.EnergyType... input) {
+		ArrayList<Energy> newList = new ArrayList<Energy>();
+		for (EnergyType E : input)
+			newList.add(new Energy(E));
+		return newList;
+	}
 	
 	private EnergyType type;
 	
@@ -14,10 +23,8 @@ public class Energy extends Card {
 		return type;
 	}
 
-	// setter returns this for chaining
-	public Energy setType(EnergyType type) {	
+	public void setType(EnergyType type) {	
 		this.type = type;
-		return this;
 	}
 
 }

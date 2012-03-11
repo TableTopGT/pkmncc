@@ -21,11 +21,9 @@ public class Charmeleon extends Pokemon {
 	}
 
 	public void actionOne(Player target) {
-		target.health = target.health - 5;
 	}
 	
 	public void actionTwo(Player target) {
-		target.health = target.health - 5;
 	}
 	
 }
