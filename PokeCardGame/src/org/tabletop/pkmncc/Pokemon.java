@@ -4,15 +4,22 @@ import java.util.ArrayList;
 
 public abstract class Pokemon extends Card {
 	
-	// General information about Pokemon		
-	// Note: NONE and HEALTHY aren't standard types/statuses		
+	/** 
+	 * Contains all PokemonTCG Types. Type NONE isn't standard 
+	 * and should be used when to handle exceptional cases.
+	 */		
 	public static enum PokemonType {NONE, GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
-
+	
+	/** 
+	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
+	 * "standard" but is implied.
+	 */		
 	public static enum PokemonStatus {HEALTHY, ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
 	
+	/* Not sure if this info is useful yet */
 	public static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
-	// Constant Pokemon characteristics
+	/* Constant Pokemon characteristics */
 	protected class ActionDesc {
 		public ArrayList<Energy> energyCost;
 		public String actionName;
@@ -30,7 +37,7 @@ public abstract class Pokemon extends Card {
 		public PokemonType resistance;
 		public int subtracter;
 		
-		// Give default values for weakness and resistance
+		/* Give default values for weakness and resistance */
 		public DefenseDesc(PokemonType weakness, int multAdder, PokemonType resistance, int subtracter) {
 			this.weakness = weakness;
 			this.multAdder = (multAdder > 2) ? multAdder : 2;
@@ -39,24 +46,28 @@ public abstract class Pokemon extends Card {
 		}
 
 	}
-	protected ActionDesc action1, action2; // Provide default attacks
+	protected ActionDesc action1, action2;
 	protected DefenseDesc defense;
 	protected PokemonType type;
 	protected int retreatCost;
+	
+	/* These fields help determine if a Pokemon can be played */
+	protected boolean basic;
+	protected boolean evolvable;
+	protected String evolution;
+	
 	
 	/* Dynamic Pokemon characteristics */
 	protected Player owner;
 	protected int HP;
 	protected ArrayList<Energy> energy;
-	// status[3] holds three fields 
-	// [ HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
+	
+	/* status[3] holds three fields 
+	 * [HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
+	 */
 	protected PokemonStatus[] status;
 	protected PokemonStatus oldstatus;
-	
-	// These fields help determine if a Pokemon can be played
-	protected boolean basic;
-	protected boolean evolvable;
-	protected String evolution;
+
 	
 	
 	
@@ -101,8 +112,8 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Battle centered methods */
-	// Determine if a pokemon can attack or retreat
-	public boolean canMove() {
+	
+	private boolean canMove() {
 		return (status[0] != PokemonStatus.ASLEEP) && (status[0] != PokemonStatus.PARALYZED);
 	}
 	
@@ -111,7 +122,8 @@ public abstract class Pokemon extends Card {
 	}
 
 	public int attack(Player opponent, ActionDesc action) {
-		// if we can move and not get hurt by our confusion
+		
+		/* If we have energy, can move, and not get hurt by our confusion */
 		if (energy.containsAll(action.energyCost)) {
 			if (this.canMove()) {
 				if (!this.confusedEffect()) {
@@ -143,7 +155,10 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Energy-centered methods */
-	// Use when switching a pokemon from bench to active for Energy display
+	/** 
+	 * Useful for displaying energies after making a Pokemon active.
+	 * @return a list of energies being held
+	 */
 	public ArrayList<Energy> getEnergy() {
 		return energy;
 	}
@@ -152,7 +167,8 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	public void removeEnergy() { //Prototype only function
+	/* Prototype-only function */
+	public void removeEnergy() {
 		energy.remove(1);
 	}
 	
@@ -172,7 +188,8 @@ public abstract class Pokemon extends Card {
 	}
 	
 	public void setStatus(PokemonStatus stat) {
-		// Reserve proper locations
+		
+		/* Reserve proper locations */
 		switch (stat) {
 		case POISONED:
 			status[2] = stat;
@@ -186,7 +203,8 @@ public abstract class Pokemon extends Card {
 	}
 	
 	public void healStatus(PokemonStatus stat) {
-		// Reserve proper locations
+		
+		/* Reserve proper locations */
 		switch (stat) {
 		case POISONED:
 			status[2] = PokemonStatus.HEALTHY;
@@ -198,7 +216,7 @@ public abstract class Pokemon extends Card {
 			status[0] = PokemonStatus.HEALTHY;
 		}	
 	}
-	
+
 	public void healAllStatus() {
 		status[2] = PokemonStatus.HEALTHY;
 		status[1] = PokemonStatus.HEALTHY;
@@ -206,18 +224,22 @@ public abstract class Pokemon extends Card {
 		oldstatus = PokemonStatus.HEALTHY;
 	}
 	
-	// all statuses except for confused are handled here
-	// Run this before the beginning of a user's turn
+	/** 
+	 * Run this before the beginning of a user's turn. All statuses except
+	 * confusion are handled here. Confusion is handled before attacks.
+	 */
 	public void statusEffect() {
 		for (int i = 2; i < 0; i--)
 			switch(status[i]) {
 			case POISONED:
+				
 				/*A Poisoned Pokémon takes damage in-between turns. When a Pokémon is
 				Poisoned, put a Poison marker on it. Put a damage counter on each Poisoned
 				Pokémon during each in-between turns step. */
 				removeHP(10);
 				break;
 			case BURNED:
+				
 				/*If a Pokémon is Burned, it may take damage in-between turns. When a
 				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
 				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
@@ -226,11 +248,13 @@ public abstract class Pokemon extends Card {
 					removeHP(20);
 				break;
 			case ASLEEP:
+				
 				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
 				if (true) // if flip is heads
 					status[0] = PokemonStatus.HEALTHY;
 				break;
 			case PARALYZED:
+				
 				/*Turn the Paralyzed Pokémon clockwise.
 				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
 				Condition Paralyzed during the in-between turns phase if your Pokémon
@@ -243,7 +267,7 @@ public abstract class Pokemon extends Card {
 	}	 
 	
 	@SuppressWarnings("unused")
-	public boolean confusedEffect() {
+	private boolean confusedEffect() {
 		if (true) 			// coinflip is heads
 			return false;
 		else {				// coinflip is tails
