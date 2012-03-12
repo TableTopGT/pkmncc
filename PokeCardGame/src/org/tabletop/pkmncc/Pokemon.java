@@ -118,12 +118,12 @@ public abstract class Pokemon extends Card {
 					Pokemon enemy = opponent.pokeArr[0];
 					if (enemy.defense.weakness == this.type) {
 						if (defense.multAdder > 10)
-							return enemy.removeHP(action.baseAttack+defense.multAdder);
+							return enemy.removeHP(action.baseAttack + enemy.defense.multAdder);
 						else
-							return enemy.removeHP(action.baseAttack*defense.multAdder);
+							return enemy.removeHP(action.baseAttack * enemy.defense.multAdder);
 					} 
 					else if (enemy.defense.resistance == this.type)
-						return enemy.removeHP(action.baseAttack - defense.subtracter);
+						return enemy.removeHP(action.baseAttack - enemy.defense.subtracter);
 					else
 						return enemy.removeHP(action.baseAttack);
 				}
