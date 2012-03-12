@@ -52,7 +52,7 @@ public class Game extends Activity{
         setContentView(new RenderView(this));
         
         // Setup Battle Music
-        battleMusic = MediaPlayer.create(this, R.raw.intro);
+        battleMusic = MediaPlayer.create(this, R.raw.title);
         battleMusic.start();
         battleMusic.setLooping(true);
         
@@ -139,9 +139,9 @@ public class Game extends Activity{
 	
 	// Handles a touch on the screen
 	public void HandleTouch(MotionEvent e){
-		if(OverlapTester.pointInRectangle(dialogButton, xCoord, yCoord)){
-			finish();
-		}
+		//if(OverlapTester.pointInRectangle(dialogButton, xCoord, yCoord)){
+			//cvfinish();
+		//}
 	}
 	
 /*	@Override
