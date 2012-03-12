@@ -29,7 +29,7 @@ import android.view.WindowManager;
 public class Game extends Activity{
     /** Called when the activity is first created. */
 	public MediaPlayer battleMusic;
-	public Bitmap battleGround;
+	public Bitmap battleGround, charmander;
 	public AssetManager assetManager;
 	public InputStream inputStream;
 	public Paint dialogBoxPaint, dialogButtonPaint;
@@ -72,6 +72,8 @@ public class Game extends Activity{
     	try {
 			inputStream = assetManager.open("images/battlebackground.png");
 			battleGround = BitmapFactory.decodeStream(inputStream);
+			inputStream = assetManager.open("images/charmander.png");
+			charmander = BitmapFactory.decodeStream(inputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -98,12 +100,15 @@ public class Game extends Activity{
         		// Draw the background
         		canvas.drawBitmap(battleGround, 0, 0, null);
         		
+        		//Lets draw a Charmander
+        		canvas.drawBitmap(charmander, 800, 300, null);
+        		
         		// Setup the DialogBox (not finished) and draw it
-        		dialogBoxRect = new RectF((float)(width/2)-300, (float)(height/2)+200, (float)(width/2)+300, (float)(height/2)-200);
-        		dialogButton = new RectF((float)(width/2)-200, (float)(height/2)-50, (float)(width/2)+200, (float)(height/2)-100);
+  //      		dialogBoxRect = new RectF((float)(width/2)-300, (float)(height/2)+200, (float)(width/2)+300, (float)(height/2)-200);
+  //      		dialogButton = new RectF((float)(width/2)-200, (float)(height/2)-50, (float)(width/2)+200, (float)(height/2)-100);
 //        		canvas.drawRoundRect(dialogBoxRect, 2, 2, dialogBoxPaint);  << Not Working, won't draw, used regular Rect instead
-        		canvas.drawRect(dialogBoxRect, dialogBoxPaint);
-        		canvas.drawRect(dialogButton, dialogButtonPaint);
+ //       		canvas.drawRect(dialogBoxRect, dialogBoxPaint);
+  //      		canvas.drawRect(dialogButton, dialogButtonPaint);
 
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
