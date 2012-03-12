@@ -1,3 +1,8 @@
+/*
+ * Pokemon.java
+ */
+
+
 package org.tabletop.pkmncc;
 
 import java.util.ArrayList;
@@ -12,25 +17,27 @@ public abstract class Pokemon extends Card {
 	
 	/** 
 	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
-	 * "standard" but is implied.
+	 * standard but is implied.
 	 */		
 	public static enum PokemonStatus {HEALTHY, ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
 	
-	/* Not sure if this info is useful yet */
 	public static enum PokemonStage {BASIC, STAGE1, STAGE2};
+	
 	
 	/* Constant Pokemon characteristics */
 	protected class ActionDesc {
-		public ArrayList<Energy> energyCost;
 		public String actionName;
 		public int baseAttack;
+		public ArrayList<Energy> energyCost;
 		public ActionDesc(String actionName, int baseAttack, Energy.EnergyType... energyCost) {
-			this.energyCost = Energy.listFromArray(energyCost);
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
+			this.energyCost = Energy.listFromArray(energyCost);
 		}
 	}
-	protected class DefenseDesc {
+	
+	
+	protected class DefenseDesc { //XXX Make static, split?	
 		public PokemonType weakness;
 		public int multAdder;
 
@@ -44,8 +51,9 @@ public abstract class Pokemon extends Card {
 			this.resistance = resistance; 
 			this.subtracter = (subtracter >= 10) ? subtracter : 30;
 		}
-
 	}
+	
+	
 	protected ActionDesc action1, action2;
 	protected DefenseDesc defense;
 	protected PokemonType type;
@@ -62,14 +70,12 @@ public abstract class Pokemon extends Card {
 	protected int HP;
 	protected ArrayList<Energy> energy;
 	
-	/* status[3] holds three fields 
+	/* status[3] holds three fields,
 	 * [HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
 	 */
 	protected PokemonStatus[] status;
 	protected PokemonStatus oldstatus;
 
-	
-	
 	
 	/* Constructors */
 	public Pokemon() {
@@ -84,14 +90,10 @@ public abstract class Pokemon extends Card {
 	}
 	
 	
-	
 	/* Abstract attack/ability methods */
 	public abstract void actionOne(Player target);
 	
 	public abstract void actionTwo(Player target);
-	
-	
-	
 	
 	
 	/* Health-centered methods */
@@ -100,58 +102,60 @@ public abstract class Pokemon extends Card {
 	}
 	
 	public int addHP(int hitPoints) {
-		return HP += hitPoints;
+		return (HP += hitPoints);
 	}
 	
 	public int removeHP(int hitPoints) {
-		return HP -= hitPoints;
+		return (HP -= hitPoints);
 	}
-	
-	
-	
 	
 	
 	/* Battle centered methods */
-	
 	private boolean canMove() {
-		return (status[0] != PokemonStatus.ASLEEP) && (status[0] != PokemonStatus.PARALYZED);
+		return (status[0] != PokemonStatus.ASLEEP)
+				&& (status[0] != PokemonStatus.PARALYZED);
 	}
 	
 	public boolean canRetreat() {
-		return this.canMove() && (energy.size() >= retreatCost);
+		return canMove() && (energy.size() >= retreatCost);
 	}
 
+	/**
+	 * Attempt an attack on the opponent's active Pokemon.
+	 * @param opponent
+	 * @param action
+	 * @return the damage done by the attack
+	 */
 	public int attack(Player opponent, ActionDesc action) {
-		
-		/* If we have energy, can move, and not get hurt by our confusion */
-		if (energy.containsAll(action.energyCost)) {
-			if (this.canMove()) {
-				if (!this.confusedEffect()) {
-					Pokemon enemy = opponent.pokeArr[0];
-					if (enemy.defense.weakness == this.type) {
-						if (defense.multAdder > 10)
-							return enemy.removeHP(action.baseAttack + enemy.defense.multAdder);
-						else
-							return enemy.removeHP(action.baseAttack * enemy.defense.multAdder);
-					} 
-					else if (enemy.defense.resistance == this.type)
-						return enemy.removeHP(action.baseAttack - enemy.defense.subtracter);
-					else
-						return enemy.removeHP(action.baseAttack);
-				}
-				// Pokemon was hurt by it's confusion!
-				else return 0;
-			}
-			// Pokemon is paralyzed/asleep!
-			else return 0;
+		if (!energy.containsAll(action.energyCost)) {
+			// Not enough energy!
+			return 0;
 		}
-		// Pokemon doesn't have enough energy!
-		else return 0;
+		
+		if (!canMove()) {
+			// Paralyzed/Asleep!
+			return 0;
+		}
+				
+		if (confusedEffect()) {
+			// Hurt by it's confusion
+			return 0;
+		}
+			
+		Pokemon enemy = opponent.pokeArr[0];
+		if (enemy.defense.weakness == this.type) {
+			if (defense.multAdder > 10) {
+				return enemy.removeHP(action.baseAttack + enemy.defense.multAdder);
+			} else {
+				return enemy.removeHP(action.baseAttack * enemy.defense.multAdder);
+			}
+		} else if (enemy.defense.resistance == this.type) {
+			return enemy.removeHP(action.baseAttack - enemy.defense.subtracter);
+		} else {
+			return enemy.removeHP(action.baseAttack);
+		}
+
 	}
-	
-	
-	
-	
 	
 	
 	/* Energy-centered methods */
@@ -167,7 +171,7 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	/* Prototype-only function */
+	//XXX Prototype-only function
 	public void removeEnergy() {
 		energy.remove(1);
 	}
@@ -179,7 +183,6 @@ public abstract class Pokemon extends Card {
 	public void removeAllEnergy() {
 		energy.clear();
 	}
-	
 	
 	
 	/* Status-centered methods */
@@ -229,7 +232,7 @@ public abstract class Pokemon extends Card {
 	 * confusion are handled here. Confusion is handled before attacks.
 	 */
 	public void statusEffect() {
-		for (int i = 2; i < 0; i--)
+		for (int i = 2; i < 0; i--) {
 			switch(status[i]) {
 			case POISONED:
 				
@@ -244,13 +247,13 @@ public abstract class Pokemon extends Card {
 				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
 				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
 				counters on the Burned Pokémon. */
-				if (true) // if flip is tails
+				if (true) //FIXME if flip is tails
 					removeHP(20);
 				break;
 			case ASLEEP:
 				
 				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
-				if (true) // if flip is heads
+				if (true) // if coinflip is heads
 					status[0] = PokemonStatus.HEALTHY;
 				break;
 			case PARALYZED:
@@ -263,14 +266,15 @@ public abstract class Pokemon extends Card {
 					status[0] = PokemonStatus.HEALTHY;
 				break;
 			}
+		}
 		oldstatus = status[0];
 	}	 
 	
 	@SuppressWarnings("unused")
 	private boolean confusedEffect() {
-		if (true) 			// coinflip is heads
+		if (true) {			//FIXME if coinflip is heads
 			return false;
-		else {				// coinflip is tails
+		} else {				// if coinflip is tails
 			removeHP(30);
 			return true;
 		}
