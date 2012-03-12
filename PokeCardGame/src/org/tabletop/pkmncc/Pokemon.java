@@ -51,6 +51,14 @@ public abstract class Pokemon extends Card {
 			this.resistance = resistance; 
 			this.subtracter = (subtracter >= 10) ? subtracter : 30;
 		}
+		
+		public boolean isWeakness(PokemonType type) {
+			return weakness == type;
+		}
+		
+		public boolean isResistance(PokemonType type) {
+			return resistance == type;
+		}
 	}
 	
 	
@@ -143,18 +151,17 @@ public abstract class Pokemon extends Card {
 		}
 			
 		Pokemon enemy = opponent.pokeArr[0];
-		if (enemy.defense.weakness == this.type) {
+		int damage = action.baseAttack;
+		if (enemy.defense.isWeakness(type)) {
 			if (defense.multAdder > 10) {
-				return enemy.removeHP(action.baseAttack + enemy.defense.multAdder);
+				damage += enemy.defense.multAdder;
 			} else {
-				return enemy.removeHP(action.baseAttack * enemy.defense.multAdder);
+				damage *= enemy.defense.multAdder;
 			}
-		} else if (enemy.defense.resistance == this.type) {
-			return enemy.removeHP(action.baseAttack - enemy.defense.subtracter);
-		} else {
-			return enemy.removeHP(action.baseAttack);
-		}
-
+		} else if (enemy.defense.isResistance(type)) {
+			damage -= enemy.defense.subtracter;
+		} 
+		return enemy.removeHP(damage);
 	}
 	
 	
