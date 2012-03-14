@@ -11,7 +11,7 @@ public class Charmander extends Pokemon {
 		HP = 60;
 		retreatCost = 1;
 		type = PokemonType.FIRE;
-		basic = true;
+		evolved = false;
 		evolvable = true;
 		evolution = "Charmeleon";
 		action1 = new ActionDesc("Scratch", 10, EnergyType.COLORLESS);

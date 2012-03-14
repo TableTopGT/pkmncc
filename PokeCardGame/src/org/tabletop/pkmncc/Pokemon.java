@@ -68,7 +68,7 @@ public abstract class Pokemon extends Card {
 	protected int retreatCost;
 	
 	/* These fields help determine if a Pokemon can be played */
-	protected boolean basic;
+	protected boolean evolved;
 	protected boolean evolvable;
 	protected String evolution;
 	
@@ -157,11 +157,9 @@ public abstract class Pokemon extends Card {
 		Pokemon enemy = opponent.pokeArr[0];
 		int damage = action.baseAttack;
 		if (enemy.defense.isWeakness(type)) {
-			if (defense.multAdder > 10) {
-				damage += enemy.defense.multAdder;
-			} else {
-				damage *= enemy.defense.multAdder;
-			}
+			damage = (defense.multAdder > 10) 
+					? damage + enemy.defense.multAdder
+					: damage * enemy.defense.multAdder;
 		} else if (enemy.defense.isResistance(type)) {
 			damage -= enemy.defense.subtracter;
 		} 

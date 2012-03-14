@@ -10,7 +10,7 @@ public class Charmeleon extends Pokemon {
 	public Charmeleon() {
 		super();
 		type = PokemonType.FIRE;
-		basic = false;
+		evolved = true;
 		evolvable = true;
 		evolution = "Charizard";
 	}
