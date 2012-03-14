@@ -23,12 +23,9 @@ public class Charmander extends Pokemon {
 		this();
 		this.owner = owner;
 	}
-
-	public void actionOne(Player target) {
-		attack(target, action1);
-	}
 	
 	public void actionTwo(Player target) {
+		removeEnergy(); //XXX Player should be able to choose which Energy Card
 		attack(target, action2);
 	}
 	

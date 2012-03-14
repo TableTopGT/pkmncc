@@ -98,10 +98,14 @@ public abstract class Pokemon extends Card {
 	}
 	
 	
-	/* Abstract attack/ability methods */
-	public abstract void actionOne(Player target);
+	/* Overridable attack/ability methods */
+	public void actionOne(Player target) {
+		attack(target, action1);
+	}
 	
-	public abstract void actionTwo(Player target);
+	public void actionTwo(Player target) {
+		attack(target, action2);
+	}
 	
 	
 	/* Health-centered methods */
