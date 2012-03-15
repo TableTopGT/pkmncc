@@ -1,5 +1,6 @@
 package org.tabletop.pkmncc;
 import org.tabletop.pkmncc.RFIDListener.CardType;
+import org.tabletop.pkmncc.pokedex.Pokemon;
 
 
 import android.app.Activity;

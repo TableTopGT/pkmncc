@@ -3,9 +3,14 @@
  */
 
 
-package org.tabletop.pkmncc;
+package org.tabletop.pkmncc.pokedex;
 
 import java.util.ArrayList;
+
+import org.tabletop.pkmncc.Card;
+import org.tabletop.pkmncc.Energy;
+import org.tabletop.pkmncc.Player;
+import org.tabletop.pkmncc.Energy.EnergyType;
 
 public abstract class Pokemon extends Card {
 	
@@ -287,6 +292,12 @@ public abstract class Pokemon extends Card {
 			removeHP(30);
 			return true;
 		}
+	}
+	
+	protected void setEvolution(boolean evolved, boolean evolveable, String evolution) {
+		this.evolved = evolved;
+		this.evolvable = evolveable;
+		this.evolution = evolution;
 	}
 	
 }
