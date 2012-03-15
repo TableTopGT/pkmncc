@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.tabletop.pkmncc.Card;
 import org.tabletop.pkmncc.Energy;
 import org.tabletop.pkmncc.Player;
-import org.tabletop.pkmncc.Energy.EnergyType;
 
 public abstract class Pokemon extends Card {
 	
@@ -29,50 +28,67 @@ public abstract class Pokemon extends Card {
 	public static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
 	
-	/* Constant Pokemon characteristics */
 	protected class ActionDesc {
 		public String actionName;
 		public int baseAttack;
 		public ArrayList<Energy> energyCost;
-		public ActionDesc(String actionName, int baseAttack, Energy.EnergyType... energyCost) {
+		
+		public ActionDesc(String actionName, int baseAttack, 
+				Energy.EnergyType... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
 			this.energyCost = Energy.listFromArray(energyCost);
 		}
+		
+		/**
+		 * Attempt an attack on the opponent's active Pokemon.
+		 * @param opponent
+		 * @param action
+		 * @return the damage done by the attack
+		 */
+		public int attack(Player opponent) {
+			if (!energy.containsAll(energyCost)) {
+				// Not enough energy!
+				return 0;
+			}
+			
+			if (!canMove()) {
+				// Paralyzed/Asleep!
+				return 0;
+			}
+					
+			if (confusedEffect()) {
+				// Hurt by it's confusion
+				return 0;
+			}
+				
+			Pokemon enemy = opponent.pokeArr[0];
+			int damage = baseAttack;
+			if (enemy.weakness == type) {
+				damage = (weakMod > 10) 
+						? damage + enemy.weakMod
+						: damage * enemy.weakMod;
+			} else if (enemy.resistance == type) {
+				damage -= enemy.resMod;
+			} 
+			return enemy.removeHP(damage);
+		}
+	
 	}
 	
 	
-	protected class DefenseDesc { //XXX Make static, split?	
-		public PokemonType weakness;
-		public int multAdder;
-
-		public PokemonType resistance;
-		public int subtracter;
-		
-		/* Give default values for weakness and resistance */
-		public DefenseDesc(PokemonType weakness, int multAdder, PokemonType resistance, int subtracter) {
-			this.weakness = weakness;
-			this.multAdder = (multAdder > 2) ? multAdder : 2;
-			this.resistance = resistance; 
-			this.subtracter = (subtracter >= 10) ? subtracter : 30;
-		}
-		
-		public boolean isWeakness(PokemonType type) {
-			return weakness == type;
-		}
-		
-		public boolean isResistance(PokemonType type) {
-			return resistance == type;
-		}
-	}
-	
-	
-	protected ActionDesc action1, action2;
-	protected DefenseDesc defense;
+	// Battle attributes
 	protected PokemonType type;
+	protected PokemonType weakness;
+	protected PokemonType resistance;
+	protected int weakMod;
+	protected int resMod;
+	protected ActionDesc action1;
+	protected ActionDesc action2;
 	protected int retreatCost;
+		
 	
-	/* These fields help determine if a Pokemon can be played */
+	// These fields help determine if a Pokemon can be played
 	protected boolean evolved;
 	protected boolean evolvable;
 	protected String evolution;
@@ -81,19 +97,17 @@ public abstract class Pokemon extends Card {
 	/* Dynamic Pokemon characteristics */
 	protected Player owner;
 	protected int HP;
-	protected ArrayList<Energy> energy;
+	protected ArrayList<Energy> energy = new ArrayList<Energy>();
 	
 	/* status[3] holds three fields,
 	 * [HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
 	 */
-	protected PokemonStatus[] status;
+	protected PokemonStatus[] status = new PokemonStatus[3];
 	protected PokemonStatus oldstatus;
 
 	
 	/* Constructors */
 	public Pokemon() {
-		this.energy = new ArrayList<Energy>();
-		this.status = new PokemonStatus[3];
 		this.healAllStatus();
 	}
 	
@@ -105,11 +119,11 @@ public abstract class Pokemon extends Card {
 	
 	/* Overridable attack/ability methods */
 	public void actionOne(Player target) {
-		attack(target, action1);
+		action1.attack(target);
 	}
 	
 	public void actionTwo(Player target) {
-		attack(target, action2);
+		action2.attack(target);
 	}
 	
 	
@@ -137,40 +151,6 @@ public abstract class Pokemon extends Card {
 		return canMove() && (energy.size() >= retreatCost);
 	}
 
-	/**
-	 * Attempt an attack on the opponent's active Pokemon.
-	 * @param opponent
-	 * @param action
-	 * @return the damage done by the attack
-	 */
-	public int attack(Player opponent, ActionDesc action) {
-		if (!energy.containsAll(action.energyCost)) {
-			// Not enough energy!
-			return 0;
-		}
-		
-		if (!canMove()) {
-			// Paralyzed/Asleep!
-			return 0;
-		}
-				
-		if (confusedEffect()) {
-			// Hurt by it's confusion
-			return 0;
-		}
-			
-		Pokemon enemy = opponent.pokeArr[0];
-		int damage = action.baseAttack;
-		if (enemy.defense.isWeakness(type)) {
-			damage = (defense.multAdder > 10) 
-					? damage + enemy.defense.multAdder
-					: damage * enemy.defense.multAdder;
-		} else if (enemy.defense.isResistance(type)) {
-			damage -= enemy.defense.subtracter;
-		} 
-		return enemy.removeHP(damage);
-	}
-	
 	
 	/* Energy-centered methods */
 	/** 
@@ -294,10 +274,18 @@ public abstract class Pokemon extends Card {
 		}
 	}
 	
-	protected void setEvolution(boolean evolved, boolean evolveable, String evolution) {
+	protected void setEvolution(boolean evolved, boolean evolveable, 
+			String evolution) {
 		this.evolved = evolved;
 		this.evolvable = evolveable;
 		this.evolution = evolution;
 	}
 	
+	protected void setDefense(PokemonType weakness, int weakMod, 
+			PokemonType resistance, int resMod) {
+		this.weakness = weakness;
+		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
+		this.resistance = resistance; 
+		this.resMod = (resMod >= 10) ? resMod : 30; // Default unlisted value
+	}
 }

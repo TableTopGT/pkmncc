@@ -11,9 +11,9 @@ public class Charmander extends Pokemon {
 		retreatCost = 1;
 		type = PokemonType.FIRE;
 		setEvolution(false, true, "Charmeleon");
+		setDefense(PokemonType.WATER, 0, PokemonType.NONE, 0);
 		action1 = new ActionDesc("Scratch", 10, EnergyType.COLORLESS);
 		action2 = new ActionDesc("Ember", 30, EnergyType.COLORLESS, EnergyType.FIRE);
-		defense = new DefenseDesc(PokemonType.WATER, 0, PokemonType.NONE, 0);
 	}
 	
 	public Charmander(Player owner) {
@@ -23,7 +23,7 @@ public class Charmander extends Pokemon {
 	
 	public void actionTwo(Player target) {
 		removeEnergy(); //XXX Player should be able to choose which Energy Card
-		attack(target, action2);
+		action2.attack(target);
 	}
 	
 }
