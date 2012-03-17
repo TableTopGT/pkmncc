@@ -1,6 +1,5 @@
 package org.tabletop.pkmncc.pokedex;
 
-import org.tabletop.pkmncc.Energy.EnergyType;
 import org.tabletop.pkmncc.Player;
 
 public class Charmander extends Pokemon {
@@ -9,11 +8,11 @@ public class Charmander extends Pokemon {
 		super();
 		HP = 60;
 		retreatCost = 1;
-		type = PokemonType.FIRE;
+		type = Element.FIRE;
 		setEvolution(false, true, "Charmeleon");
-		setDefense(PokemonType.WATER, 0, PokemonType.NONE, 0);
-		action1 = new ActionDesc("Scratch", 10, EnergyType.COLORLESS);
-		action2 = new ActionDesc("Ember", 30, EnergyType.COLORLESS, EnergyType.FIRE);
+		setDefense(Element.WATER, 0, Element.NONE, 0);
+		action1 = new ActionDesc("Scratch", 10, Element.COLORLESS);
+		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
 	}
 	
 	public Charmander(Player owner) {

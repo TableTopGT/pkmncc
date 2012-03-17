@@ -14,12 +14,6 @@ import org.tabletop.pkmncc.Player;
 public abstract class Pokemon extends Card {
 	
 	/** 
-	 * Contains all PokemonTCG Types. Type NONE isn't standard 
-	 * and should be used when to handle exceptional cases.
-	 */		
-	public static enum PokemonType {NONE, GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
-	
-	/** 
 	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
 	 * standard but is implied.
 	 */		
@@ -30,11 +24,11 @@ public abstract class Pokemon extends Card {
 	
 	protected class ActionDesc {
 		public String actionName;
-		public int baseAttack;
-		public ArrayList<Energy> energyCost;
+		private int baseAttack;
+		private ArrayList<Energy> energyCost;
 		
 		public ActionDesc(String actionName, int baseAttack, 
-				Energy.EnergyType... energyCost) {
+				Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
 			this.energyCost = Energy.listFromArray(energyCost);
@@ -78,9 +72,9 @@ public abstract class Pokemon extends Card {
 	
 	
 	// Battle attributes
-	protected PokemonType type;
-	protected PokemonType weakness;
-	protected PokemonType resistance;
+	protected Element type;
+	protected Element weakness;
+	protected Element resistance;
 	protected int weakMod;
 	protected int resMod;
 	protected ActionDesc action1;
@@ -274,6 +268,12 @@ public abstract class Pokemon extends Card {
 		}
 	}
 	
+	/**
+	 * Sets properties related to evolution capabilities.
+	 * @param evolved - false if stage is basic
+	 * @param evolveable
+	 * @param evolution - name of evolution or null string
+	 */
 	protected void setEvolution(boolean evolved, boolean evolveable, 
 			String evolution) {
 		this.evolved = evolved;
@@ -281,8 +281,8 @@ public abstract class Pokemon extends Card {
 		this.evolution = evolution;
 	}
 	
-	protected void setDefense(PokemonType weakness, int weakMod, 
-			PokemonType resistance, int resMod) {
+	protected void setDefense(Element weakness, int weakMod, 
+			Element resistance, int resMod) {
 		this.weakness = weakness;
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
 		this.resistance = resistance; 

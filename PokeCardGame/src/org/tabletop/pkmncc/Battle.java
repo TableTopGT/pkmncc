@@ -1,5 +1,5 @@
 package org.tabletop.pkmncc;
-import org.tabletop.pkmncc.RFIDListener.CardType;
+import org.tabletop.pkmncc.Card.CardType;
 import org.tabletop.pkmncc.pokedex.Pokemon;
 
 
@@ -115,7 +115,7 @@ public class Battle extends Activity {
 		newCard = cardListener.getCard();
 		newCardType = cardListener.getCardType();
 		}
-		if (newCardType == CardType.POKEMONCARD){
+		if (newCardType == CardType.POKEMON){
 			player1.addCard(newCard);
 			newCard = null;
 			newCardType=null;
@@ -124,7 +124,7 @@ public class Battle extends Activity {
 		while (endTurn==false){
 			newCard = cardListener.getCard();
 			newCardType = cardListener.getCardType();
-			if (newCardType == CardType.POKEMONCARD || newCardType == CardType.POKEMONCARD){
+			if (newCardType == CardType.POKEMON || newCardType == CardType.ENERGY){
 				player1.addCard(newCard);
 				newCard = null;
 				newCardType = null;

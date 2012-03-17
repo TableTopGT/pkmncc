@@ -1,14 +1,12 @@
 package org.tabletop.pkmncc.pokedex;
 
 import org.tabletop.pkmncc.Player;
-import org.tabletop.pkmncc.pokedex.Pokemon.PokemonType;
-
 
 public class Charmeleon extends Pokemon {
 
 	public Charmeleon() {
 		super();
-		type = PokemonType.FIRE;
+		type = Element.FIRE;
 		evolved = true;
 		evolvable = true;
 		evolution = "Charizard";
