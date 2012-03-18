@@ -4,7 +4,10 @@ import org.tabletop.pkmncc.pokedex.Pokemon.PokemonStatus;
 
 //this class contains all the functions associated with trainer cards
 public class Trainer extends Card {
-
+	
+	@SuppressWarnings("unused")
+	private static final CardType cardType = CardType.TRAINER;
+	
 	public static enum TrainerType {POTION, ENERGYREMOVAL, FULLHEAL};
 	
 	public TrainerType trainerName;

@@ -13,6 +13,9 @@ import org.tabletop.pkmncc.Player;
 
 public abstract class Pokemon extends Card {
 	
+	@SuppressWarnings("unused")
+	private static final CardType cardType = CardType.POKEMON;
+	
 	/** 
 	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
 	 * standard but is implied.
@@ -58,11 +61,11 @@ public abstract class Pokemon extends Card {
 				
 			Pokemon enemy = opponent.pokeArr[0];
 			int damage = baseAttack;
-			if (enemy.weakness == type) {
+			if (enemy.weakness == element) {
 				damage = (weakMod > 10) 
 						? damage + enemy.weakMod
 						: damage * enemy.weakMod;
-			} else if (enemy.resistance == type) {
+			} else if (enemy.resistance == element) {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);
@@ -72,7 +75,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	// Battle attributes
-	protected Element type;
 	protected Element weakness;
 	protected Element resistance;
 	protected int weakMod;

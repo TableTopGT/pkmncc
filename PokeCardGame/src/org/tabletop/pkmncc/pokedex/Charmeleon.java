@@ -6,7 +6,7 @@ public class Charmeleon extends Pokemon {
 
 	public Charmeleon() {
 		super();
-		type = Element.FIRE;
+		element = Element.FIRE;
 		evolved = true;
 		evolvable = true;
 		evolution = "Charizard";

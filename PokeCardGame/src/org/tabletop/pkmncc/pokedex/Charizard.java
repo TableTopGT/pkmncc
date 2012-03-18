@@ -6,7 +6,7 @@ public class Charizard extends Pokemon {
 
 	public Charizard() {
 		super();
-		type = Element.FIRE;
+		element = Element.FIRE;
 		evolved = true;
 		evolvable = false;
 		evolution = null;

@@ -11,5 +11,19 @@ public abstract class Card {
 	 * and should be used when to handle exceptional cases.
 	 */		
 	public static enum Element {NONE, GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
+
+	protected CardType cardType;
+	protected Element element;
+
+	public final CardType getCardType() {
+		return cardType;
+	}
 	
+	public final Element getElement() {
+		return element;
+	}
+	
+	public final void setElement(Element element) {	
+		this.element = element;
+	}
 }

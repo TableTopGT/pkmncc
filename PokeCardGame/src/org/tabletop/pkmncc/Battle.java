@@ -113,7 +113,7 @@ public class Battle extends Activity {
 		currentPlayer = player1;
 		while (newCard==null){
 		newCard = cardListener.getCard();
-		newCardType = cardListener.getCardType();
+		newCardType = newCard.getCardType();
 		}
 		if (newCardType == CardType.POKEMON){
 			player1.addCard(newCard);
@@ -123,7 +123,7 @@ public class Battle extends Activity {
 		//now player can play either more pokemon or energy until turn is ended
 		while (endTurn==false){
 			newCard = cardListener.getCard();
-			newCardType = cardListener.getCardType();
+			newCardType = newCard.getCardType();
 			if (newCardType == CardType.POKEMON || newCardType == CardType.ENERGY){
 				player1.addCard(newCard);
 				newCard = null;
