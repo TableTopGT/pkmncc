@@ -3,12 +3,10 @@
  */
 
 
-package org.tabletop.pkmncc.pokedex;
+package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
 
-import org.tabletop.pkmncc.Card;
-import org.tabletop.pkmncc.Energy;
 import org.tabletop.pkmncc.Player;
 
 public abstract class Pokemon extends Card {
@@ -61,11 +59,11 @@ public abstract class Pokemon extends Card {
 				
 			Pokemon enemy = opponent.pokeArr[0];
 			int damage = baseAttack;
-			if (enemy.weakness == element) {
+			if (enemy.weakness.equals(element)) {
 				damage = (weakMod > 10) 
 						? damage + enemy.weakMod
 						: damage * enemy.weakMod;
-			} else if (enemy.resistance == element) {
+			} else if (enemy.resistance.equals(element)) {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);
@@ -92,7 +90,8 @@ public abstract class Pokemon extends Card {
 	
 	/* Dynamic Pokemon characteristics */
 	protected Player owner;
-	protected int HP;
+	protected int baseHP;	//needs final.. upper limit needed for say restoreHP trainer
+	protected int HP = baseHP; //XXX does this work? or setHP() needed?
 	protected ArrayList<Energy> energy = new ArrayList<Energy>();
 	
 	/* status[3] holds three fields,
@@ -252,7 +251,7 @@ public abstract class Pokemon extends Card {
 				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
 				Condition Paralyzed during the in-between turns phase if your Pokémon
 				was Paralyzed since the beginning of your last turn.*/
-				if (oldstatus == PokemonStatus.PARALYZED)
+				if (oldstatus.equals(PokemonStatus.PARALYZED))
 					status[0] = PokemonStatus.HEALTHY;
 				break;
 			}

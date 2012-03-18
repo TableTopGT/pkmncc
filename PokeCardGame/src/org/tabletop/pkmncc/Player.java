@@ -1,6 +1,6 @@
 package org.tabletop.pkmncc;
-import org.tabletop.pkmncc.pokedex.Pokemon;
-import org.tabletop.pkmncc.pokedex.Pokemon.PokemonStatus;
+
+import org.tabletop.pkmncc.card.*;
 
 public class Player {
 

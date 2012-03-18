@@ -1,6 +1,7 @@
 package org.tabletop.pkmncc;
-import org.tabletop.pkmncc.Card.CardType;
-import org.tabletop.pkmncc.pokedex.Pokemon;
+
+import org.tabletop.pkmncc.card.*;
+import org.tabletop.pkmncc.card.Card.CardType;
 
 
 import android.app.Activity;

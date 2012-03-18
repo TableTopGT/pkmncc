@@ -1,13 +1,13 @@
 package org.tabletop.pkmncc;
 
-import org.tabletop.pkmncc.Card.*;
-import org.tabletop.pkmncc.Trainer.TrainerType;
+import org.tabletop.pkmncc.card.*;
+import org.tabletop.pkmncc.card.Card.Element;
+import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
 
 public class RFIDListener {
 	
 	public String RFIDTag;
-	public Card newCard;
 		
 	/*public String getTag() {
 		
@@ -19,9 +19,9 @@ public class RFIDListener {
 	public Card getCard () {
 		//insert code about getting card tag from RFID reader and setting it
 		//equal to RFIDTag				
-		
+		Card newCard;
 		// Takes in the string, compares it with known values and returns the card
-		if (RFIDTag == "O11111110"){
+		if (RFIDTag == "O11111110"){ //FIXME must use .equals()
 			newCard = new Charizard();
 		}
 		else if (RFIDTag == "0222222220"){
@@ -58,10 +58,10 @@ public class RFIDListener {
 			newCard = new Trainer(TrainerType.ENERGYREMOVAL);
 		}
 		else if (RFIDTag == "0161616160"){
-			newCard = new Trainer (TrainerType.FULLHEAL);
+			newCard = new Trainer(TrainerType.FULLHEAL);
 		}
 		else if (RFIDTag == "0171717170"){
-			newCard = new Trainer (TrainerType.POTION);
+			newCard = new Trainer(TrainerType.POTION);
 		}
 		else {
 			newCard = null;

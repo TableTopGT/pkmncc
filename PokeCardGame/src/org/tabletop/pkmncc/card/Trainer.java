@@ -1,6 +1,7 @@
-package org.tabletop.pkmncc;
+package org.tabletop.pkmncc.card;
 
-import org.tabletop.pkmncc.pokedex.Pokemon.PokemonStatus;
+import org.tabletop.pkmncc.Player;
+import org.tabletop.pkmncc.card.Pokemon.PokemonStatus;
 
 //this class contains all the functions associated with trainer cards
 public class Trainer extends Card {

@@ -1,12 +1,13 @@
 package org.tabletop.pkmncc.pokedex;
 
 import org.tabletop.pkmncc.Player;
+import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charmander extends Pokemon {
 
 	public Charmander() {
 		super();
-		HP = 60;
+		baseHP = 60;
 		retreatCost = 1;
 		element = Element.FIRE;
 		setEvolution(false, true, "Charmeleon");

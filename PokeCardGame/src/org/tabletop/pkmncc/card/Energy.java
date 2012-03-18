@@ -3,9 +3,10 @@
  */
 
 
-package org.tabletop.pkmncc;
+package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
+
 
 public class Energy extends Card {
 	

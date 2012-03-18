@@ -1,4 +1,4 @@
-package org.tabletop.pkmncc;
+package org.tabletop.pkmncc.card;
 
 public abstract class Card {
 
