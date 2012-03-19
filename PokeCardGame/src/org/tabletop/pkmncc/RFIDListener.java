@@ -4,6 +4,7 @@ import org.tabletop.pkmncc.card.*;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
+import org.tabletop.pkmncc.Battle;
 
 public class RFIDListener {
 	
@@ -20,15 +21,16 @@ public class RFIDListener {
 		//insert code about getting card tag from RFID reader and setting it
 		//equal to RFIDTag				
 		Card newCard;
+		Player currPlayer = Battle.currentPlayer; //XXX should be pulled from Game
 		// Takes in the string, compares it with known values and returns the card
 		if (RFIDTag.equals("O11111110")){
-			newCard = new Charizard();
+			newCard = new Charizard(currPlayer);
 		}
 		else if (RFIDTag.equals("0222222220")){
-			newCard = new Charmander();
+			newCard = new Charmander(currPlayer);
 		}
 		else if (RFIDTag.equals("03333333330")){
-			newCard = new Charmeleon();
+			newCard = new Charmeleon(currPlayer);
 		}
 		else if (RFIDTag.equals("0444444440")){
 			newCard = new Energy(Element.COLORLESS);

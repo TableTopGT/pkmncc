@@ -5,8 +5,8 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charmander extends Pokemon {
 
-	public Charmander() {
-		super();
+	public Charmander(Player owner) {
+		super(owner);
 		HP = 60;
 		retreatCost = 1;
 		element = Element.FIRE;
@@ -14,11 +14,6 @@ public class Charmander extends Pokemon {
 		setDefense(Element.WATER, 0, Element.NONE, 0);
 		action1 = new ActionDesc("Scratch", 10, Element.COLORLESS);
 		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
-	}
-	
-	public Charmander(Player owner) {
-		this();
-		this.owner = owner;
 	}
 	
 	public void actionTwo(Player target) {

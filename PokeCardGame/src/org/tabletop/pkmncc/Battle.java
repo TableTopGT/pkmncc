@@ -11,7 +11,7 @@ import android.widget.*;
 public class Battle extends Activity {
 	public Player player1;
 	public Player player2;
-	public Player currentPlayer;
+	public static Player currentPlayer;
 	public Player winner = null;
 	public RFIDListener cardListener;
 	public Card newCard = null;

@@ -41,7 +41,7 @@ public abstract class Pokemon extends Card {
 		 * @param action
 		 * @return the damage done by the attack
 		 */
-		public int attack(Player opponent) {
+		public int attack(Player opponent) { //TODO check if fainted
 			if (!energy.containsAll(energyCost)) {
 				// Not enough energy!
 				return 0;
@@ -101,14 +101,10 @@ public abstract class Pokemon extends Card {
 	protected PokemonStatus oldstatus;
 
 	
-	/* Constructors */
-	public Pokemon() {
-		this.healAllStatus();
-	}
-	
+	/* Constructor */
 	public Pokemon(Player owner) {
-		this();
 		this.owner = owner;
+		this.healAllStatus();
 	}
 	
 	
