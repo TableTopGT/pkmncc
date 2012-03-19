@@ -23,7 +23,7 @@ public abstract class Pokemon extends Card {
 	public static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
 	
-	protected class ActionDesc {
+	protected final class ActionDesc {
 		public String actionName;
 		private int baseAttack;
 		private ArrayList<Energy> energyCost;
@@ -90,8 +90,8 @@ public abstract class Pokemon extends Card {
 	
 	/* Dynamic Pokemon characteristics */
 	protected Player owner;
-	protected int baseHP;	//needs final.. upper limit needed for say restoreHP trainer
-	protected int HP = baseHP; //XXX does this work? or setHP() needed?
+	protected int HP;
+	protected int damage = 0;
 	protected ArrayList<Energy> energy = new ArrayList<Energy>();
 	
 	/* status[3] holds three fields,
@@ -123,16 +123,20 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Health-centered methods */
-	public int getHP() {
-		return HP;
+	public final int getHP() {
+		return HP - damage;
 	}
 	
-	public int addHP(int hitPoints) {
-		return (HP += hitPoints);
+	public final int addHP(int hitPoints) {
+		damage -= hitPoints;
+		if (damage < 0) damage = 0;
+		return HP - damage;
 	}
 	
-	public int removeHP(int hitPoints) {
-		return (HP -= hitPoints);
+	public final int removeHP(int hitPoints) {
+		damage += hitPoints;
+		if (damage > HP) damage = HP;
+		return HP - damage;
 	}
 	
 	
@@ -142,7 +146,7 @@ public abstract class Pokemon extends Card {
 				&& (status[0] != PokemonStatus.PARALYZED);
 	}
 	
-	public boolean canRetreat() {
+	public final boolean canRetreat() {
 		return canMove() && (energy.size() >= retreatCost);
 	}
 
@@ -152,34 +156,34 @@ public abstract class Pokemon extends Card {
 	 * Useful for displaying energies after making a Pokemon active.
 	 * @return a list of energies being held
 	 */
-	public ArrayList<Energy> getEnergy() {
+	public final ArrayList<Energy> getEnergy() {
 		return energy;
 	}
 	
-	public void addEnergy(Energy energyCard) {
+	public final void addEnergy(Energy energyCard) {
 		energy.add(energyCard);
 	}
 	
 	//XXX Prototype-only function
-	public void removeEnergy() {
+	public final void removeEnergy() {
 		energy.remove(1);
 	}
 	
-	public void removeEnergy(Energy energyCard) {
+	public final void removeEnergy(Energy energyCard) {
 		energy.remove(energyCard);
 	}
 	
-	public void removeAllEnergy() {
+	public final void removeAllEnergy() {
 		energy.clear();
 	}
 	
 	
 	/* Status-centered methods */
-	public PokemonStatus[] getStatus() {
+	public final PokemonStatus[] getStatus() {
 		return status;
 	}
 	
-	public void setStatus(PokemonStatus stat) {
+	public final void setStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
 		switch (stat) {
@@ -194,7 +198,7 @@ public abstract class Pokemon extends Card {
 		}
 	}
 	
-	public void healStatus(PokemonStatus stat) {
+	public final void healStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
 		switch (stat) {
@@ -209,7 +213,7 @@ public abstract class Pokemon extends Card {
 		}	
 	}
 
-	public void healAllStatus() {
+	public final void healAllStatus() {
 		status[2] = PokemonStatus.HEALTHY;
 		status[1] = PokemonStatus.HEALTHY;
 		status[0] = PokemonStatus.HEALTHY;
@@ -220,7 +224,7 @@ public abstract class Pokemon extends Card {
 	 * Run this before the beginning of a user's turn. All statuses except
 	 * confusion are handled here. Confusion is handled before attacks.
 	 */
-	public void statusEffect() {
+	public final void statusEffect() {
 		for (int i = 2; i < 0; i--) {
 			switch(status[i]) {
 			case POISONED:
@@ -275,14 +279,14 @@ public abstract class Pokemon extends Card {
 	 * @param evolveable
 	 * @param evolution - name of evolution or null string
 	 */
-	protected void setEvolution(boolean evolved, boolean evolveable, 
+	protected final void setEvolution(boolean evolved, boolean evolveable, 
 			String evolution) {
 		this.evolved = evolved;
 		this.evolvable = evolveable;
 		this.evolution = evolution;
 	}
 	
-	protected void setDefense(Element weakness, int weakMod, 
+	protected final void setDefense(Element weakness, int weakMod, 
 			Element resistance, int resMod) {
 		this.weakness = weakness;
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value

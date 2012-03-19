@@ -7,7 +7,7 @@ public class Charmander extends Pokemon {
 
 	public Charmander() {
 		super();
-		baseHP = 60;
+		HP = 60;
 		retreatCost = 1;
 		element = Element.FIRE;
 		setEvolution(false, true, "Charmeleon");
