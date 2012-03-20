@@ -12,13 +12,18 @@ public abstract class Card {
 	 */		
 	public static enum Element {NONE, GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
 
-	protected CardType cardType;
-	protected Element element;
+	private CardType cardType;
+	private Element element;
+
+	protected Card(CardType cardType, Element element) {
+		this.cardType = cardType;
+		this.element = element;
+	}
 
 	public final CardType getCardType() {
 		return cardType;
 	}
-	
+
 	public final Element getElement() {
 		return element;
 	}

@@ -7,10 +7,7 @@ public class Charizard extends Pokemon {
 	
 	public Charizard(Player target) {
 		super(target);
-		element = Element.FIRE;
-		evolved = true;
-		evolvable = false;
-		evolution = null;
+		setElement(Element.FIRE);
 	}
 
 	public void actionOne(Player target) {

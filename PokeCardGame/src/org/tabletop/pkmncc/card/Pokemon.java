@@ -11,16 +11,13 @@ import org.tabletop.pkmncc.Player;
 
 public abstract class Pokemon extends Card {
 	
-	@SuppressWarnings("unused")
-	private static final CardType cardType = CardType.POKEMON;
-	
 	/** 
 	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
 	 * standard but is implied.
 	 */		
 	public static enum PokemonStatus {HEALTHY, ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
 	
-	public static enum PokemonStage {BASIC, STAGE1, STAGE2};
+	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
 	
 	protected final class ActionDesc {
@@ -59,11 +56,11 @@ public abstract class Pokemon extends Card {
 				
 			Pokemon enemy = opponent.pokeArr[0];
 			int damage = baseAttack;
-			if (enemy.weakness.equals(element)) {
+			if (enemy.weakness.equals(getElement())) {
 				damage = (weakMod > 10) 
 						? damage + enemy.weakMod
 						: damage * enemy.weakMod;
-			} else if (enemy.resistance.equals(element)) {
+			} else if (enemy.resistance.equals(getElement())) {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);
@@ -73,36 +70,37 @@ public abstract class Pokemon extends Card {
 	
 	
 	// Battle attributes
-	protected Element weakness;
-	protected Element resistance;
-	protected int weakMod;
-	protected int resMod;
+	private Element weakness;
+	private Element resistance;
+	private int weakMod;
+	private int resMod;
 	protected ActionDesc action1;
 	protected ActionDesc action2;
 	protected int retreatCost;
 		
 	
 	// These fields help determine if a Pokemon can be played
-	protected boolean evolved;
-	protected boolean evolvable;
-	protected String evolution;
+	private boolean evolved;
+	private boolean evolvable;
+	private String evolution;
 	
 	
 	/* Dynamic Pokemon characteristics */
 	protected Player owner;
 	protected int HP;
-	protected int damage = 0;
-	protected ArrayList<Energy> energy = new ArrayList<Energy>();
+	private int damage = 0;
+	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	
 	/* status[3] holds three fields,
 	 * [HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
 	 */
-	protected PokemonStatus[] status = new PokemonStatus[3];
-	protected PokemonStatus oldstatus;
+	private PokemonStatus[] status = new PokemonStatus[3];
+	private PokemonStatus oldstatus;
 
 	
 	/* Constructor */
 	public Pokemon(Player owner) {
+		super(CardType.POKEMON, null);
 		this.owner = owner;
 		this.healAllStatus();
 	}
@@ -117,6 +115,9 @@ public abstract class Pokemon extends Card {
 		action2.attack(target);
 	}
 	
+	public final String toString() {
+		return getClass().getSimpleName();
+	}
 	
 	/* Health-centered methods */
 	public final int getHP() {
@@ -137,6 +138,9 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Battle centered methods */
+	//TODO canPlay()
+	//TODO canEvolve()
+	
 	private boolean canMove() {
 		return (status[0] != PokemonStatus.ASLEEP)
 				&& (status[0] != PokemonStatus.PARALYZED);
@@ -267,6 +271,10 @@ public abstract class Pokemon extends Card {
 			removeHP(30);
 			return true;
 		}
+	}
+	
+	protected final String getEvolution() {
+		return evolution;
 	}
 	
 	/**

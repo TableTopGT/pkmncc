@@ -9,15 +9,12 @@ import java.util.ArrayList;
 
 
 public class Energy extends Card {
-	
-	@SuppressWarnings("unused")
-	private static final CardType cardType = CardType.ENERGY;
-	
+
 	public Energy(Element element) {
-		this.element = element;
+		super(CardType.ENERGY, element);
 	}
 	
-	public static ArrayList<Energy> listFromArray(Energy.Element... input) {
+	protected static ArrayList<Energy> listFromArray(Element... input) {
 		ArrayList<Energy> newList = new ArrayList<Energy>();
 		for (Element E : input)
 			newList.add(new Energy(E));
