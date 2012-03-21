@@ -1,35 +1,24 @@
 package org.tabletop.pkmncc.pokedex;
 
-import org.tabletop.pkmncc.Energy.EnergyType;
 import org.tabletop.pkmncc.Player;
-import org.tabletop.pkmncc.Pokemon;
+import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charmander extends Pokemon {
 
-	public Charmander() {
-		super();
+	public Charmander(Player owner) {
+		super(owner);
 		HP = 60;
 		retreatCost = 1;
-		type = PokemonType.FIRE;
-		basic = true;
-		evolvable = true;
-		evolution = "Charmeleon";
-		action1 = new ActionDesc("Scratch", 10, EnergyType.COLORLESS);
-		action2 = new ActionDesc("Ember", 30, EnergyType.COLORLESS, EnergyType.FIRE);
-		defense = new DefenseDesc(PokemonType.WATER, 0, PokemonType.NONE, 0);
-	}
-	
-	public Charmander(Player owner) {
-		this();
-		this.owner = owner;
-	}
-
-	public void actionOne(Player target) {
-		attack(target, action1);
+		setElement(Element.FIRE);
+		setEvolution(false, true, "Charmeleon");
+		setDefense(Element.WATER, 0, Element.NONE, 0);
+		action1 = new ActionDesc("Scratch", 10, Element.COLORLESS);
+		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
 	}
 	
 	public void actionTwo(Player target) {
-		attack(target, action2);
+		removeEnergy(); //XXX Player should be able to choose which Energy Card
+		action2.attack(target);
 	}
 	
 }

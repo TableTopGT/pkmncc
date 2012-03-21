@@ -1,15 +1,17 @@
-package org.tabletop.pkmncc;
+package org.tabletop.pkmncc.card;
 
-import org.tabletop.pkmncc.Pokemon.PokemonStatus;
+import org.tabletop.pkmncc.Player;
+import org.tabletop.pkmncc.card.Pokemon.PokemonStatus;
 
 //this class contains all the functions associated with trainer cards
 public class Trainer extends Card {
-
+	
 	public static enum TrainerType {POTION, ENERGYREMOVAL, FULLHEAL};
 	
 	public TrainerType trainerName;
 	
 	public Trainer(TrainerType name){
+		super(CardType.TRAINER, null);
 		trainerName = name;
 	}
 	

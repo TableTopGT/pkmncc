@@ -1,22 +1,13 @@
 package org.tabletop.pkmncc.pokedex;
 
 import org.tabletop.pkmncc.Player;
-import org.tabletop.pkmncc.Pokemon;
-import org.tabletop.pkmncc.Pokemon.PokemonType;
+import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charizard extends Pokemon {
-
-	public Charizard() {
-		super();
-		type = PokemonType.FIRE;
-		basic = false;
-		evolvable = false;
-		evolution = null;
-	}
 	
 	public Charizard(Player target) {
-		this();
-		owner = target;
+		super(target);
+		setElement(Element.FIRE);
 	}
 
 	public void actionOne(Player target) {
