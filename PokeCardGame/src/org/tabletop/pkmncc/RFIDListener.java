@@ -9,7 +9,7 @@ import static org.tabletop.pkmncc.Battle.currentPlayer;
 public final class RFIDListener {
 	
 	public String RFIDTag;
-	boolean waiter;
+//	boolean waiter;
 		
 	private boolean dataAvailable = false;
 	
@@ -22,10 +22,10 @@ public final class RFIDListener {
 		return RFIDTag;
 	}
 	
-	public RFIDListener(){
-		RFIDTag = "";
-		waiter = false;
-	}
+//	public RFIDListener(){
+//		RFIDTag = "";
+//		waiter = false;
+//	}
 	
 	public Card getCard() {
 		RFIDTag = getTag(); //TODO Asynch compatible?

@@ -11,7 +11,7 @@ public class Charmander extends Pokemon {
 		retreatCost = 1;
 		setElement(Element.FIRE);
 		setEvolution(false, true, "Charmeleon");
-		setDefense(Element.WATER, 0, Element.NONE, 0);
+		setDefense(Element.WATER, 0, null, 0);
 		action1 = new ActionDesc("Scratch", 10, Element.COLORLESS);
 		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
 	}

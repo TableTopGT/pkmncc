@@ -11,10 +11,7 @@ import org.tabletop.pkmncc.Player;
 
 public abstract class Pokemon extends Card {
 	
-	/** 
-	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
-	 * standard but is implied.
-	 */		
+	/** HEALTHY isn't an official status, but is implied */
 	public static enum PokemonStatus {HEALTHY, ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
 	
 	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
@@ -56,11 +53,11 @@ public abstract class Pokemon extends Card {
 				
 			Pokemon enemy = opponent.getActive();
 			int damage = baseAttack;
-			if (enemy.weakness.equals(getElement())) {
+			if (enemy.weakness == getElement()) {
 				damage = (weakMod > 10) 
 						? damage + enemy.weakMod
 						: damage * enemy.weakMod;
-			} else if (enemy.resistance.equals(getElement())) {
+			} else if (enemy.resistance == getElement()) {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);

@@ -81,7 +81,8 @@ public class Player {
 		i = 0;
 		while (pokeArr[i] != null){
 			if (i<=5){
-				while(rfid.waiter){
+//				while(rfid.waiter){
+				while(rfid.dataOnBus()){
 //				pokeArr[i]=rfid.getCard();  // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
 				}
 			}
