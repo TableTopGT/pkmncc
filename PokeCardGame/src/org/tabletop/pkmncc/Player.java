@@ -5,6 +5,7 @@ import org.tabletop.pkmncc.card.*;
 public class Player {
 
 	public int card, health;
+	public RFIDListener rfid;
 	public Pokemon holder; //used for switching array positions (active <--> benched)
 	public Player otherPlayer;
 	public int i; //generic counter
@@ -71,14 +72,20 @@ public class Player {
 	}
 	
 	//execute when a player wants to add a pokemon to their bench
+	
+	// NOTICE : this function should just add a pokemon in a designated area in the pokeArray, filling
+	//			up the array (when the game starts) will be a function in Game.java and will use this.
+	//			also, it should auto-update the incrementer (i) to place the pokemon in the right place
 	public void addPokemon(Pokemon pokemonCard){
 		//assign the pokemon to the first spot available
 		i = 0;
 		while (pokeArr[i] != null){
+			if (i<=5){
+				while(rfid.waiter){
+//				pokeArr[i]=rfid.getCard();  // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+				}
+			}
 			i++;
-		}
-		if (i<=5){
-			pokeArr[i]=pokemonCard;
 		}
 	}
 	

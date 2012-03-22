@@ -9,6 +9,7 @@ import static org.tabletop.pkmncc.Battle.currentPlayer;
 public final class RFIDListener {
 	
 	public String RFIDTag;
+	boolean waiter;
 		
 	private boolean dataAvailable = false;
 	
@@ -19,6 +20,11 @@ public final class RFIDListener {
 	public String getTag() { //TODO asynch must run in seperate thread
 		RFIDTag = null;
 		return RFIDTag;
+	}
+	
+	public RFIDListener(){
+		RFIDTag = "";
+		waiter = false;
 	}
 	
 	public Card getCard() {

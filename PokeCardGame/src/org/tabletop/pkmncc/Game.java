@@ -15,6 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -33,12 +34,17 @@ public class Game extends Activity{
 	public Bitmap benchchar, benchsquir;
 	public AssetManager assetManager;
 	public InputStream inputStream;
-	public Paint dialogBoxPaint, dialogButtonPaint;
+	public Paint textPaint, dialogBoxPaint, dialogButtonPaint;
 	public enum State {START, TURN, END};
 	public State gameState = State.START;
-	public RectF dialogBoxRect, dialogButton;
+	public Rect dialogBoxRect;
 	public float xCoord;
 	public float yCoord;
+	public boolean gameStarting, initiateVars, initialSwipes;
+	public DialogBox mainDialog;
+	public int i;
+	
+	public Player playerOne, playerTwo;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,15 +64,22 @@ public class Game extends Activity{
         battleMusic.setLooping(true);
         
         // Setup Paint types
+        textPaint = new Paint();
         dialogBoxPaint = new Paint();
         dialogButtonPaint = new Paint();
 //        dialogBoxPaint.setARGB(5, 100, 50, 0);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setStrokeWidth(30);
+        textPaint.setTextSize(30);
         dialogBoxPaint.setColor(Color.RED);
         dialogButtonPaint.setColor(Color.YELLOW);
-//        dialogBoxPaint.setStrokeWidth(5);
-//        dialogBoxPaint.setAntiAlias(false);
         dialogBoxPaint.setStyle(Paint.Style.FILL); 
         dialogButtonPaint.setStyle(Paint.Style.FILL);
+        
+        gameStarting = true;
+        initiateVars = true;
+        initialSwipes = false;
+        i = 0;
         
         // Setup Asset stream
         assetManager = this.getAssets();
@@ -121,7 +134,7 @@ public class Game extends Activity{
         		canvas.drawBitmap(battleGround, 0, 0, null);
         		
         		//Lets draw some Prototype shi; will keep a lot of these placements
-        		canvas.drawBitmap(charmander, 800, 300, null);
+ /*       		canvas.drawBitmap(charmander, 800, 300, null);
         		canvas.drawBitmap(squirtle, 320, 300, null);
         		canvas.drawBitmap(fire, 1000, 465, null);
         		canvas.drawBitmap(fire, 1000, 415, null);
@@ -145,13 +158,28 @@ public class Game extends Activity{
         		canvas.drawBitmap(benchsquir, 50, 250, null);
         		canvas.drawBitmap(benchsquir, 50, 350, null);
         		canvas.drawBitmap(benchsquir, 50, 450, null);        		
+ */       		
         		
         		// Setup the DialogBox (not finished) and draw it
-  //      		dialogBoxRect = new RectF((float)(width/2)-300, (float)(height/2)+200, (float)(width/2)+300, (float)(height/2)-200);
-  //      		dialogButton = new RectF((float)(width/2)-200, (float)(height/2)-50, (float)(width/2)+200, (float)(height/2)-100);
+        		if(initiateVars){
+        			dialogBoxRect = new Rect((width/2)-300, (height/2)+200, (width/2)+300, (height/2)-200);
+        			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
+        			initiateVars = false;
+        		}
 //        		canvas.drawRoundRect(dialogBoxRect, 2, 2, dialogBoxPaint);  << Not Working, won't draw, used regular Rect instead
  //       		canvas.drawRect(dialogBoxRect, dialogBoxPaint);
   //      		canvas.drawRect(dialogButton, dialogButtonPaint);
+        		if(gameStarting){
+        			if(!mainDialog.done){
+            			mainDialog.draw(canvas);
+        			}
+        			else{
+        				mainDialog.setText("Player One swipe card " + (i+1));
+        				gameStarting = false;
+        				mainDialog.done = false;
+        			}
+        		}
+        		
 
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
@@ -182,9 +210,23 @@ public class Game extends Activity{
 	
 	// Handles a touch on the screen
 	public void HandleTouch(MotionEvent e){
-		//if(OverlapTester.pointInRectangle(dialogButton, xCoord, yCoord)){
-			//cvfinish();
-		//}
+		if(!mainDialog.done){
+			if(OverlapTester.pointInRectangle(mainDialog.button, xCoord, yCoord)){
+				mainDialog.done = true;
+			}
+		}
+	}
+	
+	public void initialPokemon(Canvas board, Player activePlayer){
+		i = 0;
+		while (activePlayer.pokeArr[i] != null){
+			if (i<=5){
+//				while(rfid.waiter){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
+//					activePlayer.pokeArr[i]=pokemonCard; // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+//				}
+			}
+			i++;
+		}
 	}
 	
 /*	@Override

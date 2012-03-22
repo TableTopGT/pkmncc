@@ -1,5 +1,6 @@
 package org.tabletop.pkmncc;
 
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 public class OverlapTester {
@@ -14,7 +15,7 @@ public class OverlapTester {
                 return r.x <= p.x && r.x + r.width >= p.x && r.y <= p.y && r.y + r.height >= p.y;
         }
 */
-        public static boolean pointInRectangle (RectF r, float x, float y) {
-                return r.left <= x && r.right >= x && r.top >= y && r.bottom <= y;
+        public static boolean pointInRectangle (Rect r, float x, float y) {
+                return r.left <= x && r.right >= x && r.top <= y && r.bottom >= y;
         }
 }
