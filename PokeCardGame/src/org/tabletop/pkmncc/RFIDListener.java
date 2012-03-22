@@ -27,6 +27,18 @@ public final class RFIDListener {
 //		waiter = false;
 //	}
 	
+	public Pokemon getPokeCard() {
+		if (RFIDTag.equals("O11111110")){
+			return new Charizard(currentPlayer);
+		}
+		return new Charmander(currentPlayer);
+	}
+	
+	public boolean listen(){
+		//while(USB.getData) or whatever
+		return false;
+	}
+	
 	public Card getCard() {
 		RFIDTag = getTag(); //TODO Asynch compatible?
 		
