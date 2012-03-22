@@ -24,7 +24,7 @@ public class Draw extends Activity{
 	public void DrawMain(Pokemon Poke, int playernum, Canvas canvas){
 		pokedraw = this.getAssets();
 		try {
-			instream = pokedraw.open(Poke.ImagePath);
+			instream = pokedraw.open(Poke.getImage());
 			activepokemon = BitmapFactory.decodeStream(instream);
 		} catch (IOException e) {
 			e.printStackTrace();

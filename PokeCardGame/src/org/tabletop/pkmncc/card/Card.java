@@ -12,6 +12,7 @@ public abstract class Card {
 	private CardType cardType;
 	private Element element;
 	private Player owner;
+	private String image;
 
 	protected Card(CardType cardType, Player owner, Element element) {
 		this.cardType = cardType;
@@ -41,6 +42,14 @@ public abstract class Card {
 	
 	public final void setElement(Element element) {	
 		this.element = element;
+	}
+
+	public final String getImage() {
+		return image;
+	}
+
+	protected final void setImage(String image) {
+		this.image = "images/" + image + ".png";
 	}
 	
 	//TODO draw()
