@@ -80,6 +80,8 @@ public class Game extends Activity{
         initiateVars = true;
         initialSwipes = false;
         i = 0;
+        playerOne = new Player(1);
+        playerTwo = new Player(2);
         
         // Setup Asset stream
         assetManager = this.getAssets();
