@@ -6,22 +6,24 @@ import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
 import static org.tabletop.pkmncc.Battle.currentPlayer;
 
-public class RFIDListener {
+public final class RFIDListener {
 	
 	public String RFIDTag;
 		
-	/*public String getTag() {
-		
-		// Reads of the output of the RFID reader
-		RFIDTag = this.getTag();
+	private boolean dataAvailable = false;
+	
+	public boolean dataOnBus() {
+		return dataAvailable;
+	}
+	
+	public String getTag() { //TODO asynch must run in seperate thread
+		RFIDTag = null;
 		return RFIDTag;
-		}*/
+	}
 	
 	public Card getCard() {
-		//insert code about getting card tag from RFID reader and setting it
-		//equal to RFIDTag
+		RFIDTag = getTag(); //TODO Asynch compatible?
 		
-		// Takes in the string, compares it with known values and returns the card
 		if (RFIDTag.equals("O11111110")){
 			return new Charizard(currentPlayer);
 		}
