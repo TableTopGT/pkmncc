@@ -9,6 +9,7 @@ import static org.tabletop.pkmncc.Battle.currentPlayer;
 public class RFIDListener {
 	
 	public String RFIDTag;
+	boolean waiter;
 		
 	/*public String getTag() {
 		
@@ -16,6 +17,11 @@ public class RFIDListener {
 		RFIDTag = this.getTag();
 		return RFIDTag;
 		}*/
+	
+	public RFIDListener(){
+		RFIDTag = "";
+		waiter = false;
+	}
 	
 	public Card getCard() {
 		//insert code about getting card tag from RFID reader and setting it
