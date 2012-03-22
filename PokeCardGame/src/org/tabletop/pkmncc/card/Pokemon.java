@@ -113,6 +113,7 @@ public abstract class Pokemon extends Card {
 		action2.attack(target);
 	}
 	
+	// Charmander.toString == "Charmander"
 	public final String toString() {
 		return getClass().getSimpleName();
 	}
