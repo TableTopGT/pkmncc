@@ -10,8 +10,8 @@ public class Trainer extends Card {
 	
 	public TrainerType trainerName;
 	
-	public Trainer(TrainerType name){
-		super(CardType.TRAINER, null);
+	public Trainer(TrainerType name){ //TODO Should take in an owner
+		super(CardType.TRAINER, (Player)null);
 		trainerName = name;
 	}
 	

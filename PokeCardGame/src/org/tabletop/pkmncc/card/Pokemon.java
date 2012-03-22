@@ -86,7 +86,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Dynamic Pokemon characteristics */
-	protected Player owner;
 	protected int HP;
 	private int damage = 0;
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
@@ -100,8 +99,7 @@ public abstract class Pokemon extends Card {
 	
 	/* Constructor */
 	public Pokemon(Player owner) {
-		super(CardType.POKEMON, null);
-		this.owner = owner;
+		super(CardType.POKEMON, owner);
 		this.healAllStatus();
 	}
 	
