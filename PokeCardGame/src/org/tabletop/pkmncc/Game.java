@@ -35,7 +35,7 @@ public class Game extends Activity{
 	public AssetManager assetManager;
 	public InputStream inputStream;
 	public Paint textPaint, dialogBoxPaint, dialogButtonPaint;
-	public enum State {START, TURN, END};
+	public enum State {START, BATTLE, TURN, END};
 	public State gameState = State.START;
 	public Rect dialogBoxRect;
 	public float xCoord;
@@ -182,8 +182,11 @@ public class Game extends Activity{
         				playerTurn = Turn.TWO;
         				mainDialog.setText("Player Two choose active pokemon followed by bench pokemon");
         				mainDialog.draw(canvas);
+        				break;
         			case TWO :
         				initialPokemon(canvas, playerTwo);
+//        				gameState = State.BATTLE;
+        				break;
         			}
         		}
         		if(gameStarting){
@@ -201,6 +204,8 @@ public class Game extends Activity{
         		
 
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
+    			break;
+    		case BATTLE:
     			break;
     		case TURN:
     			break;
