@@ -34,6 +34,10 @@ public class Player {
 		otherPlayer = opponent;		
 	}
 	
+	public Pokemon getActive() {
+		return pokeArr[0];
+	}
+	
 	//sets the players opponent
 	public void setOpponent(Player opponent){
 		otherPlayer=opponent;
@@ -76,6 +80,18 @@ public class Player {
 		if (i<=5){
 			pokeArr[i]=pokemonCard;
 		}
+	}
+	
+	//TODO use canPlay() dialogBox() getIndex() switchActive() to evolve
+	public final boolean canPlay(Pokemon pokemonCard) {
+		boolean playable = false;
+		for (int i = 0; i < 7; i++) {
+			if (pokeArr[i] == null) 
+				playable = pokemonCard.isBasic();
+			else
+				playable = pokemonCard.isEvolutionOf(pokeArr[i]);
+		}
+		return playable;
 	}
 	
 /*	public void endTurn(){

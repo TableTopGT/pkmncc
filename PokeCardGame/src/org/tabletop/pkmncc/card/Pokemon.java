@@ -54,7 +54,7 @@ public abstract class Pokemon extends Card {
 				return 0;
 			}
 				
-			Pokemon enemy = opponent.pokeArr[0];
+			Pokemon enemy = opponent.getActive();
 			int damage = baseAttack;
 			if (enemy.weakness.equals(getElement())) {
 				damage = (weakMod > 10) 
@@ -106,10 +106,12 @@ public abstract class Pokemon extends Card {
 	
 	/* Overridable attack/ability methods */
 	public void actionOne(Player target) {
+		assert(action1 != null) : "Action 1 not set";
 		action1.attack(target);
 	}
 	
 	public void actionTwo(Player target) {
+		assert(action2 != null) : "Action 2 not set";
 		action2.attack(target);
 	}
 	
@@ -136,9 +138,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Battle centered methods */
-	//TODO canPlay()
-	//TODO canEvolve()
-	
 	private boolean canMove() {
 		return (status[0] != PokemonStatus.ASLEEP)
 				&& (status[0] != PokemonStatus.PARALYZED);
@@ -147,7 +146,15 @@ public abstract class Pokemon extends Card {
 	public final boolean canRetreat() {
 		return canMove() && (energy.size() >= retreatCost);
 	}
+	
+	public final boolean isBasic() {
+		return !evolved;
+	}
 
+	public boolean isEvolutionOf(Pokemon pokemon) {
+		return evolved && pokemon.evolvable 
+				&& pokemon.evolution.equals(toString());
+	}
 	
 	/* Energy-centered methods */
 	/** 
@@ -271,10 +278,6 @@ public abstract class Pokemon extends Card {
 		}
 	}
 	
-	protected final String getEvolution() {
-		return evolution;
-	}
-	
 	/**
 	 * Sets properties related to evolution capabilities.
 	 * @param evolved - false if stage is basic
@@ -288,6 +291,7 @@ public abstract class Pokemon extends Card {
 		this.evolution = evolution;
 	}
 	
+	/** Enter 0 for default modifiers */
 	protected final void setDefense(Element weakness, int weakMod, 
 			Element resistance, int resMod) {
 		this.weakness = weakness;
