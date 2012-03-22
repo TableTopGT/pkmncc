@@ -67,7 +67,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	// Battle attributes and Image
-	public String ImagePath;
 	private Element weakness;
 	private Element resistance;
 	private int weakMod;
@@ -98,6 +97,7 @@ public abstract class Pokemon extends Card {
 	/* Constructor */
 	public Pokemon(Player owner) {
 		super(CardType.POKEMON, owner);
+		this.setImage(toString());
 		this.healAllStatus();
 	}
 	

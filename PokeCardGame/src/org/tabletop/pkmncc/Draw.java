@@ -21,18 +21,18 @@ public class Draw extends Activity{
 	
 	/*Draws an active Pokemon, based on which player 
 	(must find better way to input which player is active, probably quick fix in player class) */
-	public void DrawMain(Pokemon Poke, int playernum, Canvas canvas){
+	public void DrawMain(Pokemon Poke, Player player, Canvas canvas){
 		pokedraw = this.getAssets();
 		try {
-			instream = pokedraw.open(Poke.ImagePath);
+			instream = pokedraw.open(Poke.getImage());
 			activepokemon = BitmapFactory.decodeStream(instream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 		}
-		if (playernum==1){
+		if (player.playerNum==1){
 			canvas.drawBitmap(activepokemon, 800, 300, null);
-		}else if (playernum==2){
+		}else if (player.playerNum==2){
 			Matrix matrix = new Matrix();
 	        // rotate the Bitmap
 	        matrix.postRotate(180); 

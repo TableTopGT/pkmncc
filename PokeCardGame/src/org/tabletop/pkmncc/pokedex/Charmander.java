@@ -14,7 +14,6 @@ public class Charmander extends Pokemon {
 		setDefense(Element.WATER, 0, null, 0);
 		action1 = new ActionDesc("Scratch", 10, Element.COLORLESS);
 		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
-		ImagePath = "images/charmander.png";
 	}
 	
 	public void actionTwo(Player target) {
