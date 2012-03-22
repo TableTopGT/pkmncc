@@ -44,4 +44,38 @@ public class Draw extends Activity{
 			
 		}
 	}
+	
+	// Cameron I made this so I can continue Game.java and tests to see if it works
+	// You can probably use your Draw function in this one instead of canvas.drawBitmap
+	// It iterates through the Bench and draws the whole playing side
+	public void drawBenchPoke(Canvas board, Player player){
+		pokedraw = this.getAssets();
+		int k = 0;
+		Matrix matrix = new Matrix();
+		Bitmap flippedpoke = null;
+		while(k < player.pokeArr.length){
+			try {
+				if(player.pokeArr[k] == null) break;
+				instream = pokedraw.open(player.pokeArr[k].getImage());
+				activepokemon = BitmapFactory.decodeStream(instream);
+				flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
+			} catch (IOException e) {
+			e.printStackTrace();
+			} finally {
+			}
+			if(k==0){
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 320, 300, null);
+				if(player.playerNum == 2){
+					matrix.postRotate(180);
+					board.drawBitmap(flippedpoke, 800, 300, null);
+				}
+			}
+			else{
+				flippedpoke = Bitmap.createBitmap(activepokemon, 75, 75, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 50, 50 + (100 * k), null);
+				else if(player.playerNum == 2) board.drawBitmap(flippedpoke, 1150, 200 + (100 * k), null);
+			}
+			k++;
+		}
+	}
 }

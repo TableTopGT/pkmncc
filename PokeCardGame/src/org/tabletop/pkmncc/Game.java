@@ -40,10 +40,12 @@ public class Game extends Activity{
 	public Rect dialogBoxRect;
 	public float xCoord;
 	public float yCoord;
-	public boolean gameStarting, initiateVars, initialSwipes;
+	public boolean gameStarting, gameStartingTwo, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	public int i;
 	public RFIDListener rfid;
+	public enum Turn {ONE, TWO};
+	public Turn playerTurn = Turn.ONE;
 	
 	public Player playerOne, playerTwo;
 	
@@ -78,6 +80,7 @@ public class Game extends Activity{
         dialogButtonPaint.setStyle(Paint.Style.FILL);
         
         gameStarting = true;
+        gameStartingTwo = false;
         initiateVars = true;
         initialSwipes = false;
         i = 0;
@@ -172,14 +175,27 @@ public class Game extends Activity{
         			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
         			initiateVars = false;
         		}
+        		if(gameStartingTwo){
+        			switch(playerTurn){
+        			case ONE :
+        				initialPokemon(canvas, playerOne);
+        				playerTurn = Turn.TWO;
+        				mainDialog.setText("Player Two choose active pokemon followed by bench pokemon");
+        				mainDialog.draw(canvas);
+        			case TWO :
+        				initialPokemon(canvas, playerTwo);
+        			}
+        		}
         		if(gameStarting){
         			if(!mainDialog.done){
             			mainDialog.draw(canvas);
         			}
         			else{
-        				mainDialog.setText("Player One swipe card " + (i+1));
         				gameStarting = false;
+        				gameStartingTwo = true;
         				mainDialog.done = false;
+        				mainDialog.setText("Player One choose active pokemon followed by bench pokemon");
+        				mainDialog.draw(canvas);
         			}
         		}
         		
@@ -226,7 +242,9 @@ public class Game extends Activity{
 			while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
 				activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
 			}
+			k++;
 		}
+//		Draw.drawBenchPoke(board, activePlayer);
 	}
 	
 /*	@Override
