@@ -12,6 +12,12 @@ public class Energy extends Card {
 
 	public Energy(Element element) {
 		super(CardType.ENERGY, element);
+		this.setImage(toString());
+	}
+	
+	// Energy(GRASS).toString == "GRASS"
+	public String toString() {
+		return getElement().toString();
 	}
 	
 	protected static ArrayList<Energy> listFromArray(Element... input) {
