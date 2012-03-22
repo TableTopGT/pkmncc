@@ -10,6 +10,7 @@ public class Player {
 	public Player otherPlayer;
 	public int i; //generic counter
 	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
+	public int playerNum;
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	public Pokemon[] pokeArr = new Pokemon[6];
@@ -24,6 +25,15 @@ public class Player {
 		}
 	}
 	
+	public Player(int playerPosition){
+		i = 0;
+		playerNum = playerPosition;
+		//set all the players pokemon to null
+		while (i<5){
+			pokeArr[i]=null;
+			i++;
+		}
+	}
 	//Player constructor: input opponent
 	public Player(Player opponent){
 		i = 0;
