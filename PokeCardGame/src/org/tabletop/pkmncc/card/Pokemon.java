@@ -6,13 +6,12 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
-
 import org.tabletop.pkmncc.Player;
+
 
 public abstract class Pokemon extends Card {
 	
-	/** HEALTHY isn't an official status, but is implied */
-	public static enum PokemonStatus {HEALTHY, ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
+	public static enum PokemonStatus {ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
 	
 	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
@@ -62,47 +61,38 @@ public abstract class Pokemon extends Card {
 			} 
 			return enemy.removeHP(damage);
 		}
-	
 	}
 	
 	
-	// Battle attributes and Image
+	// Static attributes
+	protected int HP;
+	protected int retreatCost;
 	private Element weakness;
 	private Element resistance;
 	private int weakMod;
 	private int resMod;
 	protected ActionDesc action1;
 	protected ActionDesc action2;
-	protected int retreatCost;
-		
-	
-	// These fields help determine if a Pokemon can be played
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
 	
-	
-	/* Dynamic Pokemon characteristics */
-	protected int HP;
+	// Dynamic attributes
 	private int damage = 0;
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
-	
-	/* status[3] holds three fields,
-	 * [HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
-	 */
+	// [ASLEEP/CONFUSED/PARALYZED, BURN, POISON]
 	private PokemonStatus[] status = new PokemonStatus[3];
-	private PokemonStatus oldstatus;
+	private PokemonStatus oldStatus;
 
 	
-	/* Constructor */
 	public Pokemon(Player owner) {
 		super(owner);
 		this.setImage(toString());
-		this.healAllStatus();
+		this.removeAllStatus();
 	}
 	
 	
-	/* Overridable attack/ability methods */
+	// Overridable attack/ability methods
 	public void actionOne(Player target) {
 		assert(action1 != null) : "Action 1 not set";
 		action1.attack(target);
@@ -113,7 +103,7 @@ public abstract class Pokemon extends Card {
 		action2.attack(target);
 	}
 	
-	// Charmander.toString == "Charmander"
+	// Charmander.toString() == "Charmander"
 	public final String toString() {
 		return getClass().getSimpleName();
 	}
@@ -187,7 +177,7 @@ public abstract class Pokemon extends Card {
 		return status;
 	}
 	
-	public final void setStatus(PokemonStatus stat) {
+	public final void addStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
 		switch (stat) {
@@ -202,26 +192,26 @@ public abstract class Pokemon extends Card {
 		}
 	}
 	
-	public final void healStatus(PokemonStatus stat) {
+	public final void removeStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
 		switch (stat) {
 		case POISONED:
-			status[2] = PokemonStatus.HEALTHY;
+			status[2] = null;
 			break;
 		case BURNED:
-			status[1] = PokemonStatus.HEALTHY;
+			status[1] = null;
 			break;
 		default:
-			status[0] = PokemonStatus.HEALTHY;
+			status[0] = null;
 		}	
 	}
 
-	public final void healAllStatus() {
-		status[2] = PokemonStatus.HEALTHY;
-		status[1] = PokemonStatus.HEALTHY;
-		status[0] = PokemonStatus.HEALTHY;
-		oldstatus = PokemonStatus.HEALTHY;
+	public final void removeAllStatus() {
+		status[2] = null;
+		status[1] = null;
+		status[0] = null;
+		oldStatus = null;
 	}
 	
 	/** 
@@ -230,6 +220,7 @@ public abstract class Pokemon extends Card {
 	 */
 	public final void statusEffect() {
 		for (int i = 2; i < 0; i--) {
+			if (status[i] == null) continue;
 			switch(status[i]) {
 			case POISONED:
 				
@@ -251,7 +242,7 @@ public abstract class Pokemon extends Card {
 				
 				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
 				if (true) // if coinflip is heads
-					status[0] = PokemonStatus.HEALTHY;
+					status[0] = null;
 				break;
 			case PARALYZED:
 				
@@ -259,12 +250,12 @@ public abstract class Pokemon extends Card {
 				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
 				Condition Paralyzed during the in-between turns phase if your Pokémon
 				was Paralyzed since the beginning of your last turn.*/
-				if (oldstatus.equals(PokemonStatus.PARALYZED))
-					status[0] = PokemonStatus.HEALTHY;
+				if (oldStatus == PokemonStatus.PARALYZED)
+					status[0] = null;
 				break;
 			}
 		}
-		oldstatus = status[0];
+		oldStatus = status[0];
 	}	 
 	
 	@SuppressWarnings("unused")
@@ -280,7 +271,7 @@ public abstract class Pokemon extends Card {
 	/**
 	 * Sets properties related to evolution capabilities.
 	 * @param evolved - false if stage is basic
-	 * @param evolveable
+	 * @param evolveable - true if it has an evolved form
 	 * @param evolution - name of evolution or null string
 	 */
 	protected final void setEvolution(boolean evolved, boolean evolveable, 
@@ -290,7 +281,7 @@ public abstract class Pokemon extends Card {
 		this.evolution = evolution;
 	}
 	
-	/** Enter 0 for default modifiers */
+	/** Enter 0 for default modifiers, null if no weakness/resistance */
 	protected final void setDefense(Element weakness, int weakMod, 
 			Element resistance, int resMod) {
 		this.weakness = weakness;
