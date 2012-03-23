@@ -9,7 +9,6 @@ import static org.tabletop.pkmncc.Battle.currentPlayer;
 public final class RFIDListener {
 	
 	public String RFIDTag;
-//	boolean waiter;
 		
 	private boolean dataAvailable = false;
 	
@@ -21,11 +20,6 @@ public final class RFIDListener {
 		RFIDTag = null;
 		return RFIDTag;
 	}
-	
-//	public RFIDListener(){
-//		RFIDTag = "";
-//		waiter = false;
-//	}
 	
 	public Pokemon getPokeCard() {
 		if (RFIDTag.equals("O11111110")){
@@ -76,13 +70,13 @@ public final class RFIDListener {
 			return new Energy(Element.WATER);
 		}
 		else if (RFIDTag.equals("0141414140")){
-			return new Trainer(TrainerType.ENERGYREMOVAL);
+			return new Trainer(currentPlayer, TrainerType.ENERGYREMOVAL);
 		}
 		else if (RFIDTag.equals("0161616160")){
-			return new Trainer(TrainerType.FULLHEAL);
+			return new Trainer(currentPlayer, TrainerType.FULLHEAL);
 		}
 		else if (RFIDTag.equals("0171717170")){
-			return new Trainer(TrainerType.POTION);
+			return new Trainer(currentPlayer, TrainerType.POTION);
 		}
 		else {
 			return null;

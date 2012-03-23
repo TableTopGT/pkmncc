@@ -96,7 +96,7 @@ public abstract class Pokemon extends Card {
 	
 	/* Constructor */
 	public Pokemon(Player owner) {
-		super(CardType.POKEMON, owner);
+		super(owner);
 		this.setImage(toString());
 		this.healAllStatus();
 	}

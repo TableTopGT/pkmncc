@@ -11,11 +11,11 @@ import java.util.ArrayList;
 public class Energy extends Card {
 
 	public Energy(Element element) {
-		super(CardType.ENERGY, element);
+		super(element);
 		this.setImage(toString());
 	}
 	
-	// Energy(GRASS).toString == "GRASS"
+	@Override //Energy(GRASS).toString == "GRASS"
 	public String toString() {
 		return getElement().toString();
 	}

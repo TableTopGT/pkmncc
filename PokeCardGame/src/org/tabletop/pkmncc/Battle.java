@@ -1,7 +1,6 @@
 package org.tabletop.pkmncc;
 
 import org.tabletop.pkmncc.card.*;
-import org.tabletop.pkmncc.card.Card.CardType;
 
 
 import android.app.Activity;
@@ -15,7 +14,6 @@ public class Battle extends Activity {
 	public Player winner = null;
 	public RFIDListener cardListener;
 	public Card newCard = null;
-	public CardType newCardType;
 	public boolean endTurn;
 
 	
@@ -114,21 +112,17 @@ public class Battle extends Activity {
 		currentPlayer = player1;
 		while (newCard==null){
 		newCard = cardListener.getCard();
-		newCardType = newCard.getCardType();
 		}
-		if (newCardType == CardType.POKEMON){
+		if (newCard instanceof Pokemon){
 			player1.addCard(newCard);
 			newCard = null;
-			newCardType=null;
 		}
 		//now player can play either more pokemon or energy until turn is ended
 		while (endTurn==false){
 			newCard = cardListener.getCard();
-			newCardType = newCard.getCardType();
-			if (newCardType == CardType.POKEMON || newCardType == CardType.ENERGY){
+			if (!(newCard instanceof Trainer)) {
 				player1.addCard(newCard);
 				newCard = null;
-				newCardType = null;
 			}
 		}
 				
@@ -145,7 +139,7 @@ public class Battle extends Activity {
 			updateP2buttons();
 		}
 		
-		while (endTurn = false){
+		while (endTurn == false){
 			//Option 1: swipe a card
 			newCard = cardListener.getCard();
 			thisPlayer.addCard(newCard);

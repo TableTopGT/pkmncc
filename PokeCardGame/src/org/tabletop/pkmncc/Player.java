@@ -74,7 +74,7 @@ public class Player {
 	public void playTrainer(Trainer trainerCard){
 		if (thisTrainer == null){
 			thisTrainer = trainerCard;
-			trainerCard.useTrainer(this, otherPlayer);
+			trainerCard.useTrainer(otherPlayer);
 		}
 		else {
 			//open pop up that says you cannot play another trainer on this turn
