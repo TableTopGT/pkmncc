@@ -20,7 +20,7 @@ public abstract class Pokemon extends Card {
 		public String actionName;
 		private int baseAttack;
 		private ArrayList<Energy> energyCost;
-		
+
 		public ActionDesc(String actionName, int baseAttack, 
 				Element... energyCost) {
 			this.actionName = actionName;
@@ -28,6 +28,14 @@ public abstract class Pokemon extends Card {
 			this.energyCost = Energy.listFromArray(energyCost);
 		}
 		
+		public final void addBaseAttack(int add) {
+			this.baseAttack += add;
+		}
+		
+		public final void multBaseAttack(int mult) {
+			this.baseAttack *= mult;
+		}
+
 		/**
 		 * Attempt an attack on the opponent's active Pokemon.
 		 * @param opponent
@@ -157,7 +165,7 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	//XXX Prototype-only function
+	//XXX Prototype-only function, dialogBox so player can chose which
 	public final void removeEnergy() {
 		energy.remove(1);
 	}
@@ -273,10 +281,9 @@ public abstract class Pokemon extends Card {
 	 * @param evolveable - true if it has an evolved form
 	 * @param evolution - name of evolution or null string
 	 */
-	protected final void setEvolution(boolean evolved, boolean evolveable, 
-			String evolution) {
-		this.evolved = evolved;
-		this.evolvable = evolveable;
+	protected final void setEvolution(PokemonStage stage, String evolution) {
+		this.evolved = PokemonStage.BASIC.equals(stage);
+		this.evolvable = evolution != "";
 		this.evolution = evolution;
 	}
 	

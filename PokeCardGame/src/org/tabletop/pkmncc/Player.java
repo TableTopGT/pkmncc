@@ -45,6 +45,12 @@ public class Player {
 		otherPlayer = opponent;		
 	}
 	
+	/** True is Heads, Tails is False */
+	public boolean coinFlip() {
+		//TODO use Random number generator
+		return true;
+	}
+	
 	public Pokemon getActive() {
 		return pokeArr[0];
 	}
