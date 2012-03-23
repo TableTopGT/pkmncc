@@ -65,12 +65,12 @@ public abstract class Pokemon extends Card {
 	
 	
 	// Static attributes
-	protected int HP;
-	protected int retreatCost;
+	private int HP;
 	private Element weakness;
 	private Element resistance;
 	private int weakMod;
 	private int resMod;
+	private int retreatCost;
 	protected ActionDesc action1;
 	protected ActionDesc action2;
 	private boolean evolved;
@@ -88,7 +88,6 @@ public abstract class Pokemon extends Card {
 	public Pokemon(Player owner) {
 		super(owner);
 		this.setImage(toString());
-		this.removeAllStatus();
 	}
 	
 	
@@ -282,11 +281,13 @@ public abstract class Pokemon extends Card {
 	}
 	
 	/** Enter 0 for default modifiers, null if no weakness/resistance */
-	protected final void setDefense(Element weakness, int weakMod, 
-			Element resistance, int resMod) {
+	protected final void setDefense(int HP, int retreatCost, 
+			Element weakness, int weakMod, Element resistance, int resMod) {
 		this.weakness = weakness;
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
 		this.resistance = resistance; 
 		this.resMod = (resMod >= 10) ? resMod : 30; // Default unlisted value
+		this.HP = HP;
+		this.retreatCost = retreatCost;
 	}
 }
