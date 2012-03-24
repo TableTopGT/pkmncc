@@ -236,13 +236,13 @@ public abstract class Pokemon extends Card {
 				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
 				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
 				counters on the Burned Pokémon. */
-				if (true) //FIXME if flip is tails
+				if (!getOwner().coinFlip()) // if Tails
 					removeHP(20);
 				break;
 			case ASLEEP:
 				
 				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
-				if (true) // if coinflip is heads
+				if (getOwner().coinFlip()) // if Heads
 					status[0] = null;
 				break;
 			case PARALYZED:
@@ -259,11 +259,10 @@ public abstract class Pokemon extends Card {
 		oldStatus = status[0];
 	}	 
 	
-	@SuppressWarnings("unused")
 	private boolean confusedEffect() {
-		if (true) {			//FIXME if coinflip is heads
+		if (getOwner().coinFlip()) { 	// if Heads
 			return false;
-		} else {				// if coinflip is tails
+		} else {						// if Tails
 			removeHP(30);
 			return true;
 		}

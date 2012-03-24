@@ -11,8 +11,7 @@ import java.util.ArrayList;
 public class Energy extends Card {
 
 	public Energy(Element element) {
-		super(element);
-		this.setImage(toString());
+		this.setElement(element);
 	}
 	
 	@Override //Energy(GRASS).toString == "GRASS"

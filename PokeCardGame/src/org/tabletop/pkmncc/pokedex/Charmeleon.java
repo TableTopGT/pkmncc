@@ -18,6 +18,7 @@ public class Charmeleon extends Pokemon {
 		multiplier += getOwner().coinFlip() ? 1 : 0;
 		action1.multBaseAttack(multiplier);
 		action1.attack(target);
+		action1.multBaseAttack(1/multiplier); //Restore to default
 	}
 	
 }
