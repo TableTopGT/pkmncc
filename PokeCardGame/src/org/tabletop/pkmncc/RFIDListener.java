@@ -4,7 +4,6 @@ import org.tabletop.pkmncc.card.*;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
-import static org.tabletop.pkmncc.Battle.currentPlayer;
 
 public final class RFIDListener {
 	
@@ -23,9 +22,9 @@ public final class RFIDListener {
 	
 	public Pokemon getPokeCard() {
 		if (RFIDTag.equals("O11111110")){
-			return new Charizard(currentPlayer);
+			return new Charizard();
 		}
-		return new Charmander(currentPlayer);
+		return new Charmander();
 	}
 	
 	public boolean listen(){
@@ -37,13 +36,13 @@ public final class RFIDListener {
 		RFIDTag = getTag(); //TODO Asynch compatible?
 		
 		if (RFIDTag.equals("O11111110")){
-			return new Charizard(currentPlayer);
+			return new Charizard();
 		}
 		else if (RFIDTag.equals("0222222220")){
-			return new Charmander(currentPlayer);
+			return new Charmander();
 		}
 		else if (RFIDTag.equals("03333333330")){
-			return new Charmeleon(currentPlayer);
+			return new Charmeleon();
 		}
 		else if (RFIDTag.equals("0444444440")){
 			return new Energy(Element.COLORLESS);
@@ -70,13 +69,13 @@ public final class RFIDListener {
 			return new Energy(Element.WATER);
 		}
 		else if (RFIDTag.equals("0141414140")){
-			return new Trainer(currentPlayer, TrainerType.ENERGYREMOVAL);
+			return new Trainer(TrainerType.ENERGYREMOVAL);
 		}
 		else if (RFIDTag.equals("0161616160")){
-			return new Trainer(currentPlayer, TrainerType.FULLHEAL);
+			return new Trainer(TrainerType.FULLHEAL);
 		}
 		else if (RFIDTag.equals("0171717170")){
-			return new Trainer(currentPlayer, TrainerType.POTION);
+			return new Trainer(TrainerType.POTION);
 		}
 		else {
 			return null;

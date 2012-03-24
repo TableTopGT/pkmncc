@@ -5,8 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charmeleon extends Pokemon {
 	
-	public Charmeleon(Player target) {
-		super(target);
+	public Charmeleon() {
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE1, "Charizard");
 		setDefense(80, 1, Element.WATER, 20, null, 0);

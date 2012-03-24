@@ -5,8 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charmander extends Pokemon {
 
-	public Charmander(Player owner) {
-		super(owner);
+	public Charmander() {
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.BASIC, "Charmeleon");
 		setDefense(60, 1, Element.WATER, 0, null, 0);

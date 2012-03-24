@@ -93,12 +93,6 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus oldStatus;
 
 	
-	public Pokemon(Player owner) {
-		super(owner);
-		this.setImage(toString());
-	}
-	
-	
 	// Overridable attack/ability methods
 	public void actionOne(Player target) {
 		assert(action1 != null) : "Action 1 not set";

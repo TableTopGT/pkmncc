@@ -9,8 +9,7 @@ public class Trainer extends Card {
 	
 	public TrainerType trainerName;
 	
-	public Trainer(Player owner, TrainerType name){
-		super(owner);
+	public Trainer(TrainerType name){
 		trainerName = name;
 	}
 	
@@ -25,4 +24,10 @@ public class Trainer extends Card {
 			getOwner().getActive().removeAllStatus();
 		}
 	}
+
+	@Override
+	public String toString() {
+		return trainerName.toString();
+	}
+	
 }
