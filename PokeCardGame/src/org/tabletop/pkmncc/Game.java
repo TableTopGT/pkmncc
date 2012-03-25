@@ -84,8 +84,8 @@ public class Game extends Activity{
         initiateVars = true;
         initialSwipes = false;
         i = 0;
-        playerOne = new Player(1);
-        playerTwo = new Player(2);
+        playerOne = new Player();
+        playerTwo = new Player();
         
         // Test tag
         rfid.RFIDTag = "O11111110";

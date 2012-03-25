@@ -33,7 +33,7 @@ public class Battle extends Activity {
 	public Battle(){
 		//instantiate players
 		player1 = new Player();
-		player2 = new Player(player1);
+		player2 = new Player();
 		player1.setOpponent(player2);
 		
 		cardListener = new RFIDListener();
