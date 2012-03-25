@@ -24,10 +24,4 @@ public class Trainer extends Card {
 			getOwner().getActive().removeAllStatus();
 		}
 	}
-
-	@Override
-	public String toString() {
-		return trainerName.toString();
-	}
-	
 }

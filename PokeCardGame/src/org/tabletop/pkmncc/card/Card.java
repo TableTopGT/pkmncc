@@ -41,7 +41,5 @@ public abstract class Card {
 		this.image = "images/" + image + ".png";
 	}
 	
-	public abstract String toString();
-
 	//TODO public void draw();
 }
