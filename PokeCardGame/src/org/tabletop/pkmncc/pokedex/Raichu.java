@@ -6,13 +6,11 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Raichu extends Pokemon{
 
 	public Raichu(Player target) {
-		super (target);
-		HP = 90;
-		retreatCost = 0;
+		
 		setElement(Element.LIGHTNING);
-		setEvolution(true, false, "None");
-		setDefense(Element.FIGHTING, 10, Element.METAL, 20);
-		action1 = new ActionDesc("Slice", 30, Element.NONE);
+		setEvolution(PokemonStage.STAGE2, "");
+		setDefense(90, 0, Element.FIGHTING, 10, Element.METAL, 20);
+		action1 = new ActionDesc("Slice", 30);
 		action2 = new ActionDesc("Split Ball", 50, Element.COLORLESS, Element.COLORLESS, Element.COLORLESS);
 		//action3 = new ActionDesc("Burst Ball", 100, Element.LIGHTNING, Element.LIGHTNING, Element.COLORLESS);
 	}

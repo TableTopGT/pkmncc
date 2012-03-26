@@ -6,14 +6,12 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Pichu extends Pokemon {
 
 	public Pichu (Player target) {
-		super (target);
-		HP = 50;
-		retreatCost = 1;
+		
 		setElement(Element.LIGHTNING);
-		setEvolution(false, true, "Pikachu");
-		setDefense(Element.FIGHTING, 10, Element.METAL, 20);
-		action1 = new ActionDesc("Electric Circuit", 0, Element.NONE);
-		action2 = new ActionDesc("Baby Evolution", 0, Element.NONE); // Poke Power
+		setEvolution(PokemonStage.BASIC, "Pikachu");
+		setDefense(50, 1, Element.FIGHTING, 10, Element.METAL, 20);
+		action1 = new ActionDesc("Electric Circuit", 0);
+		action2 = new ActionDesc("Baby Evolution", 0); // Poke Power
 		}
 	
 	public void actionOne (Player target){

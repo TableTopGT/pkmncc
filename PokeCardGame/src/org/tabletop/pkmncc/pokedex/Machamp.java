@@ -6,12 +6,10 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Machamp extends Pokemon {
 
 	public Machamp(Player target) {
-		super (target);
-		HP = 130;
-		retreatCost = 2;
+		
 		setElement(Element.FIGHTING);
-		setEvolution(true, false, "None");
-		setDefense(Element.PSYCHIC, 30, Element.NONE, 0);
+		setEvolution(PokemonStage.STAGE2, "");
+		setDefense(130, 2, Element.PSYCHIC, 30, null, 0);
 		action1 = new ActionDesc("Take Out", 40, Element.FIGHTING);
 		action2 = new ActionDesc("Hurricane Punch", 30, Element.COLORLESS, Element.COLORLESS);
 		// action3 = new ActionDesc("Rage", 60, Element.FIGHTING, Element.FIGHTING, Element.COLORLESS, Element.COLORLESS);

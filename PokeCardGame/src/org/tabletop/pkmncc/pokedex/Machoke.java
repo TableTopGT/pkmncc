@@ -5,13 +5,11 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Machoke extends Pokemon {
 
-	public Machoke(Player target) {
-		super (target);
-		HP = 80;
-		retreatCost = 2;
+	public Machoke() {
+		
 		setElement(Element.FIGHTING);
-		setEvolution(true, true, "Machamp");
-		setDefense(Element.PSYCHIC, 20, Element.NONE, 0);
+		setEvolution(PokemonStage.STAGE1, "Machamp");
+		setDefense(80, 2, Element.PSYCHIC, 20, null, 0);
 		action1 = new ActionDesc("Steady Punch", 20, Element.FIGHTING); // How is 20 different from 20+
 		action2 = new ActionDesc("Brick Break", 30, Element.FIGHTING, Element.COLORLESS);
 	}

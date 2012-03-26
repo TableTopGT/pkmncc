@@ -6,12 +6,10 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Stunky extends Pokemon {
 
 	public Stunky(Player target) {
-		super(target);
-		HP = 60;
-		retreatCost = 1;
+		
 		setElement(Element.DARKNESS);
-		setEvolution(false, true, "Skuntank");
-		setDefense(Element.FIGHTING, 10, Element.PSYCHIC, 20);
+		setEvolution(PokemonStage.BASIC, "Skuntank");
+		setDefense(60, 1, Element.FIGHTING, 10, Element.PSYCHIC, 20);
 		action1 = new ActionDesc("Gnaw and Run", 10, Element.DARKNESS);
 		action2 = new ActionDesc("Double Scratch", 20, Element.COLORLESS, Element.COLORLESS);
 		// TODO Auto-generated constructor stub
