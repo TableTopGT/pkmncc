@@ -4,38 +4,45 @@ import org.tabletop.pkmncc.card.*;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
-import static org.tabletop.pkmncc.Battle.currentPlayer;
 
-public class RFIDListener {
+public final class RFIDListener {
 	
 	public String RFIDTag;
-	boolean waiter;
 		
-	/*public String getTag() {
-		
-		// Reads of the output of the RFID reader
-		RFIDTag = this.getTag();
-		return RFIDTag;
-		}*/
+	private boolean dataAvailable = false;
 	
-	public RFIDListener(){
-		RFIDTag = "";
-		waiter = false;
+	public boolean dataOnBus() {
+		return dataAvailable;
+	}
+	
+	public String getTag() { //TODO asynch must run in seperate thread
+		RFIDTag = null;
+		return RFIDTag;
+	}
+	
+	public Pokemon getPokeCard() {
+		if (RFIDTag.equals("O11111110")){
+			return new Charizard();
+		}
+		return new Charmander();
+	}
+	
+	public boolean listen(){
+		//while(USB.getData) or whatever
+		return false;
 	}
 	
 	public Card getCard() {
-		//insert code about getting card tag from RFID reader and setting it
-		//equal to RFIDTag
+		RFIDTag = getTag(); //TODO Asynch compatible?
 		
-		// Takes in the string, compares it with known values and returns the card
 		if (RFIDTag.equals("O11111110")){
-			return new Charizard(currentPlayer);
+			return new Charizard();
 		}
 		else if (RFIDTag.equals("0222222220")){
-			return new Charmander(currentPlayer);
+			return new Charmander();
 		}
 		else if (RFIDTag.equals("03333333330")){
-			return new Charmeleon(currentPlayer);
+			return new Charmeleon();
 		}
 		else if (RFIDTag.equals("0444444440")){
 			return new Energy(Element.COLORLESS);

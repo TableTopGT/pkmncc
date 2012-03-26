@@ -1,14 +1,16 @@
 package org.tabletop.pkmncc;
 
+import java.util.Arrays;
+
 import org.tabletop.pkmncc.card.*;
 
 public class Player {
 
+	private static int playerCount = 0;
+	public int playerNum;
 	public int card, health;
 	public RFIDListener rfid;
-	public Pokemon holder; //used for switching array positions (active <--> benched)
-	public Player otherPlayer;
-	public int i; //generic counter
+	public Player opponent;
 	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
@@ -16,28 +18,26 @@ public class Player {
 	
 	//Player constructor--if you use this constructor, you should call setOpponent after
 	public Player(){
-		i = 0;
 		//set all the players pokemon to null
-		while (i<5){
-			pokeArr[i]=null;
-			i++;
-		}
+		Arrays.fill(pokeArr, null);
+		playerNum = ++playerCount;
+		assert (playerCount < 3) : "Too many players!";
 	}
 	
-	//Player constructor: input opponent
-	public Player(Player opponent){
-		i = 0;
-		//set all the players pokemon to null
-		while (i<5){
-			pokeArr[i]=null;
-			i++;
-		}
-		otherPlayer = opponent;		
+	/** True is Heads, Tails is False */
+	public boolean coinFlip() {
+		//TODO use Random number generator
+		return true;
+	}
+	
+	public Pokemon getActive() {
+		return pokeArr[0];
 	}
 	
 	//sets the players opponent
 	public void setOpponent(Player opponent){
-		otherPlayer=opponent;
+		this.opponent = opponent;
+		opponent.opponent = this;
 	}
 
 	//check to see what kind of card the player has scanned
@@ -60,7 +60,7 @@ public class Player {
 	public void playTrainer(Trainer trainerCard){
 		if (thisTrainer == null){
 			thisTrainer = trainerCard;
-			trainerCard.useTrainer(this, otherPlayer);
+			trainerCard.useTrainer(opponent);
 		}
 		else {
 			//open pop up that says you cannot play another trainer on this turn
@@ -74,10 +74,11 @@ public class Player {
 	//			also, it should auto-update the incrementer (i) to place the pokemon in the right place
 	public void addPokemon(Pokemon pokemonCard){
 		//assign the pokemon to the first spot available
-		i = 0;
+		int i = 0;
 		while (pokeArr[i] != null){
 			if (i<=5){
-				while(rfid.waiter){
+//				while(rfid.waiter){
+				while(rfid.dataOnBus()){
 //				pokeArr[i]=rfid.getCard();  // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
 				}
 			}
@@ -85,26 +86,31 @@ public class Player {
 		}
 	}
 	
-/*	public void endTurn(){
-		i = 0;
-		//if any of the pokemon are poisoned,subtract from their health 
-		while (i<5){
-			if (pokeArr[i].getStatus() == PokemonStatus.POISONED ){
-				pokeArr[i].removeHP(10);
-			}
+	//TODO use canPlay() dialogBox() getIndex() switchActive() to evolve
+	public final boolean canPlay(Pokemon pokemonCard) {
+		boolean playable = false;
+		for (int i = 0; i < 7; i++) {
+			if (pokeArr[i] == null) 
+				playable = pokemonCard.isBasic();
+			else
+				playable = pokemonCard.isEvolutionOf(pokeArr[i]);
 		}
+		return playable;
+	}
+	
+	public void endTurn(){
 		thisTrainer = null;
 	}
-*/	
+
 	public void switchActive(int newActiveIndex){
-		holder = pokeArr[0];
-		pokeArr[0]=pokeArr[newActiveIndex];
-		pokeArr[newActiveIndex]=holder;		
+		Pokemon holder = pokeArr[0];
+		pokeArr[0] = pokeArr[newActiveIndex];
+		pokeArr[newActiveIndex] = holder;
 	}
 
 	//returns the index of the pokemon
 	public int getIndex(Pokemon thisPoke){
-		i=0;
+		int i = 0;
 		//go through the array testing for the pokemon
 		while (pokeArr[i] != thisPoke && i<6){
 			i++;

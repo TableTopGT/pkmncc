@@ -1,27 +1,28 @@
 package org.tabletop.pkmncc.card;
 
+import org.tabletop.pkmncc.Player;
+import static org.tabletop.pkmncc.Battle.currentPlayer;
+
 public abstract class Card {
 
-	public static enum CardType {POKEMON, ENERGY, TRAINER};
+	/** Used by Pokemon and Energy Cards */
+	public static enum Element {GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
 
-	/** 
-	 * Contains all PokemonTCG Types. 
-	 * 
-	 * Used by Energy and Pokemon Cards. Type NONE isn't standard 
-	 * and should be used when to handle exceptional cases.
-	 */		
-	public static enum Element {NONE, GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
-
-	private CardType cardType;
 	private Element element;
+	private Player owner;
+	private String image;
 
-	protected Card(CardType cardType, Element element) {
-		this.cardType = cardType;
-		this.element = element;
+	protected Card() {
+		this.owner = currentPlayer;
+		this.setImage(toString());
 	}
-
-	public final CardType getCardType() {
-		return cardType;
+	
+	public final Player getOwner() {
+		return owner;
+	} 
+	
+	public final void setOwner(Player owner) {
+		this.owner = owner;
 	}
 
 	public final Element getElement() {
@@ -31,4 +32,14 @@ public abstract class Card {
 	public final void setElement(Element element) {	
 		this.element = element;
 	}
+
+	public final String getImage() {
+		return image;
+	}
+
+	public final void setImage(String image) {
+		this.image = "images/" + image + ".png";
+	}
+	
+	//TODO public void draw();
 }

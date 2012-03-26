@@ -6,16 +6,12 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
-
 import org.tabletop.pkmncc.Player;
+
 
 public abstract class Pokemon extends Card {
 	
-	/** 
-	 * Contains all PokemonTCG Statuses. Type HEALTHY isn't officially 
-	 * standard but is implied.
-	 */		
-	public static enum PokemonStatus {HEALTHY, ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
+	public static enum PokemonStatus {ASLEEP, CONFUSED, PARALYZED, BURNED, POISONED};
 	
 	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
@@ -24,21 +20,30 @@ public abstract class Pokemon extends Card {
 		public String actionName;
 		private int baseAttack;
 		private ArrayList<Energy> energyCost;
-		
+
 		public ActionDesc(String actionName, int baseAttack, 
 				Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
 			this.energyCost = Energy.listFromArray(energyCost);
 		}
-		
+
 		/**
 		 * Attempt an attack on the opponent's active Pokemon.
 		 * @param opponent
-		 * @param action
 		 * @return the damage done by the attack
 		 */
-		public int attack(Player opponent) { //TODO check if fainted
+		public int attack(Player opponent) {
+			return attack(opponent, baseAttack);
+		}
+		
+		/**
+		 * Attempt an attack with an adjusted attack strength.
+		 * @param opponent
+		 * @param tempAttack - modified attack strength
+		 * @return the damage done by the attack
+		 */
+		public int attack(Player opponent, int tempAttack) { //TODO check if fainted
 			if (!energy.containsAll(energyCost)) {
 				// Not enough energy!
 				return 0;
@@ -54,67 +59,53 @@ public abstract class Pokemon extends Card {
 				return 0;
 			}
 				
-			Pokemon enemy = opponent.pokeArr[0];
-			int damage = baseAttack;
-			if (enemy.weakness.equals(getElement())) {
+			Pokemon enemy = opponent.getActive();
+			int damage = tempAttack;
+			if (enemy.weakness == getElement()) {
 				damage = (weakMod > 10) 
 						? damage + enemy.weakMod
 						: damage * enemy.weakMod;
-			} else if (enemy.resistance.equals(getElement())) {
+			} else if (enemy.resistance == getElement()) {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);
 		}
-	
 	}
 	
 	
-	// Battle attributes
+	// Static attributes
+	private int HP;
 	private Element weakness;
 	private Element resistance;
 	private int weakMod;
 	private int resMod;
+	private int retreatCost;
 	protected ActionDesc action1;
 	protected ActionDesc action2;
-	protected int retreatCost;
-		
-	
-	// These fields help determine if a Pokemon can be played
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
 	
-	
-	/* Dynamic Pokemon characteristics */
-	protected Player owner;
-	protected int HP;
+	// Dynamic attributes
 	private int damage = 0;
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
-	
-	/* status[3] holds three fields,
-	 * [HEALTHY/ASLEEP/CONFUSED/PARALYZED, HEALTHY/BURN, HEALTHY/POISON]
-	 */
+	// [ASLEEP/CONFUSED/PARALYZED, BURN, POISON]
 	private PokemonStatus[] status = new PokemonStatus[3];
-	private PokemonStatus oldstatus;
+	private PokemonStatus oldStatus;
 
 	
-	/* Constructor */
-	public Pokemon(Player owner) {
-		super(CardType.POKEMON, null);
-		this.owner = owner;
-		this.healAllStatus();
-	}
-	
-	
-	/* Overridable attack/ability methods */
+	// Overridable attack/ability methods
 	public void actionOne(Player target) {
+		assert(action1 != null) : "Action 1 not set";
 		action1.attack(target);
 	}
 	
 	public void actionTwo(Player target) {
+		assert(action2 != null) : "Action 2 not set";
 		action2.attack(target);
 	}
 	
+	@Override // Charmander.toString() == "Charmander"
 	public final String toString() {
 		return getClass().getSimpleName();
 	}
@@ -138,9 +129,6 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Battle centered methods */
-	//TODO canPlay()
-	//TODO canEvolve()
-	
 	private boolean canMove() {
 		return (status[0] != PokemonStatus.ASLEEP)
 				&& (status[0] != PokemonStatus.PARALYZED);
@@ -149,7 +137,15 @@ public abstract class Pokemon extends Card {
 	public final boolean canRetreat() {
 		return canMove() && (energy.size() >= retreatCost);
 	}
+	
+	public final boolean isBasic() {
+		return !evolved;
+	}
 
+	public boolean isEvolutionOf(Pokemon pokemon) {
+		return evolved && pokemon.evolvable 
+				&& pokemon.evolution.equals(toString());
+	}
 	
 	/* Energy-centered methods */
 	/** 
@@ -164,7 +160,7 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	//XXX Prototype-only function
+	//XXX Prototype-only function, dialogBox so player can chose which
 	public final void removeEnergy() {
 		energy.remove(1);
 	}
@@ -183,7 +179,7 @@ public abstract class Pokemon extends Card {
 		return status;
 	}
 	
-	public final void setStatus(PokemonStatus stat) {
+	public final void addStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
 		switch (stat) {
@@ -198,26 +194,26 @@ public abstract class Pokemon extends Card {
 		}
 	}
 	
-	public final void healStatus(PokemonStatus stat) {
+	public final void removeStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
 		switch (stat) {
 		case POISONED:
-			status[2] = PokemonStatus.HEALTHY;
+			status[2] = null;
 			break;
 		case BURNED:
-			status[1] = PokemonStatus.HEALTHY;
+			status[1] = null;
 			break;
 		default:
-			status[0] = PokemonStatus.HEALTHY;
+			status[0] = null;
 		}	
 	}
 
-	public final void healAllStatus() {
-		status[2] = PokemonStatus.HEALTHY;
-		status[1] = PokemonStatus.HEALTHY;
-		status[0] = PokemonStatus.HEALTHY;
-		oldstatus = PokemonStatus.HEALTHY;
+	public final void removeAllStatus() {
+		status[2] = null;
+		status[1] = null;
+		status[0] = null;
+		oldStatus = null;
 	}
 	
 	/** 
@@ -226,6 +222,7 @@ public abstract class Pokemon extends Card {
 	 */
 	public final void statusEffect() {
 		for (int i = 2; i < 0; i--) {
+			if (status[i] == null) continue;
 			switch(status[i]) {
 			case POISONED:
 				
@@ -240,14 +237,14 @@ public abstract class Pokemon extends Card {
 				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
 				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
 				counters on the Burned Pokémon. */
-				if (true) //FIXME if flip is tails
+				if (!getOwner().coinFlip()) // if Tails
 					removeHP(20);
 				break;
 			case ASLEEP:
 				
 				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
-				if (true) // if coinflip is heads
-					status[0] = PokemonStatus.HEALTHY;
+				if (getOwner().coinFlip()) // if Heads
+					status[0] = null;
 				break;
 			case PARALYZED:
 				
@@ -255,43 +252,39 @@ public abstract class Pokemon extends Card {
 				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
 				Condition Paralyzed during the in-between turns phase if your Pokémon
 				was Paralyzed since the beginning of your last turn.*/
-				if (oldstatus.equals(PokemonStatus.PARALYZED))
-					status[0] = PokemonStatus.HEALTHY;
+				if (oldStatus == PokemonStatus.PARALYZED)
+					status[0] = null;
 				break;
 			}
 		}
-		oldstatus = status[0];
+		oldStatus = status[0];
 	}	 
 	
-	@SuppressWarnings("unused")
 	private boolean confusedEffect() {
-		if (true) {			//FIXME if coinflip is heads
+		if (getOwner().coinFlip()) { 	// if Heads
 			return false;
-		} else {				// if coinflip is tails
+		} else {						// if Tails
 			removeHP(30);
 			return true;
 		}
 	}
 	
-	protected final String getEvolution() {
-		return evolution;
-	}
-	
 	/**
 	 * Sets properties related to evolution capabilities.
-	 * @param evolved - false if stage is basic
-	 * @param evolveable
-	 * @param evolution - name of evolution or null string
+	 * @param stage - the Pokemon's stage
+	 * @param evolution - name of next evolution or null string
 	 */
-	protected final void setEvolution(boolean evolved, boolean evolveable, 
-			String evolution) {
-		this.evolved = evolved;
-		this.evolvable = evolveable;
+	protected final void setEvolution(PokemonStage stage, String evolution) {
+		this.evolved = PokemonStage.BASIC.equals(stage);
+		this.evolvable = evolution != "";
 		this.evolution = evolution;
 	}
 	
-	protected final void setDefense(Element weakness, int weakMod, 
-			Element resistance, int resMod) {
+	/** Enter 0 for default modifiers, null if no weakness/resistance */
+	protected final void setDefense(int HP, int retreatCost, 
+			Element weakness, int weakMod, Element resistance, int resMod) {
+		this.HP = HP;
+		this.retreatCost = retreatCost;
 		this.weakness = weakness;
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
 		this.resistance = resistance; 

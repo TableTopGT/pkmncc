@@ -5,21 +5,18 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Charmeleon extends Pokemon {
 	
-	public Charmeleon(Player target) {
-		super(target);
-		HP = 60;
-		retreatCost = 1;
+	public Charmeleon() {
 		setElement(Element.FIRE);
-		setEvolution(true, true, "Charizard");
-		setDefense(Element.WATER, 0, Element.NONE, 0);	
-		action1 = new ActionDesc("Scratch", 10, Element.COLORLESS);
-		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
+		setEvolution(PokemonStage.STAGE1, "Charizard");
+		setDefense(80, 1, Element.WATER, 20, null, 0);
+		action1 = new ActionDesc("Slam", 30, Element.COLORLESS, Element.COLORLESS);
+		action2 = new ActionDesc("Fire Punch", 50, Element.COLORLESS, Element.COLORLESS, Element.FIRE);
 	}
 
 	public void actionOne(Player target) {
-	}
-	
-	public void actionTwo(Player target) {
+		int multiplier = getOwner().coinFlip() ? 1 : 1;
+		multiplier += getOwner().coinFlip() ? 1 : 0;
+		action1.attack(target, 30*multiplier);
 	}
 	
 }
