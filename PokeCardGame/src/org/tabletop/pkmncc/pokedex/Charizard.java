@@ -15,6 +15,7 @@ public class Charizard extends Pokemon {
 												   Element.FIRE, Element.FIRE);
 	}
 
+	@Override
 	public void actionOne(Player target) {
 		if (getStatus()[0] == null)
 			for (Energy E : getEnergy())
@@ -22,6 +23,7 @@ public class Charizard extends Pokemon {
 		// Can't undo this yet, might need an endPokePower()
 	}
 	
+	@Override
 	public void actionTwo(Player target) {
 		removeEnergy();
 		removeEnergy();

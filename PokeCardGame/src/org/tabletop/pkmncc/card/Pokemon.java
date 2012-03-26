@@ -6,6 +6,7 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
+import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 
 
@@ -15,17 +16,15 @@ public abstract class Pokemon extends Card {
 	
 	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
-	
 	protected final class ActionDesc {
 		public String actionName;
 		private int baseAttack;
 		private ArrayList<Energy> energyCost;
 
-		public ActionDesc(String actionName, int baseAttack, 
-				Element... energyCost) {
+		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost);
+			this.energyCost = Energy.listFromArray(energyCost); //XXX handle empty cost
 		}
 
 		/**
@@ -43,7 +42,7 @@ public abstract class Pokemon extends Card {
 		 * @param tempAttack - modified attack strength
 		 * @return the damage done by the attack
 		 */
-		public int attack(Player opponent, int tempAttack) { //TODO check if fainted
+		public int attack(Player opponent, int tempAttack) {
 			if (!energy.containsAll(energyCost)) {
 				// Not enough energy!
 				return 0;
@@ -85,6 +84,8 @@ public abstract class Pokemon extends Card {
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
+//	private MediaPlayer cry = new MediaPlayer();
+//	private String sound = "../sounds/"+toString()+".mp3";
 	
 	// Dynamic attributes
 	private int damage = 0;
@@ -93,6 +94,12 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
+	protected Pokemon() {
+//		Draw.add(this); //XXX
+//		cry.setDataSource(sound);
+//		cry.prepare();
+//		cry.start();
+	}
 	
 	// Overridable attack/ability methods
 	public void actionOne(Player target) {
@@ -118,13 +125,27 @@ public abstract class Pokemon extends Card {
 	public final int addHP(int hitPoints) {
 		damage -= hitPoints;
 		if (damage < 0) damage = 0;
-		return HP - damage;
+		return getHP();
 	}
 	
+	/** Pokemon will disappear from screen and cry on faint */
 	public final int removeHP(int hitPoints) {
 		damage += hitPoints;
-		if (damage > HP) damage = HP;
-		return HP - damage;
+		if (damage >= HP) faint();
+		return getHP();
+	}
+	
+	private void faint() { //FIXME
+		damage = HP;
+//		cry.start();
+		// Cleanup audio
+//		cry.release();
+//		cry = null;
+//		Draw.remove(this);
+	}
+	
+	public final boolean isFainted() {
+		return getHP() == 0;
 	}
 	
 	

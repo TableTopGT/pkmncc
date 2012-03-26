@@ -7,7 +7,7 @@ import org.tabletop.pkmncc.card.*;
 public class Player {
 
 	private static int playerCount = 0;
-	public int playerNum;
+	public final int playerNum;
 	public int card, health;
 	public RFIDListener rfid;
 	public Player opponent;
