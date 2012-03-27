@@ -88,6 +88,7 @@ public class Game extends Activity{
         playerTwo = new Player(2);
         
         // Test tag
+        rfid = new RFIDListener();
         rfid.RFIDTag = "O11111110";
         
         // Setup Asset stream
@@ -131,14 +132,18 @@ public class Game extends Activity{
     		
     		switch(gameState){
     		case START:
-        		// Re-scale background to Canvas resolution, goes off screen, canvas is
-        		// NOT 1280 x 800 because of the tablet's bar at the bottom
-        		battleGround = Bitmap.createScaledBitmap(battleGround, width, height, false);
-        		
-        		// scale bench Pokemon
-        		benchchar = Bitmap.createScaledBitmap(charmander, 75, 75, false);
-        		benchsquir = Bitmap.createScaledBitmap(squirtle, 75, 75, false);
-        		
+        		if(initiateVars){
+            		// Re-scale background to Canvas resolution, goes off screen, canvas is
+            		// NOT 1280 x 800 because of the tablet's bar at the bottom
+            		battleGround = Bitmap.createScaledBitmap(battleGround, width, height, false);
+            		
+            		// scale bench Pokemon
+            		benchchar = Bitmap.createScaledBitmap(charmander, 75, 75, false);
+            		benchsquir = Bitmap.createScaledBitmap(squirtle, 75, 75, false);
+        			dialogBoxRect = new Rect((width/2)-300, (height/2)+200, (width/2)+300, (height/2)-200);
+        			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
+        			initiateVars = false;
+        		}
         		// Draw the background
         		canvas.drawBitmap(battleGround, 0, 0, null);
         		
@@ -169,22 +174,18 @@ public class Game extends Activity{
         		canvas.drawBitmap(benchsquir, 50, 450, null);        		
  */       		
         		
-        		// Setup the DialogBox (not finished) and draw it
-        		if(initiateVars){
-        			dialogBoxRect = new Rect((width/2)-300, (height/2)+200, (width/2)+300, (height/2)-200);
-        			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
-        			initiateVars = false;
-        		}
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
         				initialPokemon(canvas, playerOne);
+        				mainDialog.done = false;
         				playerTurn = Turn.TWO;
         				mainDialog.setText("Player Two choose active pokemon followed by bench pokemon");
         				mainDialog.draw(canvas);
         				break;
         			case TWO :
         				initialPokemon(canvas, playerTwo);
+        				mainDialog.done = false;
 //        				gameState = State.BATTLE;
         				break;
         			}
@@ -244,12 +245,16 @@ public class Game extends Activity{
 	public void initialPokemon(Canvas board, Player activePlayer){
 		int k = 0;
 		while (k < activePlayer.pokeArr.length){
-			while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
-				activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+			if(!mainDialog.done){
+				while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
+					if(!mainDialog.done) activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+					else break;
+				}
+				k++;
 			}
-			k++;
+			else break;
 		}
-//		Draw.drawBenchPoke(board, activePlayer);
+//		Draw.drawBenchPoke(board, activePlayer, assetManager);
 	}
 	
 /*	@Override

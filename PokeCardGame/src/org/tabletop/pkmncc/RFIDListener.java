@@ -22,14 +22,17 @@ public final class RFIDListener {
 	
 	public Pokemon getPokeCard() {
 		if (RFIDTag.equals("O11111110")){
-			return new Charizard();
+			RFIDTag.equals(null);
+			return new Charmander();
 		}
+		// Also returns Charmander to test, should actually return nothing until
+		// an RFID tag is put in.
 		return new Charmander();
 	}
 	
 	public boolean listen(){
 		//while(USB.getData) or whatever
-		return false;
+		return true;
 	}
 	
 	public Card getCard() {

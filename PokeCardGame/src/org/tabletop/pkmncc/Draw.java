@@ -14,9 +14,9 @@ import android.graphics.Matrix;
 
 
 public class Draw extends Activity{
-	public AssetManager pokedraw;
-	private InputStream instream;
-	private Bitmap activepokemon;
+	public static AssetManager pokedraw;
+	private static InputStream instream;
+	private static Bitmap activepokemon;
 	
 	
 	/*Draws an active Pokemon, based on which player 
@@ -48,8 +48,8 @@ public class Draw extends Activity{
 	// Cameron I made this so I can continue Game.java and tests to see if it works
 	// You can probably use your Draw function in this one instead of canvas.drawBitmap
 	// It iterates through the Bench and draws the whole playing side
-	public void drawBenchPoke(Canvas board, Player player){
-		pokedraw = this.getAssets();
+	public static void drawBenchPoke(Canvas board, Player player, AssetManager pokedraw){
+//		pokedraw = this.getAssets();
 		int k = 0;
 		Matrix matrix = new Matrix();
 		Bitmap flippedpoke = null;
