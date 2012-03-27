@@ -6,6 +6,7 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
+import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 
 
@@ -15,34 +16,33 @@ public abstract class Pokemon extends Card {
 	
 	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
-	
 	protected final class ActionDesc {
 		public String actionName;
 		private int baseAttack;
 		private ArrayList<Energy> energyCost;
 
-		public ActionDesc(String actionName, int baseAttack, 
-				Element... energyCost) {
+		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost);
-		}
-		
-		public final void addBaseAttack(int add) {
-			this.baseAttack += add;
-		}
-		
-		public final void multBaseAttack(int mult) {
-			this.baseAttack *= mult;
+			this.energyCost = Energy.listFromArray(energyCost); //XXX handle empty cost
 		}
 
 		/**
 		 * Attempt an attack on the opponent's active Pokemon.
 		 * @param opponent
-		 * @param action
 		 * @return the damage done by the attack
 		 */
-		public int attack(Player opponent) { //TODO check if fainted
+		public int attack(Player opponent) {
+			return attack(opponent, baseAttack);
+		}
+		
+		/**
+		 * Attempt an attack with an adjusted attack strength.
+		 * @param opponent
+		 * @param tempAttack - modified attack strength
+		 * @return the damage done by the attack
+		 */
+		public int attack(Player opponent, int tempAttack) {
 			if (!energy.containsAll(energyCost)) {
 				// Not enough energy!
 				return 0;
@@ -59,7 +59,7 @@ public abstract class Pokemon extends Card {
 			}
 				
 			Pokemon enemy = opponent.getActive();
-			int damage = baseAttack;
+			int damage = tempAttack;
 			if (enemy.weakness == getElement()) {
 				damage = (weakMod > 10) 
 						? damage + enemy.weakMod
@@ -84,6 +84,8 @@ public abstract class Pokemon extends Card {
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
+//	private MediaPlayer cry = new MediaPlayer();
+//	private String sound = "../sounds/"+toString()+".mp3";
 	
 	// Dynamic attributes
 	private int damage = 0;
@@ -92,6 +94,12 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
+	protected Pokemon() {
+//		Draw.add(this); //XXX
+//		cry.setDataSource(sound);
+//		cry.prepare();
+//		cry.start();
+	}
 	
 	// Overridable attack/ability methods
 	public void actionOne(Player target) {
@@ -104,7 +112,7 @@ public abstract class Pokemon extends Card {
 		action2.attack(target);
 	}
 	
-	// Charmander.toString() == "Charmander"
+	@Override // Charmander.toString() == "Charmander"
 	public final String toString() {
 		return getClass().getSimpleName();
 	}
@@ -117,13 +125,27 @@ public abstract class Pokemon extends Card {
 	public final int addHP(int hitPoints) {
 		damage -= hitPoints;
 		if (damage < 0) damage = 0;
-		return HP - damage;
+		return getHP();
 	}
 	
+	/** Pokemon will disappear from screen and cry on faint */
 	public final int removeHP(int hitPoints) {
 		damage += hitPoints;
-		if (damage > HP) damage = HP;
-		return HP - damage;
+		if (damage >= HP) faint();
+		return getHP();
+	}
+	
+	private void faint() { //FIXME
+		damage = HP;
+//		cry.start();
+		// Cleanup audio
+//		cry.release();
+//		cry = null;
+//		Draw.remove(this);
+	}
+	
+	public final boolean isFainted() {
+		return getHP() == 0;
 	}
 	
 	
@@ -270,9 +292,8 @@ public abstract class Pokemon extends Card {
 	
 	/**
 	 * Sets properties related to evolution capabilities.
-	 * @param evolved - false if stage is basic
-	 * @param evolveable - true if it has an evolved form
-	 * @param evolution - name of evolution or null string
+	 * @param stage - the Pokemon's stage
+	 * @param evolution - name of next evolution or null string
 	 */
 	protected final void setEvolution(PokemonStage stage, String evolution) {
 		this.evolved = PokemonStage.BASIC.equals(stage);
@@ -283,11 +304,11 @@ public abstract class Pokemon extends Card {
 	/** Enter 0 for default modifiers, null if no weakness/resistance */
 	protected final void setDefense(int HP, int retreatCost, 
 			Element weakness, int weakMod, Element resistance, int resMod) {
+		this.HP = HP;
+		this.retreatCost = retreatCost;
 		this.weakness = weakness;
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
 		this.resistance = resistance; 
 		this.resMod = (resMod >= 10) ? resMod : 30; // Default unlisted value
-		this.HP = HP;
-		this.retreatCost = retreatCost;
 	}
 }

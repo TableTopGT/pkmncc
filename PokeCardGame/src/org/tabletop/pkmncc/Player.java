@@ -1,66 +1,53 @@
 package org.tabletop.pkmncc;
 
+import java.util.Arrays;
+import java.util.Random;
+
 import org.tabletop.pkmncc.card.*;
 
 public class Player {
 
+	private static int playerCount = 0;
+	public final int playerNum;
 	public int card, health;
 	public RFIDListener rfid;
-	public Pokemon holder; //used for switching array positions (active <--> benched)
-	public Player otherPlayer;
-	public int i; //generic counter
+	public Player opponent;
 	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
-	public int playerNum;
+	public Random randGen = new Random();
+	public int randInt;
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	public Pokemon[] pokeArr = new Pokemon[6];
 	
-	//Player constructor--if you use this constructor, you should call setOpponent after
+	/**Player constructor--if you use this constructor, you should call setOpponent after**/
 	public Player(){
-		i = 0;
 		//set all the players pokemon to null
-		while (i<5){
-			pokeArr[i]=null;
-			i++;
-		}
+		Arrays.fill(pokeArr, null);
+		playerNum = ++playerCount;
+		assert (playerCount < 3) : "Too many players!";
 	}
 	
-	public Player(int playerPosition){
-		i = 0;
-		playerNum = playerPosition;
-		//set all the players pokemon to null
-		while (i<5){
-			pokeArr[i]=null;
-			i++;
-		}
-	}
-	//Player constructor: input opponent
-	public Player(Player opponent){
-		i = 0;
-		//set all the players pokemon to null
-		while (i<5){
-			pokeArr[i]=null;
-			i++;
-		}
-		otherPlayer = opponent;		
-	}
-	
-	/** True is Heads, Tails is False */
+	/** True is Heads, Tails is False **/
 	public boolean coinFlip() {
-		//TODO use Random number generator
-		return true;
+		//use Random number generator to get a number between 0 and 1
+		randInt = randGen.nextInt(2);		
+		if (randInt==1) {return true;}
+		else if (randInt==0) {return false;}
+		else {return true;}
 	}
 	
+	/** Returns the player's active Pokemon **/
 	public Pokemon getActive() {
 		return pokeArr[0];
 	}
 	
-	//sets the players opponent
+	/** Set the players opponent **/
 	public void setOpponent(Player opponent){
-		otherPlayer=opponent;
+		this.opponent = opponent;
+		opponent.opponent = this;
 	}
 
-	//check to see what kind of card the player has scanned
+	/**Check to see what kind of card the player has scanned**/
 	public void addCard(Card playedCard){
 
 		if(playedCard instanceof Trainer){
@@ -74,27 +61,26 @@ public class Player {
 		}
 	}
 	
-
 	
-	//execute when a player wants play a trainer card
+	/**Execute when a player wants play a trainer card**/
 	public void playTrainer(Trainer trainerCard){
 		if (thisTrainer == null){
 			thisTrainer = trainerCard;
-			trainerCard.useTrainer(otherPlayer);
+			trainerCard.useTrainer(opponent);
 		}
 		else {
 			//open pop up that says you cannot play another trainer on this turn
 		}
 	}
 	
-	//execute when a player wants to add a pokemon to their bench
+	/**Add a Pokemon to the player's bench**/
 	
 	// NOTICE : this function should just add a pokemon in a designated area in the pokeArray, filling
 	//			up the array (when the game starts) will be a function in Game.java and will use this.
 	//			also, it should auto-update the incrementer (i) to place the pokemon in the right place
 	public void addPokemon(Pokemon pokemonCard){
 		//assign the pokemon to the first spot available
-		i = 0;
+		int i = 0;
 		while (pokeArr[i] != null){
 			if (i<=5){
 //				while(rfid.waiter){
@@ -118,26 +104,21 @@ public class Player {
 		return playable;
 	}
 	
-/*	public void endTurn(){
-		i = 0;
-		//if any of the pokemon are poisoned,subtract from their health 
-		while (i<5){
-			if (pokeArr[i].getStatus() == PokemonStatus.POISONED ){
-				pokeArr[i].removeHP(10);
-			}
-		}
+	/**Execute at end of player's turn to reset variables, clean up, etc.**/
+	public void endTurn(){
 		thisTrainer = null;
 	}
-*/	
+
+	/**Switch player's active Pokemon**/
 	public void switchActive(int newActiveIndex){
-		holder = pokeArr[0];
-		pokeArr[0]=pokeArr[newActiveIndex];
-		pokeArr[newActiveIndex]=holder;		
+		Pokemon holder = pokeArr[0];
+		pokeArr[0] = pokeArr[newActiveIndex];
+		pokeArr[newActiveIndex] = holder;
 	}
 
-	//returns the index of the pokemon
+	/**Returns the index of the pokemon**/
 	public int getIndex(Pokemon thisPoke){
-		i=0;
+		int i = 0;
 		//go through the array testing for the pokemon
 		while (pokeArr[i] != thisPoke && i<6){
 			i++;

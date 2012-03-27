@@ -13,12 +13,11 @@ public class Charmeleon extends Pokemon {
 		action2 = new ActionDesc("Fire Punch", 50, Element.COLORLESS, Element.COLORLESS, Element.FIRE);
 	}
 
+	@Override
 	public void actionOne(Player target) {
 		int multiplier = getOwner().coinFlip() ? 1 : 1;
 		multiplier += getOwner().coinFlip() ? 1 : 0;
-		action1.multBaseAttack(multiplier);
-		action1.attack(target);
-		action1.multBaseAttack(1/multiplier); //Restore to default
+		action1.attack(target, 30*multiplier);
 	}
 	
 }

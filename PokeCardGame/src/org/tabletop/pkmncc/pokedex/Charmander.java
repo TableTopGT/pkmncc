@@ -13,6 +13,7 @@ public class Charmander extends Pokemon {
 		action2 = new ActionDesc("Ember", 30, Element.COLORLESS, Element.FIRE);
 	}
 	
+	@Override
 	public void actionTwo(Player target) {
 		removeEnergy();
 		action2.attack(target);

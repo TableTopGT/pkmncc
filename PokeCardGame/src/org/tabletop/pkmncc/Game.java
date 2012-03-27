@@ -43,7 +43,7 @@ public class Game extends Activity{
 	public boolean gameStarting, gameStartingTwo, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	public int i;
-	public RFIDListener rfid;
+	public RFIDListener rfid = new RFIDListener();
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
 	
@@ -84,8 +84,8 @@ public class Game extends Activity{
         initiateVars = true;
         initialSwipes = false;
         i = 0;
-        playerOne = new Player(1);
-        playerTwo = new Player(2);
+        playerOne = new Player();
+        playerTwo = new Player();
         
         // Test tag
         rfid = new RFIDListener();

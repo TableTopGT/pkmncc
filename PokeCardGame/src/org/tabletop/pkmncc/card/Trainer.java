@@ -2,17 +2,19 @@ package org.tabletop.pkmncc.card;
 
 import org.tabletop.pkmncc.Player;
 
-//this class contains all the functions associated with trainer cards
+/**This class contains all the functions associated with trainer cards**/
+
 public class Trainer extends Card {
 	
-	public static enum TrainerType {POTION, ENERGYREMOVAL, FULLHEAL};
-	
+	public static enum TrainerType {POTION, ENERGYREMOVAL, FULLHEAL};	
 	public TrainerType trainerName;
 	
+	/**Trainer constructor--input trainer type**/
 	public Trainer(TrainerType name){
 		trainerName = name;
 	}
 	
+	/**Use the trainer card**/
 	public void useTrainer(Player opponent){
 		if (trainerName == TrainerType.POTION){
 			getOwner().getActive().addHP(10);
@@ -24,10 +26,4 @@ public class Trainer extends Card {
 			getOwner().getActive().removeAllStatus();
 		}
 	}
-
-	@Override
-	public String toString() {
-		return trainerName.toString();
-	}
-	
 }

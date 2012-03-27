@@ -10,11 +10,12 @@ public class Charizard extends Pokemon {
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE2, "");
 		setDefense(120, 3, Element.WATER, 0, Element.FIGHTING, 30);
-		action1 = new ActionDesc("PP: Energy Burn", 0, (Element)null);
+		action1 = new ActionDesc("PP: Energy Burn", 0);
 		action2 = new ActionDesc("Fire Spin", 100, Element.FIRE, Element.FIRE,
 												   Element.FIRE, Element.FIRE);
 	}
 
+	@Override
 	public void actionOne(Player target) {
 		if (getStatus()[0] == null)
 			for (Energy E : getEnergy())
@@ -22,6 +23,7 @@ public class Charizard extends Pokemon {
 		// Can't undo this yet, might need an endPokePower()
 	}
 	
+	@Override
 	public void actionTwo(Player target) {
 		removeEnergy();
 		removeEnergy();
