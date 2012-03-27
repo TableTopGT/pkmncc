@@ -1,6 +1,7 @@
 package org.tabletop.pkmncc;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import org.tabletop.pkmncc.card.*;
 
@@ -12,11 +13,13 @@ public class Player {
 	public RFIDListener rfid;
 	public Player opponent;
 	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
+	public Random randGen = new Random();
+	public int randInt;
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	public Pokemon[] pokeArr = new Pokemon[6];
 	
-	//Player constructor--if you use this constructor, you should call setOpponent after
+	/**Player constructor--if you use this constructor, you should call setOpponent after**/
 	public Player(){
 		//set all the players pokemon to null
 		Arrays.fill(pokeArr, null);
@@ -24,23 +27,27 @@ public class Player {
 		assert (playerCount < 3) : "Too many players!";
 	}
 	
-	/** True is Heads, Tails is False */
+	/** True is Heads, Tails is False **/
 	public boolean coinFlip() {
-		//TODO use Random number generator
-		return true;
+		//use Random number generator to get a number between 0 and 1
+		randInt = randGen.nextInt(2);		
+		if (randInt==1) {return true;}
+		else if (randInt==0) {return false;}
+		else {return true;}
 	}
 	
+	/** Returns the player's active Pokemon **/
 	public Pokemon getActive() {
 		return pokeArr[0];
 	}
 	
-	//sets the players opponent
+	/** Set the players opponent **/
 	public void setOpponent(Player opponent){
 		this.opponent = opponent;
 		opponent.opponent = this;
 	}
 
-	//check to see what kind of card the player has scanned
+	/**Check to see what kind of card the player has scanned**/
 	public void addCard(Card playedCard){
 
 		if(playedCard instanceof Trainer){
@@ -54,9 +61,8 @@ public class Player {
 		}
 	}
 	
-
 	
-	//execute when a player wants play a trainer card
+	/**Execute when a player wants play a trainer card**/
 	public void playTrainer(Trainer trainerCard){
 		if (thisTrainer == null){
 			thisTrainer = trainerCard;
@@ -67,7 +73,7 @@ public class Player {
 		}
 	}
 	
-	//execute when a player wants to add a pokemon to their bench
+	/**Add a Pokemon to the player's bench**/
 	
 	// NOTICE : this function should just add a pokemon in a designated area in the pokeArray, filling
 	//			up the array (when the game starts) will be a function in Game.java and will use this.
@@ -98,17 +104,19 @@ public class Player {
 		return playable;
 	}
 	
+	/**Execute at end of player's turn to reset variables, clean up, etc.**/
 	public void endTurn(){
 		thisTrainer = null;
 	}
 
+	/**Switch player's active Pokemon**/
 	public void switchActive(int newActiveIndex){
 		Pokemon holder = pokeArr[0];
 		pokeArr[0] = pokeArr[newActiveIndex];
 		pokeArr[newActiveIndex] = holder;
 	}
 
-	//returns the index of the pokemon
+	/**Returns the index of the pokemon**/
 	public int getIndex(Pokemon thisPoke){
 		int i = 0;
 		//go through the array testing for the pokemon
