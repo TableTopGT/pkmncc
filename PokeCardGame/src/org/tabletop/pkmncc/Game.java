@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.tabletop.pkmncc.R;
+import org.tabletop.pkmncc.card.Card.Element;
+import org.tabletop.pkmncc.card.Energy;
 
 import android.app.Activity;
 import android.content.Context;
@@ -46,8 +48,13 @@ public class Game extends Activity{
 	public RFIDListener rfid = new RFIDListener();
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
-	
 	public Player playerOne, playerTwo;
+	
+	// Debug variables
+	public Energy energyAdd;
+	public Element elementFire;
+	public Element elementWater;
+	public Element elementGrass;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,9 +94,16 @@ public class Game extends Activity{
         playerOne = new Player();
         playerTwo = new Player();
         
+        // DEBUG STUFF, NOT NEEDED IN FINAL VERSION
+        elementFire = Element.FIRE;
+        elementWater = Element.WATER;
+        elementGrass = Element.GRASS;
+        
         // Test tag
         rfid = new RFIDListener();
         rfid.RFIDTag = "O11111110";
+        
+        //////////////////////////////////////////
         
         // Setup Asset stream
         assetManager = this.getAssets();
@@ -178,6 +192,14 @@ public class Game extends Activity{
         			switch(playerTurn){
         			case ONE :
         				initialPokemon(canvas, playerOne);
+        				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
+        				energyAdd.setElement(elementFire);
+        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd.setElement(elementWater);
+        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd.setElement(elementGrass);
+        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				playerTurn = Turn.TWO;
         				mainDialog.setText("Player Two choose active pokemon followed by bench pokemon");
@@ -185,6 +207,14 @@ public class Game extends Activity{
         				break;
         			case TWO :
         				initialPokemon(canvas, playerTwo);
+        				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
+        				energyAdd.setElement(elementGrass);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd.setElement(elementFire);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd.setElement(elementGrass);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				gameState = State.BATTLE;
         				break;
@@ -250,10 +280,15 @@ public class Game extends Activity{
 		int k = 0;
 		while (k < activePlayer.pokeArr.length){
 			if(!mainDialog.done){
+			
+				////// Later this code will have to wait to swipe cards to add to the bench//////
+			
 //				while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
 //					if(!mainDialog.done) activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
 //					else break;
 //				}
+				
+				//////////////////////////////////////////////////////////////////////////
 				activePlayer.pokeArr[k] = rfid.getPokeCard();
 				k++;
 			}
