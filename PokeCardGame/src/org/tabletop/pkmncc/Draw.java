@@ -53,6 +53,7 @@ public class Draw extends Activity{
 		int k = 0;
 		Matrix matrix = new Matrix();
 		Bitmap flippedpoke = null;
+		Bitmap flippedSmallpoke = null;
 		while(k < player.pokeArr.length){
 			try {
 				if(player.pokeArr[k] == null) break;
@@ -64,16 +65,20 @@ public class Draw extends Activity{
 			} finally {
 			}
 			if(k==0){
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 320, 300, null);
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 800, 300, null);
 				if(player.playerNum == 2){
 					matrix.postRotate(180);
-					board.drawBitmap(flippedpoke, 800, 300, null);
+					flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
+					board.drawBitmap(flippedpoke, 320, 300, null);
 				}
 			}
 			else{
-				flippedpoke = Bitmap.createBitmap(activepokemon, 75, 75, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 50, 50 + (100 * k), null);
-				else if(player.playerNum == 2) board.drawBitmap(flippedpoke, 1150, 200 + (100 * k), null);
+				flippedpoke = Bitmap.createScaledBitmap(activepokemon, 75, 75, true);
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 1150, 600 - (100 * (k-1)), null);
+				else if(player.playerNum == 2){
+					flippedSmallpoke = Bitmap.createBitmap(flippedpoke, 0, 0, flippedpoke.getWidth(), flippedpoke.getHeight(), matrix, true);
+					board.drawBitmap(flippedSmallpoke, 50, 50 + (100 * (k-1)), null);
+				}
 			}
 			k++;
 		}

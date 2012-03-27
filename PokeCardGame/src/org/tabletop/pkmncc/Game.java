@@ -96,7 +96,7 @@ public class Game extends Activity{
     	try {
 			inputStream = assetManager.open("images/battlebackground.png");
 			battleGround = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/charmander.png");
+			inputStream = assetManager.open("images/Charmander.png");
 			charmander = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/squirtle.png");
 			squirtle = BitmapFactory.decodeStream(inputStream);
@@ -186,7 +186,7 @@ public class Game extends Activity{
         			case TWO :
         				initialPokemon(canvas, playerTwo);
         				mainDialog.done = false;
-//        				gameState = State.BATTLE;
+        				gameState = State.BATTLE;
         				break;
         			}
         		}
@@ -207,6 +207,10 @@ public class Game extends Activity{
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
     		case BATTLE:
+    			canvas.drawBitmap(battleGround, 0, 0, null);
+    			Draw.drawBenchPoke(canvas, playerOne, assetManager);
+    			Draw.drawBenchPoke(canvas, playerTwo, assetManager);
+    			invalidate();
     			break;
     		case TURN:
     			break;
@@ -246,10 +250,11 @@ public class Game extends Activity{
 		int k = 0;
 		while (k < activePlayer.pokeArr.length){
 			if(!mainDialog.done){
-				while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
-					if(!mainDialog.done) activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
-					else break;
-				}
+//				while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
+//					if(!mainDialog.done) activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+//					else break;
+//				}
+				activePlayer.pokeArr[k] = rfid.getPokeCard();
 				k++;
 			}
 			else break;
