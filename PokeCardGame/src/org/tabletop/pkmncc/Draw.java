@@ -14,9 +14,9 @@ import android.graphics.Matrix;
 
 
 public class Draw extends Activity{
-	public AssetManager pokedraw;
-	private InputStream instream;
-	private Bitmap activepokemon;
+	public static AssetManager pokedraw;
+	private static InputStream instream;
+	private static Bitmap activepokemon;
 	
 	
 	/*Draws an active Pokemon, based on which player 
@@ -48,11 +48,12 @@ public class Draw extends Activity{
 	// Cameron I made this so I can continue Game.java and tests to see if it works
 	// You can probably use your Draw function in this one instead of canvas.drawBitmap
 	// It iterates through the Bench and draws the whole playing side
-	public void drawBenchPoke(Canvas board, Player player){
-		pokedraw = this.getAssets();
+	public static void drawBenchPoke(Canvas board, Player player, AssetManager pokedraw){
+//		pokedraw = this.getAssets();
 		int k = 0;
 		Matrix matrix = new Matrix();
 		Bitmap flippedpoke = null;
+		Bitmap flippedSmallpoke = null;
 		while(k < player.pokeArr.length){
 			try {
 				if(player.pokeArr[k] == null) break;
@@ -64,16 +65,20 @@ public class Draw extends Activity{
 			} finally {
 			}
 			if(k==0){
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 320, 300, null);
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 800, 300, null);
 				if(player.playerNum == 2){
 					matrix.postRotate(180);
-					board.drawBitmap(flippedpoke, 800, 300, null);
+					flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
+					board.drawBitmap(flippedpoke, 320, 300, null);
 				}
 			}
 			else{
-				flippedpoke = Bitmap.createBitmap(activepokemon, 75, 75, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 50, 50 + (100 * k), null);
-				else if(player.playerNum == 2) board.drawBitmap(flippedpoke, 1150, 200 + (100 * k), null);
+				flippedpoke = Bitmap.createScaledBitmap(activepokemon, 75, 75, true);
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 1150, 600 - (100 * (k-1)), null);
+				else if(player.playerNum == 2){
+					flippedSmallpoke = Bitmap.createBitmap(flippedpoke, 0, 0, flippedpoke.getWidth(), flippedpoke.getHeight(), matrix, true);
+					board.drawBitmap(flippedSmallpoke, 50, 50 + (100 * (k-1)), null);
+				}
 			}
 			k++;
 		}
