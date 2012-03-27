@@ -14,7 +14,6 @@ public abstract class Card {
 
 	protected Card() {
 		this.owner = currentPlayer;
-		this.setImage(toString());
 	}
 	
 	public final Player getOwner() {
@@ -31,6 +30,7 @@ public abstract class Card {
 	
 	public final void setElement(Element element) {	
 		this.element = element;
+		this.setImage(toString());
 	}
 
 	public final String getImage() {

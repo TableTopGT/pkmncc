@@ -37,11 +37,17 @@ public class PokeCardGameActivity extends Activity implements OnClickListener {
         wakeLock.acquire();*/
     }
     
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	music.start();
+    };
+    
     public void onClick(View v) {
     	switch(v.getId()) {
     	case R.id.begin_button:
     		music.stop();
-    		music.release();
+    		//music.release();
     		Intent beginGame = new Intent(this, Game.class);
     		startActivity(beginGame);
     		break;
