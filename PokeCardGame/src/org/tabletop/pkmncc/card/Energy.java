@@ -14,9 +14,9 @@ public class Energy extends Card {
 		this.setElement(element);
 	}
 	
-	@Override //Energy(GRASS).toString == "GRASS"
+	@Override //Energy(FIRE).toString == "fire"
 	public String toString() {
-		return getElement().toString();
+		return getElement().toString().toLowerCase();
 	}
 	
 	protected static ArrayList<Energy> listFromArray(Element... input) {

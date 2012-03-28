@@ -24,7 +24,7 @@ public abstract class Pokemon extends Card {
 		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost); //XXX handle empty cost
+			this.energyCost = Energy.listFromArray(energyCost); //XXX how does this handle empty cost?
 		}
 
 		/**
