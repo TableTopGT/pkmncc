@@ -94,8 +94,8 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
-	protected Pokemon() {
-//		Draw.add(this); //XXX
+	protected Pokemon() { //XXX
+		setImage(toString());
 //		cry.setDataSource(sound);
 //		cry.prepare();
 //		cry.start();

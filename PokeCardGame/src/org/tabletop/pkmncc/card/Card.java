@@ -1,7 +1,7 @@
 package org.tabletop.pkmncc.card;
 
 import org.tabletop.pkmncc.Player;
-import static org.tabletop.pkmncc.Battle.currentPlayer;
+import static org.tabletop.pkmncc.Player.currentPlayer;
 
 public abstract class Card {
 
@@ -13,7 +13,7 @@ public abstract class Card {
 	private String image;
 
 	protected Card() {
-		this.owner = currentPlayer;
+		owner = currentPlayer;
 	}
 	
 	public final Player getOwner() {
@@ -30,7 +30,6 @@ public abstract class Card {
 	
 	public final void setElement(Element element) {	
 		this.element = element;
-		this.setImage(toString());
 	}
 
 	public final String getImage() {
@@ -40,6 +39,4 @@ public abstract class Card {
 	public final void setImage(String image) {
 		this.image = "images/" + image + ".png";
 	}
-	
-	//TODO public void draw();
 }
