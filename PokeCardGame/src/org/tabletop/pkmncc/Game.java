@@ -217,6 +217,7 @@ public class Game extends Activity{
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
+        				playerTurn = Turn.ONE;
         				gameState = State.BATTLE;
         				break;
         			}
@@ -241,6 +242,12 @@ public class Game extends Activity{
     			canvas.drawBitmap(battleGround, 0, 0, null);
     			Draw.drawBenchPoke(canvas, playerOne, assetManager);
     			Draw.drawBenchPoke(canvas, playerTwo, assetManager);
+    			switch(playerTurn){
+    				case ONE :
+    					break;
+    				case TWO :
+    					break;
+    			}
     			invalidate();
     			break;
     		case TURN:
