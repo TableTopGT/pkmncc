@@ -94,10 +94,11 @@ public class Game extends Activity{
         playerOne = new Player();
         playerTwo = new Player();
         
-        // DEBUG STUFF, NOT NEEDED IN FINAL VERSION
+        // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
         elementFire = Element.FIRE;
         elementWater = Element.WATER;
         elementGrass = Element.GRASS;
+        energyAdd = new Energy(elementFire);
         
         // Test tag
         rfid = new RFIDListener();
