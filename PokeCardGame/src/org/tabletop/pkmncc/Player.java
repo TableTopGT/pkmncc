@@ -8,6 +8,8 @@ import org.tabletop.pkmncc.card.*;
 public class Player {
 
 	private static int playerCount = 0;
+	public static Player currentPlayer;
+
 	public final int playerNum;
 	public int card, health;
 	public RFIDListener rfid;
@@ -45,6 +47,11 @@ public class Player {
 	public void setOpponent(Player opponent){
 		this.opponent = opponent;
 		opponent.opponent = this;
+	}
+
+	// call this at the start of a player's turn.
+	private void setCurrent() {
+		currentPlayer = this;
 	}
 
 	/**Check to see what kind of card the player has scanned**/
