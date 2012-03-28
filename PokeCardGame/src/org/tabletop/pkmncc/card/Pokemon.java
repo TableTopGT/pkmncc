@@ -88,7 +88,7 @@ public abstract class Pokemon extends Card {
 //	private String sound = "../sounds/"+toString()+".mp3";
 	
 	// Dynamic attributes
-	private int damage = 0;
+	private int currentHP;
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	// [ASLEEP/CONFUSED/PARALYZED, BURN, POISON]
 	private PokemonStatus[] status = new PokemonStatus[3];
@@ -119,33 +119,34 @@ public abstract class Pokemon extends Card {
 	
 	/* Health-centered methods */
 	public final int getHP() {
-		return HP - damage;
+		return currentHP;
+	}
+
+	protected final int getDamage() {
+		return HP - currentHP;
 	}
 	
 	public final int addHP(int hitPoints) {
-		damage -= hitPoints;
-		if (damage < 0) damage = 0;
+		currentHP += hitPoints;
+		if (currentHP > HP) currentHP = HP;
 		return getHP();
 	}
 	
 	/** Pokemon will disappear from screen and cry on faint */
 	public final int removeHP(int hitPoints) {
-		damage += hitPoints;
-		if (damage >= HP) faint();
+		currentHP -= hitPoints;
+		if (currentHP <= 0) faint();
 		return getHP();
 	}
 	
 	private void faint() { //FIXME
-		damage = HP;
 //		cry.start();
-		// Cleanup audio
 //		cry.release();
 //		cry = null;
-//		Draw.remove(this);
 	}
 	
 	public final boolean isFainted() {
-		return getHP() == 0;
+		return getHP() <= 0;
 	}
 	
 	
@@ -305,6 +306,7 @@ public abstract class Pokemon extends Card {
 	protected final void setDefense(int HP, int retreatCost, 
 			Element weakness, int weakMod, Element resistance, int resMod) {
 		this.HP = HP;
+		this.currentHP = HP;
 		this.retreatCost = retreatCost;
 		this.weakness = weakness;
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
