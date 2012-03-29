@@ -5,12 +5,19 @@ import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
 
+import android.content.Context;
+
 public final class RFIDListener {
 	
 	public String RFIDTag;
 		
 	private boolean dataAvailable = false;
 	
+	/** This class must be instantiated before any cards are created. */
+	public RFIDListener(Context context) {
+		Card.setContext(context);
+	}
+
 	public boolean dataOnBus() {
 		return dataAvailable;
 	}
@@ -20,20 +27,13 @@ public final class RFIDListener {
 		return RFIDTag;
 	}
 	
-	public Pokemon getPokeCard() {
-		if (RFIDTag.equals("O11111110")){
-			return new Charizard();
-		}
-		return new Charmander();
-	}
-	
 	public boolean listen(){
 		//while(USB.getData) or whatever
-		return false;
+		return true;
 	}
 	
 	public Card getCard() {
-		RFIDTag = getTag(); //TODO Asynch compatible?
+		//RFIDTag = getTag(); //XXX
 		
 		if (RFIDTag.equals("O11111110")){
 			return new Charizard();

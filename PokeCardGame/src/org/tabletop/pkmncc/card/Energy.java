@@ -11,12 +11,13 @@ import java.util.ArrayList;
 public class Energy extends Card {
 
 	public Energy(Element element) {
-		this.setElement(element);
+		setElement(element);
+		setImage(toString());
 	}
 	
-	@Override //Energy(GRASS).toString == "GRASS"
+	@Override //Energy(FIRE).toString == "fire"
 	public String toString() {
-		return getElement().toString();
+		return getElement().toString().toLowerCase();
 	}
 	
 	protected static ArrayList<Energy> listFromArray(Element... input) {
