@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
+import org.tabletop.pkmncc.card.Pokemon;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,7 +46,7 @@ public class Game extends Activity{
 	public boolean gameStarting, gameStartingTwo, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	public int i;
-	public RFIDListener rfid = new RFIDListener();
+	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
 	public Player playerOne, playerTwo;
@@ -100,9 +101,8 @@ public class Game extends Activity{
         elementGrass = Element.GRASS;
         energyAdd = new Energy(elementFire);
         
-        // Test tag
-        rfid = new RFIDListener();
-        rfid.RFIDTag = "O11111110";
+        // Test tag for Charmander
+        rfid.RFIDTag = "0222222220";
         
         //////////////////////////////////////////
         
@@ -286,6 +286,12 @@ public class Game extends Activity{
 	
 	public void initialPokemon(Canvas board, Player activePlayer){
 		int k = 0;
+
+		//Temporary fix to at least show the active pokemon
+		activePlayer.getActive();
+		activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
+		activePlayer.getActive().play();
+
 		while (k < activePlayer.pokeArr.length){
 			if(!mainDialog.done){
 			
@@ -297,7 +303,7 @@ public class Game extends Activity{
 //				}
 				
 				//////////////////////////////////////////////////////////////////////////
-				activePlayer.pokeArr[k] = rfid.getPokeCard();
+				activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
 				k++;
 			}
 			else break;

@@ -1,7 +1,10 @@
 package org.tabletop.pkmncc.card;
 
+
+import android.content.Context;
 import org.tabletop.pkmncc.Player;
 import static org.tabletop.pkmncc.Player.currentPlayer;
+
 
 public abstract class Card {
 
@@ -11,6 +14,7 @@ public abstract class Card {
 	private Element element;
 	private Player owner;
 	private String image;
+	private static Context context;
 
 	protected Card() {
 		owner = currentPlayer;
@@ -38,5 +42,13 @@ public abstract class Card {
 
 	public final void setImage(String image) {
 		this.image = "images/" + image + ".png";
+	}
+
+	protected final Context getContext() {
+		return context;
+	}
+
+	public final static void setContext(Context context) {
+		Card.context = context;
 	}
 }

@@ -36,7 +36,7 @@ public class Battle extends Activity {
 		player2 = new Player();
 		player1.setOpponent(player2);
 		
-		cardListener = new RFIDListener();
+		//cardListener = new RFIDListener();
 		
 		endTurn = false;
 		

@@ -6,6 +6,7 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
+import android.content.Context;
 import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 
@@ -84,8 +85,7 @@ public abstract class Pokemon extends Card {
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
-//	private MediaPlayer cry = new MediaPlayer();
-//	private String sound = "../sounds/"+toString()+".mp3";
+	private MediaPlayer cry;
 	
 	// Dynamic attributes
 	private int currentHP;
@@ -94,11 +94,16 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
-	protected Pokemon() { //XXX
+	protected Pokemon() { //XXX Make constructor that takes in context?
 		setImage(toString());
-//		cry.setDataSource(sound);
-//		cry.prepare();
-//		cry.start();
+	}
+	
+	public void play() { //TODO play the pokemon's actual sound, not bulbasaur
+		Context c = getContext();
+		cry = MediaPlayer.create(c, 
+				c.getResources()
+				.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
+		cry.start();
 	}
 	
 	// Overridable attack/ability methods
@@ -139,10 +144,10 @@ public abstract class Pokemon extends Card {
 		return getHP();
 	}
 	
-	private void faint() { //FIXME
-//		cry.start();
-//		cry.release();
-//		cry = null;
+	private void faint() {
+		cry.start();
+		cry.release();
+		cry = null;
 	}
 	
 	public final boolean isFainted() {
