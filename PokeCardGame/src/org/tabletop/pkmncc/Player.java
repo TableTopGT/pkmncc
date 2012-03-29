@@ -7,8 +7,9 @@ import org.tabletop.pkmncc.card.*;
 
 public class Player {
 
+	public static Player currentPlayer;
 	private static int playerCount = 0;
-	public final int playerNum;
+	public final int playerNum = ++playerCount;
 	public int card, health;
 	public RFIDListener rfid;
 	public Player opponent;
@@ -23,7 +24,6 @@ public class Player {
 	public Player(){
 		//set all the players pokemon to null
 		Arrays.fill(pokeArr, null);
-		playerNum = ++playerCount;
 		assert (playerCount < 3) : "Too many players!";
 	}
 	
@@ -38,6 +38,7 @@ public class Player {
 	
 	/** Returns the player's active Pokemon **/
 	public Pokemon getActive() {
+		setCurrent();
 		return pokeArr[0];
 	}
 	
@@ -45,6 +46,11 @@ public class Player {
 	public void setOpponent(Player opponent){
 		this.opponent = opponent;
 		opponent.opponent = this;
+	}
+
+	// call this at the start of a player's turn.
+	private void setCurrent() {
+		currentPlayer = this;
 	}
 
 	/**Check to see what kind of card the player has scanned**/

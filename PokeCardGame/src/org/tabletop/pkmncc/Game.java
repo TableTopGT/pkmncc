@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
+import org.tabletop.pkmncc.card.Pokemon;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,16 +46,14 @@ public class Game extends Activity{
 	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	public int i;
-	public RFIDListener rfid = new RFIDListener();
+	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
 	public Player playerOne, playerTwo;
 	
 	// Debug variables
 	public Energy energyAdd;
-	public Element elementFire;
-	public Element elementWater;
-	public Element elementGrass;
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,14 +95,10 @@ public class Game extends Activity{
         playerTwo = new Player();
         
         // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
-        elementFire = Element.FIRE;
-        elementWater = Element.WATER;
-        elementGrass = Element.GRASS;
-        energyAdd = new Energy(elementFire);
+        energyAdd = new Energy(Element.FIRE);
         
-        // Test tag
-        rfid = new RFIDListener();
-        rfid.RFIDTag = "O11111110";
+        // Test tag for Charmander
+        rfid.RFIDTag = "0222222220";
         
         //////////////////////////////////////////
         
@@ -114,7 +109,7 @@ public class Game extends Activity{
 			battleGround = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/Charmander.png");
 			charmander = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/squirtle.png");
+			inputStream = assetManager.open("images/Squirtle.png");
 			squirtle = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/fire.png");
 			fire = BitmapFactory.decodeStream(inputStream);
@@ -204,11 +199,11 @@ public class Game extends Activity{
         			case ONE :
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
-        				energyAdd.setElement(elementFire);
+        				//energyAdd.setElement(Element.FIRE); //TODO Doesn't work cuz it's the same object
         				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementWater);
+        				energyAdd =  new Energy(Element.WATER);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementGrass);
+        				energyAdd =  new Energy(Element.GRASS);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
         				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
@@ -219,11 +214,14 @@ public class Game extends Activity{
         			case TWO :
         				initialPokemon(canvas, playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
-        				energyAdd.setElement(elementGrass);
+        				energyAdd = new Energy(Element.FIRE);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementFire);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementGrass);
+        				energyAdd = new Energy(Element.LIGHTNING);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd = new Energy(Element.PSYCHIC);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd = new Energy(Element.FIGHTING);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
@@ -253,8 +251,10 @@ public class Game extends Activity{
     			break;
     		case BATTLE:
     			canvas.drawBitmap(battleGround, 0, 0, null);
-    			Draw.drawBenchPoke(canvas, playerOne, assetManager);
-    			Draw.drawBenchPoke(canvas, playerTwo, assetManager);
+    			Draw.drawPoke(canvas, playerOne, assetManager);
+    			Draw.drawPoke(canvas, playerTwo, assetManager);
+    			Draw.drawEnergy(playerOne, canvas, assetManager);
+    			Draw.drawEnergy(playerTwo, canvas, assetManager);
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
@@ -305,6 +305,11 @@ public class Game extends Activity{
 	
 	public void initialPokemon(Canvas board, Player activePlayer){
 		int k = 0;
+
+		//Temporary fix to at least show the active pokemon
+		activePlayer.getActive();
+		activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
+
 		while (k < activePlayer.pokeArr.length){
 			if(!mainDialog.done){
 			
@@ -316,7 +321,7 @@ public class Game extends Activity{
 //				}
 				
 				//////////////////////////////////////////////////////////////////////////
-				activePlayer.pokeArr[k] = rfid.getPokeCard();
+				activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
 				k++;
 			}
 			else break;
