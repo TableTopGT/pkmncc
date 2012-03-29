@@ -35,8 +35,9 @@ public class Game extends Activity{
 	public MediaPlayer battleMusic;
 	public Bitmap battleGround, charmander, squirtle, fire, water, pokeball1, pokeball2, retreat1, retreat2;
 	public Bitmap benchchar, benchsquir;
-	public AssetManager assetManager;
+	public AssetManager assetManager, pokedraw;
 	public InputStream inputStream;
+	public boolean checktouch =true;
 	public Paint textPaint, dialogBoxPaint, dialogButtonPaint;
 	public enum State {START, BATTLE, TURN, END};
 	public State gameState = State.START;
@@ -189,9 +190,11 @@ public class Game extends Activity{
             			mainDialog.draw(canvas);
         			}
         			else{
+        				checktouch=false;
         				gameStartingThree = false;
         				mainDialog.done = false;
         				gameState = State.BATTLE;
+        				checktouch=true;
         			}
         		}
         		if(gameStartingTwo){
@@ -230,6 +233,7 @@ public class Game extends Activity{
         				gameStartingTwo = false;
         				gameStartingThree = true;
         				playerTurn = Turn.ONE;
+        				checktouch=true;
         				break;
         			}
         		}
@@ -238,6 +242,7 @@ public class Game extends Activity{
             			mainDialog.draw(canvas);
         			}
         			else{
+        				checktouch=false;
         				gameStarting = false;
         				gameStartingTwo = true;
         				mainDialog.done = false;
@@ -259,11 +264,13 @@ public class Game extends Activity{
     				case ONE :
     					// New class for the players Turns since there are so many options
     					//rfid.swipeCard(playerOne)
+    					playerOne.pokeArr[0].statusEffect();
     					playerTurn = Turn.TWO;
     					break;
     				case TWO :
     					// New class for the players Turns since there are so many options
     					//rfid.swipeCard(playerTwo);
+    					playerOne.pokeArr[0].statusEffect();
     					playerTurn = Turn.ONE;
     					break;
     			}
@@ -296,7 +303,7 @@ public class Game extends Activity{
 	
 	// Handles a touch on the screen
 	public void HandleTouch(MotionEvent e){
-		if(!mainDialog.done){
+		if(!mainDialog.done && checktouch){
 			if(OverlapTester.pointInRectangle(mainDialog.button, xCoord, yCoord)){
 				mainDialog.done = true;
 			}
