@@ -6,7 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Machop extends Pokemon{
 
-	public Machop (Player target) {
+	public Machop () {
 		
 		setElement(Element.FIGHTING);
 		setEvolution(PokemonStage.BASIC, "Machoke");

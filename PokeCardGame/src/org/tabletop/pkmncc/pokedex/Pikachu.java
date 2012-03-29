@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Pikachu extends Pokemon {
 
-	public Pikachu(Player target) {
+	public Pikachu() {
 		
 		setElement(Element.LIGHTNING);
 		setEvolution(PokemonStage.STAGE1, "Raichu");
@@ -16,13 +16,16 @@ public class Pikachu extends Pokemon {
 		
 	
 		
-	/* action2 - If Pikachu evolved from Pichu during this turn, 
-	   prevent all effects of an attack, including damage, 
-	   done to Pikachu during your opponent's next turn.
-	   
-	   public void actionTwo(Player target) {
-		}
-	*/
+	
+	public void actionTwo (Player target) {
+		/*If Pikachu evolved from Pichu during this turn, 
+		   prevent all effects of an attack, including damage, 
+		   done to Pikachu during your opponent's next turn.
+        */	
+	}
+	
+	
+	
 		
 }
 

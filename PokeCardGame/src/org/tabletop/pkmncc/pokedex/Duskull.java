@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Duskull extends Pokemon {
 
-	public Duskull(Player target) {
+	public Duskull() {
 		
 		setElement(Element.PSYCHIC);
 		setEvolution(PokemonStage.BASIC, "Dusclops");
@@ -17,6 +17,10 @@ public class Duskull extends Pokemon {
 
 	public void actionTwo (Player target) {
 		/* Call flipCoin
+		 * int multiplier = getOwner().coinFlip() ? 1 : 1;
+		   multiplier += getOwner().coinFlip() ? 1 : 0; // does this flip coin once?
+		   action1.attack(target, 30*multiplier);
+		   
 		 * if (i == "tails") {
 		 * do nothing
 		 * }

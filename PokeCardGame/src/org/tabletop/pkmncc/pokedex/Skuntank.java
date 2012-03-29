@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Skuntank extends Pokemon {
 
-	public Skuntank(Player target) {
+	public Skuntank() {
 		
 		setElement(Element.DARKNESS);
 		setEvolution(PokemonStage.STAGE1, "");

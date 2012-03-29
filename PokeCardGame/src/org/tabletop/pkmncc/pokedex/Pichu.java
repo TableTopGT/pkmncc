@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Pichu extends Pokemon {
 
-	public Pichu (Player target) {
+	public Pichu () {
 		
 		setElement(Element.LIGHTNING);
 		setEvolution(PokemonStage.BASIC, "Pikachu");

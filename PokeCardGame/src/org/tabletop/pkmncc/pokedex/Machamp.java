@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Machamp extends Pokemon {
 
-	public Machamp(Player target) {
+	public Machamp() {
 		
 		setElement(Element.FIGHTING);
 		setEvolution(PokemonStage.STAGE2, "");
@@ -17,12 +17,14 @@ public class Machamp extends Pokemon {
 	}
 	
 	public void actionOne (Player target){
+		
 		/* If the Defending Pokémon isn't an Evolved Pokémon, 
 		 * that Pokémon is Knocked Out instead of damaged by this attack.
-		*/
+	   	*/
 	}
 	
 	public void actionTwo (Player target){
+		
 		/* heads = 0;
 		 * for (count <= 4){
 		 * call flipCoin

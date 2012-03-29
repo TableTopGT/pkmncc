@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Stunky extends Pokemon {
 
-	public Stunky(Player target) {
+	public Stunky() {
 		
 		setElement(Element.DARKNESS);
 		setEvolution(PokemonStage.BASIC, "Skuntank");

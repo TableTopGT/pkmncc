@@ -16,8 +16,10 @@ public class Dusclops extends Pokemon {
 
 	public void actionOne (Player target){
 		
-		/* if (owner discards card from hand){
-		 * opponent also discards a card from hand;
+		/* Use DialogBox to ask owner if he/she wants to discard a card
+		 * if (yes) {
+		 * discardCard for owner 
+		 * and discardCard for opponent
 		 * }
 		 */
 	}

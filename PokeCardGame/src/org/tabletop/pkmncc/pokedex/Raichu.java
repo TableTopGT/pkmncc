@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 public class Raichu extends Pokemon{
 
-	public Raichu(Player target) {
+	public Raichu() {
 		
 		setElement(Element.LIGHTNING);
 		setEvolution(PokemonStage.STAGE2, "");
