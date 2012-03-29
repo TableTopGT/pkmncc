@@ -13,6 +13,7 @@ public final class RFIDListener {
 		
 	private boolean dataAvailable = false;
 	
+	/** This class must be instantiated before any cards are created. */
 	public RFIDListener(Context context) {
 		Card.setContext(context);
 	}

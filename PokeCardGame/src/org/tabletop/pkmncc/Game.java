@@ -189,7 +189,7 @@ public class Game extends Activity{
         			case ONE :
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
-        				//energyAdd.setElement(Element.FIRE);
+        				//energyAdd.setElement(Element.FIRE); //TODO Doesn't work cuz it's the same object
         				playerOne.pokeArr[0].addEnergy(energyAdd);
         				energyAdd =  new Energy(Element.WATER);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
@@ -290,7 +290,6 @@ public class Game extends Activity{
 		//Temporary fix to at least show the active pokemon
 		activePlayer.getActive();
 		activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
-		activePlayer.getActive().play();
 
 		while (k < activePlayer.pokeArr.length){
 			if(!mainDialog.done){

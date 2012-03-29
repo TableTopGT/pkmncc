@@ -85,24 +85,19 @@ public abstract class Pokemon extends Card {
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
-	private MediaPlayer cry;
+	private MediaPlayer cry = MediaPlayer.create(getContext(), 
+			getContext().getResources()
+			.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
 	
 	// Dynamic attributes
 	private int currentHP;
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
-	// [ASLEEP/CONFUSED/PARALYZED, BURN, POISON]
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
-	protected Pokemon() { //XXX Make constructor that takes in context?
-		setImage(toString());
-	}
 	
-	public void play() { //TODO play the pokemon's actual sound, not bulbasaur
-		Context c = getContext();
-		cry = MediaPlayer.create(c, 
-				c.getResources()
-				.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
+	protected Pokemon() { //TODO play the pokemon's actual sound, not bulbasaur
+		setImage(toString());
 		cry.start();
 	}
 	
@@ -202,6 +197,9 @@ public abstract class Pokemon extends Card {
 	
 	
 	/* Status-centered methods */
+	/**
+	 * @return [ASLEEP/CONFUSED/PARALYZED, BURN, POISON] or null in said entries
+	 */
 	public final PokemonStatus[] getStatus() {
 		return status;
 	}
