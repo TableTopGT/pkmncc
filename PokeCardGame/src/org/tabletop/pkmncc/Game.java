@@ -42,7 +42,7 @@ public class Game extends Activity{
 	public Rect dialogBoxRect;
 	public float xCoord;
 	public float yCoord;
-	public boolean gameStarting, gameStartingTwo, initiateVars, initialSwipes;
+	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	public int i;
 	public RFIDListener rfid = new RFIDListener();
@@ -88,6 +88,7 @@ public class Game extends Activity{
         
         gameStarting = true;
         gameStartingTwo = false;
+        gameStartingThree = false;
         initiateVars = true;
         initialSwipes = false;
         i = 0;
@@ -188,7 +189,16 @@ public class Game extends Activity{
         		canvas.drawBitmap(benchsquir, 50, 350, null);
         		canvas.drawBitmap(benchsquir, 50, 450, null);        		
  */       		
-        		
+        		if(gameStartingThree){
+        			if(!mainDialog.done){
+            			mainDialog.draw(canvas);
+        			}
+        			else{
+        				gameStartingThree = false;
+        				mainDialog.done = false;
+        				gameState = State.BATTLE;
+        			}
+        		}
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
@@ -217,8 +227,11 @@ public class Game extends Activity{
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
+        				mainDialog.setText("Players draw 6 prize cards");
+        				mainDialog.draw(canvas);
+        				gameStartingTwo = false;
+        				gameStartingThree = true;
         				playerTurn = Turn.ONE;
-        				gameState = State.BATTLE;
         				break;
         			}
         		}
@@ -244,8 +257,14 @@ public class Game extends Activity{
     			Draw.drawBenchPoke(canvas, playerTwo, assetManager);
     			switch(playerTurn){
     				case ONE :
+    					// New class for the players Turns since there are so many options
+    					//rfid.swipeCard(playerOne)
+    					playerTurn = Turn.TWO;
     					break;
     				case TWO :
+    					// New class for the players Turns since there are so many options
+    					//rfid.swipeCard(playerTwo);
+    					playerTurn = Turn.ONE;
     					break;
     			}
     			invalidate();
