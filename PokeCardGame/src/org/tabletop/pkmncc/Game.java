@@ -53,12 +53,7 @@ public class Game extends Activity{
 	
 	// Debug variables
 	public Energy energyAdd;
-	public Element elementFire;
-	public Element elementWater;
-	public Element elementGrass;
-	public Element elementFighting;
-	public Element elementLightning;
-	public Element elementPsychic;
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,13 +94,7 @@ public class Game extends Activity{
         playerTwo = new Player();
         
         // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
-        elementFire = Element.FIRE;
-        elementWater = Element.WATER;
-        elementGrass = Element.GRASS;
-        elementLightning = Element.LIGHTNING;
-        elementPsychic = Element.PSYCHIC;
-        elementFighting = Element.FIGHTING;
-        energyAdd = new Energy(elementFire);
+        energyAdd = new Energy(Element.FIRE);
         
         // Test tag for Charmander
         rfid.RFIDTag = "0222222220";
@@ -200,11 +189,11 @@ public class Game extends Activity{
         			case ONE :
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
-        				//energyAdd.setElement(elementFire);
+        				//energyAdd.setElement(Element.FIRE);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd =  new Energy(elementWater);
+        				energyAdd =  new Energy(Element.WATER);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd =  new Energy(elementGrass);
+        				energyAdd =  new Energy(Element.GRASS);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
         				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
@@ -215,14 +204,14 @@ public class Game extends Activity{
         			case TWO :
         				initialPokemon(canvas, playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
-        				energyAdd = new Energy(elementFire);
+        				energyAdd = new Energy(Element.FIRE);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd = new Energy(elementLightning);
+        				energyAdd = new Energy(Element.LIGHTNING);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd = new Energy(elementPsychic);
+        				energyAdd = new Energy(Element.PSYCHIC);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd = new Energy(elementFighting);
+        				energyAdd = new Energy(Element.FIGHTING);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
