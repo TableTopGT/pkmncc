@@ -56,6 +56,9 @@ public class Game extends Activity{
 	public Element elementFire;
 	public Element elementWater;
 	public Element elementGrass;
+	public Element elementFighting;
+	public Element elementLightning;
+	public Element elementPsychic;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,9 @@ public class Game extends Activity{
         elementFire = Element.FIRE;
         elementWater = Element.WATER;
         elementGrass = Element.GRASS;
+        elementLightning = Element.LIGHTNING;
+        elementPsychic = Element.PSYCHIC;
+        elementFighting = Element.FIGHTING;
         energyAdd = new Energy(elementFire);
         
         // Test tag for Charmander
@@ -113,7 +119,7 @@ public class Game extends Activity{
 			battleGround = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/Charmander.png");
 			charmander = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/squirtle.png");
+			inputStream = assetManager.open("images/Squirtle.png");
 			squirtle = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/fire.png");
 			fire = BitmapFactory.decodeStream(inputStream);
@@ -194,11 +200,11 @@ public class Game extends Activity{
         			case ONE :
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
-        				energyAdd.setElement(elementFire);
+        				//energyAdd.setElement(elementFire);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementWater);
+        				energyAdd =  new Energy(elementWater);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementGrass);
+        				energyAdd =  new Energy(elementGrass);
         				playerOne.pokeArr[0].addEnergy(energyAdd);
         				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
@@ -209,11 +215,14 @@ public class Game extends Activity{
         			case TWO :
         				initialPokemon(canvas, playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
-        				energyAdd.setElement(elementGrass);
+        				energyAdd = new Energy(elementFire);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementFire);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd.setElement(elementGrass);
+        				energyAdd = new Energy(elementLightning);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd = new Energy(elementPsychic);
+        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				energyAdd = new Energy(elementFighting);
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
@@ -240,8 +249,10 @@ public class Game extends Activity{
     			break;
     		case BATTLE:
     			canvas.drawBitmap(battleGround, 0, 0, null);
-    			Draw.drawBenchPoke(canvas, playerOne, assetManager);
-    			Draw.drawBenchPoke(canvas, playerTwo, assetManager);
+    			Draw.drawPoke(canvas, playerOne, assetManager);
+    			Draw.drawPoke(canvas, playerTwo, assetManager);
+    			Draw.drawEnergy(playerOne, canvas, assetManager);
+    			Draw.drawEnergy(playerTwo, canvas, assetManager);
     			switch(playerTurn){
     				case ONE :
     					break;

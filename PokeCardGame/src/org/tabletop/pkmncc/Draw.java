@@ -21,7 +21,7 @@ public class Draw extends Activity{
 	
 	/*Draws an active Pokemon, based on which player 
 	(must find better way to input which player is active, probably quick fix in player class) */
-	public void DrawMain(Pokemon Poke, Player player, Canvas canvas){
+/*	public void DrawMain(Pokemon Poke, Player player, Canvas canvas){
 		pokedraw = this.getAssets();
 		try {
 			instream = pokedraw.open(Poke.getImage());
@@ -39,16 +39,36 @@ public class Draw extends Activity{
 	        // recreate the new Bitmap
 	        Bitmap flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0,
 	        		activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-	   
-	        canvas.drawBitmap(flippedpoke, 320, 300, null);
-			
+	        canvas.drawBitmap(flippedpoke, 320, 300, null);			
 		}
-	}
+	} */
 	
-	// Cameron I made this so I can continue Game.java and tests to see if it works
-	// You can probably use your Draw function in this one instead of canvas.drawBitmap
-	// It iterates through the Bench and draws the whole playing side
-	public static void drawBenchPoke(Canvas board, Player player, AssetManager pokedraw){
+	public static void drawEnergy( Player player, Canvas canvas, AssetManager pokedraw){
+		int k=0;
+		Matrix matrix = new Matrix();
+		Bitmap energy = null;
+		Bitmap flippedenergy = null;
+		matrix.postRotate(180);
+		while (k < player.pokeArr[0].getEnergy().size()){
+			try {
+				if(player.pokeArr[0].getEnergy() == null) break;
+				instream = pokedraw.open(player.pokeArr[0].getEnergy().get(k).getImage());
+				energy = BitmapFactory.decodeStream(instream);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+			}
+			if(player.playerNum == 1) canvas.drawBitmap(energy, 1000, 465-(50*(k-1)), null);
+			if(player.playerNum == 2){
+				flippedenergy = Bitmap.createBitmap(energy, 0, 0, energy.getWidth(), energy.getHeight(), matrix, true);
+				canvas.drawBitmap(flippedenergy, 280, 300+(50*(k-1)), null);
+			}
+			k++;
+		}
+	} 
+	
+	
+	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
 //		pokedraw = this.getAssets();
 		int k = 0;
 		Matrix matrix = new Matrix();
@@ -74,7 +94,7 @@ public class Draw extends Activity{
 			}
 			else{
 				flippedpoke = Bitmap.createScaledBitmap(activepokemon, 75, 75, true);
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 1150, 600 - (100 * (k-1)), null);
+				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 1150, 615 - (100 * (k-1)), null);
 				else if(player.playerNum == 2){
 					flippedSmallpoke = Bitmap.createBitmap(flippedpoke, 0, 0, flippedpoke.getWidth(), flippedpoke.getHeight(), matrix, true);
 					board.drawBitmap(flippedSmallpoke, 50, 50 + (100 * (k-1)), null);
