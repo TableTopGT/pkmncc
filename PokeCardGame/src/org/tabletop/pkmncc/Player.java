@@ -14,8 +14,6 @@ public class Player {
 	public RFIDListener rfid;
 	public Player opponent;
 	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
-	public Random randGen = new Random();
-	public int randInt;
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	public Pokemon[] pokeArr = new Pokemon[6];
@@ -27,18 +25,13 @@ public class Player {
 		assert (playerCount < 3) : "Too many players!";
 	}
 	
-	/** True is Heads, Tails is False **/
+	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
-		//use Random number generator to get a number between 0 and 1
-		randInt = randGen.nextInt(2);		
-		if (randInt==1) {return true;}
-		else if (randInt==0) {return false;}
-		else {return true;}
+		return (new Random()).nextBoolean();
 	}
 	
 	/** Returns the player's active Pokemon **/
 	public Pokemon getActive() {
-		setCurrent();
 		return pokeArr[0];
 	}
 	
@@ -46,11 +39,6 @@ public class Player {
 	public void setOpponent(Player opponent){
 		this.opponent = opponent;
 		opponent.opponent = this;
-	}
-
-	// call this at the start of a player's turn.
-	private void setCurrent() {
-		currentPlayer = this;
 	}
 
 	/**Check to see what kind of card the player has scanned**/
@@ -108,6 +96,10 @@ public class Player {
 				playable = pokemonCard.isEvolutionOf(pokeArr[i]);
 		}
 		return playable;
+	}
+	
+	public void startTurn() {
+		currentPlayer = this;
 	}
 	
 	/**Execute at end of player's turn to reset variables, clean up, etc.**/

@@ -6,7 +6,6 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
-import android.content.Context;
 import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 

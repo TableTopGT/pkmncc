@@ -314,7 +314,7 @@ public class Game extends Activity{
 		int k = 0;
 
 		//Temporary fix to at least show the active pokemon
-		activePlayer.getActive();
+		activePlayer.startTurn();
 		activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
 
 		while (k < activePlayer.pokeArr.length){
