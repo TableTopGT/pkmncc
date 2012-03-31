@@ -92,8 +92,8 @@ public class Game extends Activity{
         initiateVars = true;
         initialSwipes = false;
         i = 0;
-        playerOne = new Player();
-        playerTwo = new Player();
+        playerOne = new Player(null);
+        playerTwo = new Player(playerOne);
         
         // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
         energyAdd = new Energy(Element.FIRE);

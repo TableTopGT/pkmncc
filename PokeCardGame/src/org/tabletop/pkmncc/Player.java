@@ -1,8 +1,6 @@
 package org.tabletop.pkmncc;
 
-import java.util.Arrays;
 import java.util.Random;
-
 import org.tabletop.pkmncc.card.*;
 
 public class Player {
@@ -18,13 +16,14 @@ public class Player {
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	public Pokemon[] pokeArr = new Pokemon[6];
 	
-	/**Player constructor--if you use this constructor, you should call setOpponent after**/
-	public Player(){
-		//set all the players pokemon to null
-		Arrays.fill(pokeArr, null);
-		assert (playerCount < 3) : "Too many players!";
+	/** Player constructor: input opponent */
+	public Player(Player opponent) {
+		if (opponent != null) {
+			this.opponent = opponent;
+			opponent.opponent = this;
+		}
 	}
-	
+
 	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
 		return (new Random()).nextBoolean();
@@ -35,12 +34,6 @@ public class Player {
 		return pokeArr[0];
 	}
 	
-	/** Set the players opponent **/
-	public void setOpponent(Player opponent){
-		this.opponent = opponent;
-		opponent.opponent = this;
-	}
-
 	/**Check to see what kind of card the player has scanned**/
 	public void addCard(Card playedCard){
 
@@ -86,13 +79,13 @@ public class Player {
 		}
 	}
 	
-	//TODO use canPlay() dialogBox() getIndex() switchActive() to evolve
+	// true if (emptySpot && isBasic) || (occupiedSpot && isEvolution)
 	public final boolean canPlay(Pokemon pokemonCard) {
 		boolean playable = false;
-		for (int i = 0; i < 7; i++) {
-			if (pokeArr[i] == null) 
+		for (int i = 0; (i < 7) && (!playable); i++) {
+			if (pokeArr[i] == null)		// empty spot found
 				playable = pokemonCard.isBasic();
-			else
+			else						// pokemon in spot
 				playable = pokemonCard.isEvolutionOf(pokeArr[i]);
 		}
 		return playable;
