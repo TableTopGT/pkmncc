@@ -84,6 +84,7 @@ public abstract class Pokemon extends Card {
 	private boolean evolved;
 	private boolean evolvable;
 	private String evolution;
+	private Class<? extends Pokemon> evolution2;
 	private MediaPlayer cry = MediaPlayer.create(getContext(), 
 			getContext().getResources()
 			.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
@@ -163,9 +164,9 @@ public abstract class Pokemon extends Card {
 		return !evolved;
 	}
 
-	public boolean isEvolutionOf(Pokemon pokemon) {
+	public boolean isEvolutionOf(Pokemon pokemon) { //XXX will fail if pokemon evolutions not changed
 		return evolved && pokemon.evolvable 
-				&& pokemon.evolution.equals(toString());
+				&& pokemon.evolution2.equals(getClass());
 	}
 	
 	/* Energy-centered methods */
@@ -292,18 +293,45 @@ public abstract class Pokemon extends Card {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Sets properties related to evolution capabilities.
 	 * @param stage - the Pokemon's stage
-	 * @param evolution - name of next evolution or null string
+	 * @param string - name of next evolution or null string
 	 */
-	protected final void setEvolution(PokemonStage stage, String evolution) {
+	protected final void setEvolution(PokemonStage stage, String string) { //TODO remove after transition
 		this.evolved = PokemonStage.BASIC.equals(stage);
-		this.evolvable = evolution != "";
-		this.evolution = evolution;
+
+		try {
+			Class.forName(string);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Evolution " + string + " not found.");
+		}
+
+		this.evolvable = string != "";
+		this.evolution = string;
 	}
 	
+	/**
+	 * Sets properties related to evolution state and capabilities.
+	 * @param stage - the Pokemon's stage
+	 */
+	protected void setEvolution(PokemonStage stage) {
+		setEvolution(stage, (Class<? extends Pokemon>) null);
+	}
+
+	/**
+	 * Sets properties related to evolution state and capabilities.
+	 * @param stage - the Pokemon's stage
+	 * @param evolution - class of next the evolution
+	 */
+	protected void setEvolution(PokemonStage stage, Class<? extends Pokemon> evolution) {
+		this.evolved = PokemonStage.BASIC.equals(stage);
+		this.evolvable = evolution != null;
+		this.evolution2 = evolution;		//TODO rename to evolution
+	}
+
 	/** Enter 0 for default modifiers, null if no weakness/resistance */
 	protected final void setDefense(int HP, int retreatCost, 
 			Element weakness, int weakMod, Element resistance, int resMod) {

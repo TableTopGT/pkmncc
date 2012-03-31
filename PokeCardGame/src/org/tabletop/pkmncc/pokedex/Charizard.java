@@ -8,7 +8,7 @@ public class Charizard extends Pokemon {
 	
 	public Charizard() {
 		setElement(Element.FIRE);
-		setEvolution(PokemonStage.STAGE2, "");
+		setEvolution(PokemonStage.STAGE2);
 		setDefense(120, 3, Element.WATER, 0, Element.FIGHTING, 30);
 		action1 = new ActionDesc("PP: Energy Burn", 0);
 		action2 = new ActionDesc("Fire Spin", 100, Element.FIRE, Element.FIRE,
