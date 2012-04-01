@@ -181,23 +181,13 @@ public abstract class Pokemon extends Card {
 	}
 	
 	/**
-	 * @return The evolved form of this Pokemon with matching health and energies,
-	 * 			but without any status ailments.
+	 * Transfers damage and energies to another pokemon. Use when performing
+	 * an evolution.
 	 */
-	public final Pokemon getEvolution() {
-		Pokemon nextForm = null;
-		if (evolution != null) {
-			try {
-				nextForm = evolution.newInstance();
-				nextForm.currentHP = currentHP;
-				nextForm.energy = energy;
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-		return nextForm;
+	public final void transferStatsTo(Pokemon nextForm) {
+		nextForm.removeHP(getDamage());
+		nextForm.energy = energy;
+		energy = null; // Dispose of local reference to the energy object
 	}
 
 	/* Energy-centered methods */
@@ -262,7 +252,7 @@ public abstract class Pokemon extends Card {
 	public final void removeStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
-		switch (stat) {
+		switch (stat) { //TODO implement sortable in Status enums
 		case POISONED:
 			status[2] = null;
 			break;
