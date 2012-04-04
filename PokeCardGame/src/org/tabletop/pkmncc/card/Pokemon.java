@@ -24,7 +24,8 @@ public abstract class Pokemon extends Card {
 		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost); //XXX how does this handle empty cost?
+			this.energyCost = Energy.listFromArray(energyCost); 
+			//FIXME how does this handle empty or colorless cost?
 		}
 
 		/**
@@ -68,6 +69,7 @@ public abstract class Pokemon extends Card {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);
+			//XXX Implement prize cards here?
 		}
 	}
 	

@@ -60,35 +60,28 @@ public class Player {
 		}
 	}
 	
-	/**Add a Pokemon to the player's bench**/
-	
-	// NOTICE : this function should just add a pokemon in a designated area in the pokeArray, filling
-	//			up the array (when the game starts) will be a function in Game.java and will use this.
-	//			also, it should auto-update the incrementer (i) to place the pokemon in the right place
-	public void addPokemon(Pokemon pokemonCard){
-		//assign the pokemon to the first spot available
-		int i = 0;
-		while (pokeArr[i] != null){
-			if (i<=5){
-//				while(rfid.waiter){
-				while(rfid.dataOnBus()){
-//				pokeArr[i]=rfid.getCard();  // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+	/**
+	 * Plays a pokemon card one of in two cases:<br>
+	 * (1) Find an empty bench spot and the card is BASIC<br>
+	 * (2) Find an occupied spot and the card is an Evolution of the pokemon
+	 * occupying that spot
+	 * @param pokemonCard - a card to play
+	 * @return whether the attempt was successful or not
+	 */
+	public final boolean addPokemon(Pokemon pokemonCard) {
+		for (int i = 0; i < pokeArr.length; ++i) {
+			if (pokeArr[i] == null) {
+				if (pokemonCard.isBasic()) {
+					pokeArr[i] = pokemonCard;
+					return true;
 				}
+			} else if (pokemonCard.isEvolutionOf(pokeArr[i])) {
+				pokeArr[i].transferStatsTo(pokemonCard);
+				pokeArr[i] = pokemonCard;
+				return true;
 			}
-			i++;
 		}
-	}
-	
-	// true if (emptySpot && isBasic) || (occupiedSpot && isEvolution)
-	public final boolean canPlay(Pokemon pokemonCard) {
-		boolean playable = false;
-		for (int i = 0; (i < 7) && (!playable); i++) {
-			if (pokeArr[i] == null)		// empty spot found
-				playable = pokemonCard.isBasic();
-			else						// pokemon in spot
-				playable = pokemonCard.isEvolutionOf(pokeArr[i]);
-		}
-		return playable;
+		return false;
 	}
 	
 	public void startTurn() {
