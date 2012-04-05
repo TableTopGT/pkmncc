@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.tabletop.pkmncc.R;
+import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
@@ -35,15 +36,16 @@ public class Game extends Activity{
 	public MediaPlayer battleMusic;
 	public Bitmap battleGround, charmander, squirtle, fire, water, pokeball1, pokeball2, retreat1, retreat2;
 	public Bitmap benchchar, benchsquir;
-	public AssetManager assetManager;
+	public AssetManager assetManager, pokedraw;
 	public InputStream inputStream;
+	public boolean checktouch =true;
 	public Paint textPaint, dialogBoxPaint, dialogButtonPaint;
 	public enum State {START, BATTLE, TURN, END};
 	public State gameState = State.START;
 	public Rect dialogBoxRect;
 	public float xCoord;
 	public float yCoord;
-	public boolean gameStarting, gameStartingTwo, initiateVars, initialSwipes;
+	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	public int i;
 	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
@@ -87,17 +89,19 @@ public class Game extends Activity{
         
         gameStarting = true;
         gameStartingTwo = false;
+        gameStartingThree = false;
         initiateVars = true;
         initialSwipes = false;
         i = 0;
-        playerOne = new Player();
-        playerTwo = new Player();
+        playerOne = new Player(null);
+        playerTwo = new Player(playerOne);
         
+        // Begin rfid listener
+        rfid.start();
+
         // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
         energyAdd = new Energy(Element.FIRE);
         
-        // Test tag for Charmander
-        rfid.RFIDTag = "0222222220";
         
         //////////////////////////////////////////
         
@@ -183,7 +187,18 @@ public class Game extends Activity{
         		canvas.drawBitmap(benchsquir, 50, 350, null);
         		canvas.drawBitmap(benchsquir, 50, 450, null);        		
  */       		
-        		
+        		if(gameStartingThree){
+        			if(!mainDialog.done){
+            			mainDialog.draw(canvas);
+        			}
+        			else{
+        				checktouch=false;
+        				gameStartingThree = false;
+        				mainDialog.done = false;
+        				gameState = State.BATTLE;
+        				checktouch=true;
+        			}
+        		}
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
@@ -199,7 +214,7 @@ public class Game extends Activity{
         				mainDialog.done = false;
         				playerTurn = Turn.TWO;
         				mainDialog.setText("Player Two choose active pokemon followed by bench pokemon");
-        				mainDialog.draw(canvas);
+        				//mainDialog.draw(canvas);
         				break;
         			case TWO :
         				initialPokemon(canvas, playerTwo);
@@ -215,8 +230,12 @@ public class Game extends Activity{
         				playerTwo.pokeArr[0].addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
+        				mainDialog.setText("Players draw 6 prize cards");
+        				mainDialog.draw(canvas);
+        				gameStartingTwo = false;
+        				gameStartingThree = true;
         				playerTurn = Turn.ONE;
-        				gameState = State.BATTLE;
+        				checktouch=true;
         				break;
         			}
         		}
@@ -225,11 +244,12 @@ public class Game extends Activity{
             			mainDialog.draw(canvas);
         			}
         			else{
+        				checktouch=false;
         				gameStarting = false;
         				gameStartingTwo = true;
         				mainDialog.done = false;
         				mainDialog.setText("Player One choose active pokemon followed by bench pokemon");
-        				mainDialog.draw(canvas);
+        				//mainDialog.draw(canvas);
         			}
         		}
         		
@@ -244,8 +264,16 @@ public class Game extends Activity{
     			Draw.drawEnergy(playerTwo, canvas, assetManager);
     			switch(playerTurn){
     				case ONE :
+    					// New class for the players Turns since there are so many options
+    					//rfid.swipeCard(playerOne)
+    					playerOne.pokeArr[0].statusEffect();
+    					playerTurn = Turn.TWO;
     					break;
     				case TWO :
+    					// New class for the players Turns since there are so many options
+    					//rfid.swipeCard(playerTwo);
+    					playerOne.pokeArr[0].statusEffect();
+    					playerTurn = Turn.ONE;
     					break;
     			}
     			invalidate();
@@ -277,7 +305,7 @@ public class Game extends Activity{
 	
 	// Handles a touch on the screen
 	public void HandleTouch(MotionEvent e){
-		if(!mainDialog.done){
+		if(!mainDialog.done && checktouch){
 			if(OverlapTester.pointInRectangle(mainDialog.button, xCoord, yCoord)){
 				mainDialog.done = true;
 			}
@@ -285,29 +313,21 @@ public class Game extends Activity{
 	}
 	
 	public void initialPokemon(Canvas board, Player activePlayer){
-		int k = 0;
-
-		//Temporary fix to at least show the active pokemon
-		activePlayer.getActive();
-		activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
-
-		while (k < activePlayer.pokeArr.length){
-			if(!mainDialog.done){
-			
-				////// Later this code will have to wait to swipe cards to add to the bench//////
-			
-//				while(rfid.listen()){	// SHOULD BE rfid.waiter == true, this is just for now so it keeps running
-//					if(!mainDialog.done) activePlayer.pokeArr[k]=rfid.getPokeCard(); // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
-//					else break;
-//				}
-				
-				//////////////////////////////////////////////////////////////////////////
-				activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
-				k++;
-			}
-			else break;
+		activePlayer.startTurn();
+		rfid.setMode(Mode.INIT);
+		for (int k = 0; k < activePlayer.pokeArr.length; ) {
+			//if(mainDialog.done) {
+				if (rfid.cardSwiped()) {
+					//if(!mainDialog.done) 
+						activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
+					//else break;
+						k++;
+						Draw.drawPoke(board, activePlayer, assetManager);
+				}
+			//}
+			//else break;
 		}
-//		Draw.drawBenchPoke(board, activePlayer, assetManager);
+		Draw.drawPoke(board, activePlayer, assetManager);
 	}
 	
 /*	@Override

@@ -4,82 +4,114 @@ import org.tabletop.pkmncc.card.*;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Trainer.TrainerType;
 import org.tabletop.pkmncc.pokedex.*;
-
 import android.content.Context;
 
-public final class RFIDListener {
+/** This class must be instantiated before any cards are created. */
+public final class RFIDListener extends Thread {
+
+	public static enum Mode {INIT, SILENT};
 	
-	public String RFIDTag;
-		
+	private Mode currMode = Mode.SILENT;
+	private String RFIDTag = null;
 	private boolean dataAvailable = false;
 	
-	/** This class must be instantiated before any cards are created. */
 	public RFIDListener(Context context) {
 		Card.setContext(context);
 	}
 
-	public boolean dataOnBus() {
+	public boolean cardSwiped() {
 		return dataAvailable;
 	}
-	
-	public String getTag() { //TODO asynch must run in seperate thread
-		RFIDTag = null;
-		return RFIDTag;
+
+	public void setMode(Mode m) {
+		currMode = m;
+		//interrupt();
+		//run(); //TODO really inefficient, need to implement wait()
 	}
-	
-	public boolean listen(){
-		//while(USB.getData) or whatever
-		return true;
-	}
-	
+
 	public Card getCard() {
-		//RFIDTag = getTag(); //XXX
 		
+		Card swipedCard = null;
+		
+		// Return the swiped card
 		if (RFIDTag.equals("O11111110")){
-			return new Charizard();
+			swipedCard =  new Charizard();
 		}
 		else if (RFIDTag.equals("0222222220")){
-			return new Charmander();
+			swipedCard =  new Charmander();
 		}
 		else if (RFIDTag.equals("03333333330")){
-			return new Charmeleon();
+			swipedCard =  new Charmeleon();
 		}
 		else if (RFIDTag.equals("0444444440")){
-			return new Energy(Element.COLORLESS);
+			swipedCard =  new Energy(Element.COLORLESS);
 		}
 		else if (RFIDTag.equals("0555555550")){
-			return new Energy(Element.DARKNESS);
+			swipedCard =  new Energy(Element.DARKNESS);
 		}
 		else if (RFIDTag.equals("0666666660")){
-			return new Energy(Element.FIGHTING);
+			swipedCard =  new Energy(Element.FIGHTING);
 		}
 		else if (RFIDTag.equals("0777777770")){
-			return new Energy(Element.FIRE);
+			swipedCard =  new Energy(Element.FIRE);
 		}
 		else if (RFIDTag.equals("0888888880")){
-			return new Energy(Element.GRASS);
+			swipedCard =  new Energy(Element.GRASS);
 		}
 		else if (RFIDTag.equals("0999999990")){
-			return new Energy(Element.LIGHTNING);
+			swipedCard =  new Energy(Element.LIGHTNING);
 		}
 		else if (RFIDTag.equals("0121212120")){
-			return new Energy(Element.METAL);
+			swipedCard =  new Energy(Element.METAL);
 		}
 		else if (RFIDTag.equals("0131313130")){
-			return new Energy(Element.WATER);
+			swipedCard =  new Energy(Element.WATER);
 		}
 		else if (RFIDTag.equals("0141414140")){
-			return new Trainer(TrainerType.ENERGYREMOVAL);
+			swipedCard =  new Trainer(TrainerType.ENERGYREMOVAL);
 		}
 		else if (RFIDTag.equals("0161616160")){
-			return new Trainer(TrainerType.FULLHEAL);
+			swipedCard =  new Trainer(TrainerType.FULLHEAL);
 		}
 		else if (RFIDTag.equals("0171717170")){
-			return new Trainer(TrainerType.POTION);
+			swipedCard =  new Trainer(TrainerType.POTION);
 		}
-		else {
-			return null;
-		}
+
+		// Don't allow main thread to get a new card until next swipe
+		dataAvailable = false;
+
+		// Reset RFIDtag
+		RFIDTag = null;
+
+		// Give the swiped card
+		return swipedCard;
+	}
+
+	/** Swipe a card w/ specified tag after x seconds */
+	private void swipeCard(String s, int seconds) {
+		try {
+			Thread.sleep(seconds*1000);
+			RFIDTag = s; 				// swipe a card
+			dataAvailable = true;		// notify of card swipe
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // sleep x seconds
+	}
+	
+	@Override
+	public void run() {
+			while (true)
+				switch(currMode) {
+				case INIT:
+					// swipe a charmander every 3 seconds
+					swipeCard("0222222220", 3);
+					break;
+				case SILENT:
+					//wait()
+					break;
+				}
+
 	}
 
 }

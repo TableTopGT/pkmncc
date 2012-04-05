@@ -15,7 +15,8 @@ public class Energy extends Card {
 		setImage(toString());
 	}
 	
-	@Override //Energy(FIRE).toString == "fire"
+	/** Returns the element of the Energy in lowercase */
+	@Override
 	public String toString() {
 		return getElement().toString().toLowerCase();
 	}

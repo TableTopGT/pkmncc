@@ -1,8 +1,6 @@
 package org.tabletop.pkmncc;
 
-import java.util.Arrays;
 import java.util.Random;
-
 import org.tabletop.pkmncc.card.*;
 
 public class Player {
@@ -14,45 +12,28 @@ public class Player {
 	public RFIDListener rfid;
 	public Player opponent;
 	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
-	public Random randGen = new Random();
-	public int randInt;
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	public Pokemon[] pokeArr = new Pokemon[6];
 	
-	/**Player constructor--if you use this constructor, you should call setOpponent after**/
-	public Player(){
-		//set all the players pokemon to null
-		Arrays.fill(pokeArr, null);
-		assert (playerCount < 3) : "Too many players!";
+	/** Player constructor: input opponent */
+	public Player(Player opponent) {
+		if (opponent != null) {
+			this.opponent = opponent;
+			opponent.opponent = this;
+		}
 	}
-	
-	/** True is Heads, Tails is False **/
+
+	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
-		//use Random number generator to get a number between 0 and 1
-		randInt = randGen.nextInt(2);		
-		if (randInt==1) {return true;}
-		else if (randInt==0) {return false;}
-		else {return true;}
+		return (new Random()).nextBoolean();
 	}
 	
 	/** Returns the player's active Pokemon **/
 	public Pokemon getActive() {
-		setCurrent();
 		return pokeArr[0];
 	}
 	
-	/** Set the players opponent **/
-	public void setOpponent(Player opponent){
-		this.opponent = opponent;
-		opponent.opponent = this;
-	}
-
-	// call this at the start of a player's turn.
-	private void setCurrent() {
-		currentPlayer = this;
-	}
-
 	/**Check to see what kind of card the player has scanned**/
 	public void addCard(Card playedCard){
 
@@ -79,35 +60,32 @@ public class Player {
 		}
 	}
 	
-	/**Add a Pokemon to the player's bench**/
-	
-	// NOTICE : this function should just add a pokemon in a designated area in the pokeArray, filling
-	//			up the array (when the game starts) will be a function in Game.java and will use this.
-	//			also, it should auto-update the incrementer (i) to place the pokemon in the right place
-	public void addPokemon(Pokemon pokemonCard){
-		//assign the pokemon to the first spot available
-		int i = 0;
-		while (pokeArr[i] != null){
-			if (i<=5){
-//				while(rfid.waiter){
-				while(rfid.dataOnBus()){
-//				pokeArr[i]=rfid.getCard();  // NEEDS 3 DIFFERENT TYPES OF getCard, one that returns each type of card
+	/**
+	 * Plays a pokemon card one of in two cases:<br>
+	 * (1) Find an empty bench spot and the card is BASIC<br>
+	 * (2) Find an occupied spot and the card is an Evolution of the pokemon
+	 * occupying that spot
+	 * @param pokemonCard - a card to play
+	 * @return whether the attempt was successful or not
+	 */
+	public final boolean addPokemon(Pokemon pokemonCard) {
+		for (int i = 0; i < pokeArr.length; ++i) {
+			if (pokeArr[i] == null) {
+				if (pokemonCard.isBasic()) {
+					pokeArr[i] = pokemonCard;
+					return true;
 				}
+			} else if (pokemonCard.isEvolutionOf(pokeArr[i])) {
+				pokeArr[i].transferStatsTo(pokemonCard);
+				pokeArr[i] = pokemonCard;
+				return true;
 			}
-			i++;
 		}
+		return false;
 	}
 	
-	//TODO use canPlay() dialogBox() getIndex() switchActive() to evolve
-	public final boolean canPlay(Pokemon pokemonCard) {
-		boolean playable = false;
-		for (int i = 0; i < 7; i++) {
-			if (pokeArr[i] == null) 
-				playable = pokemonCard.isBasic();
-			else
-				playable = pokemonCard.isEvolutionOf(pokeArr[i]);
-		}
-		return playable;
+	public void startTurn() {
+		currentPlayer = this;
 	}
 	
 	/**Execute at end of player's turn to reset variables, clean up, etc.**/

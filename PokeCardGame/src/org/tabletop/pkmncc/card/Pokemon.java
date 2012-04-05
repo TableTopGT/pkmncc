@@ -6,7 +6,6 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
-import android.content.Context;
 import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 
@@ -18,14 +17,15 @@ public abstract class Pokemon extends Card {
 	protected static enum PokemonStage {BASIC, STAGE1, STAGE2};
 	
 	protected final class ActionDesc {
-		public String actionName;
-		private int baseAttack;
+		public final String actionName;
+		private final int baseAttack;
 		private ArrayList<Energy> energyCost;
 
 		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost); //XXX how does this handle empty cost?
+			this.energyCost = Energy.listFromArray(energyCost); 
+			//FIXME how does this handle empty or colorless cost?
 		}
 
 		/**
@@ -69,12 +69,13 @@ public abstract class Pokemon extends Card {
 				damage -= enemy.resMod;
 			} 
 			return enemy.removeHP(damage);
+			//XXX Implement prize cards here?
 		}
 	}
 	
 	
-	// Static attributes
 	private int HP;
+	private int currentHP;
 	private Element weakness;
 	private Element resistance;
 	private int weakMod;
@@ -82,37 +83,49 @@ public abstract class Pokemon extends Card {
 	private int retreatCost;
 	protected ActionDesc action1;
 	protected ActionDesc action2;
-	private boolean evolved;
-	private boolean evolvable;
-	private String evolution;
+
+	private boolean isEvolved;
+	private boolean isEvolvable;
+	private Class<? extends Pokemon> evolution;
+	private String strinvolution;
+
 	private MediaPlayer cry = MediaPlayer.create(getContext(), 
 			getContext().getResources()
 			.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
-	
-	// Dynamic attributes
-	private int currentHP;
+	//TODO play the pokemon's actual sound, not bulbasaur
+
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
-	
-	protected Pokemon() { //TODO play the pokemon's actual sound, not bulbasaur
+
+	protected Pokemon() {
 		setImage(toString());
 		cry.start();
 	}
 	
-	// Overridable attack/ability methods
+	/**
+	 * Attack's a target with the defined attack1. Override
+	 * to provide custom behavior.
+	 * @param target
+	 */
 	public void actionOne(Player target) {
 		assert(action1 != null) : "Action 1 not set";
 		action1.attack(target);
 	}
 	
+	/**
+	 * Attack's a target with the defined attack2. Override
+	 * to provide custom behavior.
+	 * @param target
+	 */
 	public void actionTwo(Player target) {
 		assert(action2 != null) : "Action 2 not set";
 		action2.attack(target);
 	}
-	
-	@Override // Charmander.toString() == "Charmander"
+
+	/** Returns the capitalized class name of the Pokemon */
+	@Override
 	public final String toString() {
 		return getClass().getSimpleName();
 	}
@@ -161,14 +174,24 @@ public abstract class Pokemon extends Card {
 	}
 	
 	public final boolean isBasic() {
-		return !evolved;
+		return !isEvolved;
 	}
 
-	public boolean isEvolutionOf(Pokemon pokemon) {
-		return evolved && pokemon.evolvable 
-				&& pokemon.evolution.equals(toString());
+	public boolean isEvolutionOf(Pokemon pokemon) { //XXX will fail if pokemon evolutions not changed
+		return isEvolved && pokemon.isEvolvable
+				&& pokemon.evolution.equals(getClass());
 	}
 	
+	/**
+	 * Transfers damage and energies to another pokemon. Use when performing
+	 * an evolution.
+	 */
+	public final void transferStatsTo(Pokemon nextForm) {
+		nextForm.removeHP(getDamage());
+		nextForm.energy = energy;
+		energy = null; // Dispose of local reference to the energy object
+	}
+
 	/* Energy-centered methods */
 	/** 
 	 * Useful for displaying energies after making a Pokemon active.
@@ -190,7 +213,10 @@ public abstract class Pokemon extends Card {
 	public final void removeEnergy(Energy energyCard) {
 		energy.remove(energyCard);
 	}
-	
+
+	/**
+	 * Discards all of the energy of a Pokemon.
+	 */
 	public final void removeAllEnergy() {
 		energy.clear();
 	}
@@ -198,12 +224,15 @@ public abstract class Pokemon extends Card {
 	
 	/* Status-centered methods */
 	/**
-	 * @return [ASLEEP/CONFUSED/PARALYZED, BURN, POISON] or null in said entries
+	 * @return array holding [ASLEEP/CONFUSED/PARALYZED, BURN, POISON] or nulls
 	 */
 	public final PokemonStatus[] getStatus() {
 		return status;
 	}
 	
+	/**
+	 * Gives Pokemon a specified status ailment.
+	 */
 	public final void addStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
@@ -218,11 +247,14 @@ public abstract class Pokemon extends Card {
 			status[0] = stat;
 		}
 	}
-	
+
+	/**
+	 * Relieves Pokemon of specified status ailment.
+	 */
 	public final void removeStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
-		switch (stat) {
+		switch (stat) { //TODO implement sortable in Status enums
 		case POISONED:
 			status[2] = null;
 			break;
@@ -234,6 +266,9 @@ public abstract class Pokemon extends Card {
 		}	
 	}
 
+	/**
+	 * Relieves Pokemon of all status ailments.
+	 */
 	public final void removeAllStatus() {
 		status[2] = null;
 		status[1] = null;
@@ -243,7 +278,7 @@ public abstract class Pokemon extends Card {
 	
 	/** 
 	 * Run this before the beginning of a user's turn. All statuses except
-	 * confusion are handled here. Confusion is handled before attacks.
+	 * confusion are handled here. Confusion is handled automatically before attacks.
 	 */
 	public final void statusEffect() {
 		for (int i = 2; i < 0; i--) {
@@ -293,18 +328,48 @@ public abstract class Pokemon extends Card {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Sets properties related to evolution capabilities.
 	 * @param stage - the Pokemon's stage
-	 * @param evolution - name of next evolution or null string
+	 * @param string - name of next evolution or null string
+	 * @deprecated use the version that takes in a class object or just a stage
+	 * 				if no evolution
 	 */
-	protected final void setEvolution(PokemonStage stage, String evolution) {
-		this.evolved = PokemonStage.BASIC.equals(stage);
-		this.evolvable = evolution != "";
-		this.evolution = evolution;
+	@Deprecated
+	protected final void setEvolution(PokemonStage stage, String string) { //TODO remove after transition
+		this.isEvolved = !PokemonStage.BASIC.equals(stage);
+
+		try {
+			Class.forName(string);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Evolution " + string + " not found.");
+		}
+
+		this.isEvolvable = string != "";
+		this.strinvolution = string;
 	}
 	
+	/**
+	 * Sets properties related to evolution state and capabilities.
+	 * @param stage - the Pokemon's stage
+	 */
+	protected void setEvolution(PokemonStage stage) {
+		setEvolution(stage, (Class<? extends Pokemon>) null);
+	}
+
+	/**
+	 * Sets properties related to evolution state and capabilities.
+	 * @param stage - the Pokemon's stage
+	 * @param evolution - class of next the evolution
+	 */
+	protected void setEvolution(PokemonStage stage, Class<? extends Pokemon> evolution) {
+		this.isEvolved = !PokemonStage.BASIC.equals(stage);
+		this.isEvolvable = evolution != null;
+		this.evolution = evolution;
+	}
+
 	/** Enter 0 for default modifiers, null if no weakness/resistance */
 	protected final void setDefense(int HP, int retreatCost, 
 			Element weakness, int weakMod, Element resistance, int resMod) {
