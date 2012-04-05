@@ -8,7 +8,7 @@ public class Machamp extends Pokemon {
 	public Machamp() {
 		
 		setElement(Element.FIGHTING);
-		setEvolution(PokemonStage.STAGE2, "");
+		setEvolution(PokemonStage.STAGE2);
 		setDefense(130, 2, Element.PSYCHIC, 30, null, 0);
 		action1 = new ActionDesc("Take Out", 40, Element.FIGHTING);
 		action2 = new ActionDesc("Hurricane Punch", 30, Element.COLORLESS, Element.COLORLESS);
@@ -16,13 +16,19 @@ public class Machamp extends Pokemon {
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public void actionOne (Player target){
+		
+		if(isBasic()){
+			
+		}
 		
 		/* If the Defending Pokémon isn't an Evolved Pokémon, 
 		 * that Pokémon is Knocked Out instead of damaged by this attack.
 	   	*/
 	}
 	
+	@Override
 	public void actionTwo (Player target){
 		
 		/* heads = 0;

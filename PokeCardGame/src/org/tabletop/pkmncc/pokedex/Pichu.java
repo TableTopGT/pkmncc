@@ -8,12 +8,13 @@ public class Pichu extends Pokemon {
 	public Pichu () {
 		
 		setElement(Element.LIGHTNING);
-		setEvolution(PokemonStage.BASIC, "Pikachu");
+		setEvolution(PokemonStage.BASIC, Pikachu.class);
 		setDefense(50, 1, Element.FIGHTING, 10, Element.METAL, 20);
 		action1 = new ActionDesc("Electric Circuit", 0);
 		action2 = new ActionDesc("Baby Evolution", 0); // Poke Power
 		}
 	
+	@Override
 	public void actionOne (Player target){
 		/* Use DialogBox
 		 * -- Search your discard pile for up to 4 Lightning Energy cards
@@ -23,6 +24,7 @@ public class Pichu extends Pokemon {
 		 */
 	}
 	
+	@Override
 	public void actionTwo (Player target){
 		/*Once during your turn (before your attack), 
 		 * you may put Pikachu from your hand onto Pichu (this counts as evolving Pichu) 

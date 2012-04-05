@@ -8,22 +8,19 @@ public class Duskull extends Pokemon {
 	public Duskull() {
 		
 		setElement(Element.PSYCHIC);
-		setEvolution(PokemonStage.BASIC, "Dusclops");
+		setEvolution(PokemonStage.BASIC, Dusclops.class);
 		setDefense(50, 1, Element.DARKNESS, 10, Element.COLORLESS, 20);
 		action1 = new ActionDesc("Tackle", 10, Element.COLORLESS);
 		action2 = new ActionDesc("Surprise Attack", 30, Element.PSYCHIC, Element.COLORLESS);
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public void actionTwo (Player target) {
-		/* Call flipCoin
-		 * int multiplier = getOwner().coinFlip() ? 1 : 1;
-		   multiplier += getOwner().coinFlip() ? 1 : 0; // does this flip coin once?
-		   action1.attack(target, 30*multiplier);
-		   
-		 * if (i == "tails") {
-		 * do nothing
-		 * }
-		 */
+		
+		 if (getOwner().coinFlip()){
+		    action1.attack(target, 30);
+		   }
+		 
 	}
 }

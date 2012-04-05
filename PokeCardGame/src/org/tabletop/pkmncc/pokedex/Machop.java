@@ -9,13 +9,14 @@ public class Machop extends Pokemon{
 	public Machop () {
 		
 		setElement(Element.FIGHTING);
-		setEvolution(PokemonStage.BASIC, "Machoke");
+		setEvolution(PokemonStage.BASIC, Machoke.class);
 		setDefense(60, 1, Element.PSYCHIC, 10, null, 0);
 		action1 = new ActionDesc("Kick", 10, Element.COLORLESS);
 		action2 = new ActionDesc("Knock Back", 20, Element.FIGHTING, Element.COLORLESS);
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public void actionTwo (Player target){
 		/* opponent switches the Defending Pokémon with 1 of his or her Benched Pokémon.
 		 * -- Use DialogBox to get Pokemon Index

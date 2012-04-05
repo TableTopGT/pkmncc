@@ -8,11 +8,13 @@ public class Machoke extends Pokemon {
 	public Machoke() {
 		
 		setElement(Element.FIGHTING);
-		setEvolution(PokemonStage.STAGE1, "Machamp");
+		setEvolution(PokemonStage.STAGE1, Machamp.class);
 		setDefense(80, 2, Element.PSYCHIC, 20, null, 0);
 		action1 = new ActionDesc("Steady Punch", 20, Element.FIGHTING); // How is 20 different from 20+
 		action2 = new ActionDesc("Brick Break", 30, Element.FIGHTING, Element.COLORLESS);
 	}
+	
+	@Override
 	public void actionOne (Player target){
 		/* (Flip a coin. If heads, this attack does 20 damage plus 20 more damage.)
 		call flipCoin
@@ -21,6 +23,7 @@ public class Machoke extends Pokemon {
 		*/	
 		}
 	
+	@Override
 	public void actionTwo (Player target){
 		/* This attack's damage isn't affected by Resistance, 
 		 * Poké-Powers, Poké-Bodies, or any other effects on the Defending Pokémon.

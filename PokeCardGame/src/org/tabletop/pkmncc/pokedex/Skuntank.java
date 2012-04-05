@@ -8,17 +8,19 @@ public class Skuntank extends Pokemon {
 	public Skuntank() {
 		
 		setElement(Element.DARKNESS);
-		setEvolution(PokemonStage.STAGE1, "");
+		setEvolution(PokemonStage.STAGE1);
 		setDefense(100,2, Element.FIGHTING, 20, Element.PSYCHIC, 20);
 		action1 = new ActionDesc("Poison Claws", 20, Element.COLORLESS, Element.COLORLESS);
 		action2 = new ActionDesc("Plunder", 60, Element.DARKNESS, Element.COLORLESS, Element.COLORLESS);
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public void actionOne (Player target) {
 		// Defending Pokemon is poisoned
 	}
 	
+	@Override
 	public void actionTwo (Player target) {
 		/* Discard all trainer cards
 		 * removeTrainer();
