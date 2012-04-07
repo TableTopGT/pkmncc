@@ -1,20 +1,22 @@
 package org.tabletop.pkmncc;
 
+import java.util.ArrayList;
 import java.util.Random;
 import org.tabletop.pkmncc.card.*;
 
 public class Player {
 
+	public static final int fieldSpots = 6;
 	public static Player currentPlayer;
-	private static int playerCount = 0;
+	private static int playerCount;
+
 	public final int playerNum = ++playerCount;
 	public int card, health;
-	public RFIDListener rfid;
 	public Player opponent;
-	public Trainer thisTrainer = null; //tracks whether a trainer has been used already during a turn	
+	public Trainer thisTrainer; //tracks whether a trainer has been used already during a turn	
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
-	public Pokemon[] pokeArr = new Pokemon[6];
+	private ArrayList<Pokemon> pokeArr = new ArrayList<Pokemon>(fieldSpots);
 	
 	/** Player constructor: input opponent */
 	public Player(Player opponent) {
@@ -28,15 +30,9 @@ public class Player {
 	public boolean coinFlip() {
 		return (new Random()).nextBoolean();
 	}
-	
-	/** Returns the player's active Pokemon **/
-	public Pokemon getActive() {
-		return pokeArr[0];
-	}
-	
+
 	/**Check to see what kind of card the player has scanned**/
 	public void addCard(Card playedCard){
-
 		if(playedCard instanceof Trainer){
 			this.playTrainer( (Trainer) playedCard);
 		}
@@ -44,11 +40,10 @@ public class Player {
 			this.addPokemon( (Pokemon) playedCard);
 		}
 		else if (playedCard instanceof Energy){
-			this.pokeArr[0].addEnergy( (Energy) playedCard);
+			this.getActive().addEnergy( (Energy) playedCard);
 		}
 	}
-	
-	
+
 	/**Execute when a player wants play a trainer card**/
 	public void playTrainer(Trainer trainerCard){
 		if (thisTrainer == null){
@@ -59,7 +54,35 @@ public class Player {
 			//open pop up that says you cannot play another trainer on this turn
 		}
 	}
-	
+
+	public Pokemon getPokemon(int index) {
+		return pokeArr.get(index);
+	}
+
+	/** Returns the player's active Pokemon **/
+	public Pokemon getActive() {
+		return getPokemon(0);
+	}
+
+	public int numPokemon() {
+		return pokeArr.size();
+	}
+
+	/**
+	 * Returns the index of the first occurrence
+	 * of Pokemon or -1 if not found.
+	 */
+	public int getIndex(Pokemon thisPoke) {
+		return pokeArr.indexOf(thisPoke);
+	}
+
+	/** Switch player's active Pokemon */
+	public void switchActive(int newActiveIndex){
+		Pokemon holder = pokeArr.get(0);
+		pokeArr.set(0, pokeArr.get(newActiveIndex));
+		pokeArr.set(newActiveIndex, holder);
+	}
+
 	/**
 	 * Plays a pokemon card one of in two cases:<br>
 	 * (1) Find an empty bench spot and the card is BASIC<br>
@@ -69,47 +92,26 @@ public class Player {
 	 * @return whether the attempt was successful or not
 	 */
 	public final boolean addPokemon(Pokemon pokemonCard) {
-		for (int i = 0; i < pokeArr.length; ++i) {
-			if (pokeArr[i] == null) {
-				if (pokemonCard.isBasic()) {
-					pokeArr[i] = pokemonCard;
-					return true;
-				}
-			} else if (pokemonCard.isEvolutionOf(pokeArr[i])) {
-				pokeArr[i].transferStatsTo(pokemonCard);
-				pokeArr[i] = pokemonCard;
+		if ((pokeArr.size() < fieldSpots) && pokemonCard.isBasic()) {
+			pokeArr.add(pokemonCard);
+			return true;
+		}
+		for (int i = 0; i < pokeArr.size(); ++i) {
+			if (pokemonCard.isEvolutionOf(pokeArr.get(i))) {
+				pokeArr.get(i).transferStatsTo(pokemonCard);
+				pokeArr.set(i, pokemonCard);
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public void startTurn() {
 		currentPlayer = this;
 	}
-	
+
 	/**Execute at end of player's turn to reset variables, clean up, etc.**/
 	public void endTurn(){
 		thisTrainer = null;
 	}
-
-	/**Switch player's active Pokemon**/
-	public void switchActive(int newActiveIndex){
-		Pokemon holder = pokeArr[0];
-		pokeArr[0] = pokeArr[newActiveIndex];
-		pokeArr[newActiveIndex] = holder;
-	}
-
-	/**Returns the index of the pokemon**/
-	public int getIndex(Pokemon thisPoke){
-		int i = 0;
-		//go through the array testing for the pokemon
-		while (pokeArr[i] != thisPoke && i<6){
-			i++;
-		}
-		//returns the index of the pokemon, or '6' if pokemon isn't owned by player
-		return i;
-	}
-	
-
 }

@@ -60,7 +60,7 @@ public class Game extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+ 
         // Sets Window to fullscreen and gets rid of top bar on Android device
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -205,11 +205,11 @@ public class Game extends Activity{
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
         				//energyAdd.setElement(Element.FIRE); //TODO Doesn't work cuz it's the same object
-        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				playerOne.getActive().addEnergy(energyAdd);
         				energyAdd =  new Energy(Element.WATER);
-        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				playerOne.getActive().addEnergy(energyAdd);
         				energyAdd =  new Energy(Element.GRASS);
-        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				playerOne.getActive().addEnergy(energyAdd);
         				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				playerTurn = Turn.TWO;
@@ -220,14 +220,14 @@ public class Game extends Activity{
         				initialPokemon(canvas, playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
         				energyAdd = new Energy(Element.FIRE);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				playerTwo.getActive().addEnergy(energyAdd);
+        				playerTwo.getActive().addEnergy(energyAdd);
         				energyAdd = new Energy(Element.LIGHTNING);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				playerTwo.getActive().addEnergy(energyAdd);
         				energyAdd = new Energy(Element.PSYCHIC);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				playerTwo.getActive().addEnergy(energyAdd);
         				energyAdd = new Energy(Element.FIGHTING);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				playerTwo.getActive().addEnergy(energyAdd);
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				mainDialog.setText("Players draw 6 prize cards");
@@ -266,13 +266,13 @@ public class Game extends Activity{
     				case ONE :
     					// New class for the players Turns since there are so many options
     					//rfid.swipeCard(playerOne)
-    					playerOne.pokeArr[0].statusEffect();
+    					playerOne.getActive().statusEffect();
     					playerTurn = Turn.TWO;
     					break;
     				case TWO :
     					// New class for the players Turns since there are so many options
     					//rfid.swipeCard(playerTwo);
-    					playerOne.pokeArr[0].statusEffect();
+    					playerOne.getActive().statusEffect();
     					playerTurn = Turn.ONE;
     					break;
     			}
@@ -319,15 +319,17 @@ public class Game extends Activity{
 			//if(mainDialog.done) {
 				if (rfid.cardSwiped()) {
 					//if(!mainDialog.done) 
-						activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
+						activePlayer.addCard(rfid.getCard());
 					//else break;
 						k++;
 						Draw.drawPoke(board, activePlayer, assetManager);
+						
 				}
 			//}
 			//else break;
 		}
 		Draw.drawPoke(board, activePlayer, assetManager);
+		
 	}
 	
 /*	@Override
@@ -342,4 +344,6 @@ public class Game extends Activity{
 		super.onResume();
 		battleMusic.start();
 	}
+
+
 }

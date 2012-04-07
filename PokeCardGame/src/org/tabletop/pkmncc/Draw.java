@@ -3,9 +3,6 @@ package org.tabletop.pkmncc;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.tabletop.pkmncc.card.Pokemon;
-
-import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 
 
-public class Draw extends Activity{
+public class Draw {
 	public static AssetManager pokedraw;
 	private static InputStream instream;
 	private static Bitmap activepokemon;
@@ -44,45 +41,37 @@ public class Draw extends Activity{
 	} */
 	
 	public static void drawEnergy( Player player, Canvas canvas, AssetManager pokedraw){
-		int k=0;
 		Matrix matrix = new Matrix();
 		Bitmap energy = null;
 		Bitmap flippedenergy = null;
 		matrix.postRotate(180);
-		while (k < player.pokeArr[0].getEnergy().size()){
+		for (int k = 0; k < player.getActive().getEnergy().size(); k++){
 			try {
-				if(player.pokeArr[0].getEnergy() == null) break;
-				instream = pokedraw.open(player.pokeArr[0].getEnergy().get(k).getImage());
+				instream = pokedraw.open(player.getActive().getEnergy().get(k).getImage());
 				energy = BitmapFactory.decodeStream(instream);
 			} catch (IOException e) {
 				e.printStackTrace();
-			} finally {
 			}
 			if(player.playerNum == 1) canvas.drawBitmap(energy, 1000, 465-(50*(k-1)), null);
 			if(player.playerNum == 2){
 				flippedenergy = Bitmap.createBitmap(energy, 0, 0, energy.getWidth(), energy.getHeight(), matrix, true);
 				canvas.drawBitmap(flippedenergy, 280, 300+(50*(k-1)), null);
 			}
-			k++;
 		}
 	} 
 	
 	
 	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
-//		pokedraw = this.getAssets();
-		int k = 0;
 		Matrix matrix = new Matrix();
 		Bitmap flippedpoke = null;
 		Bitmap flippedSmallpoke = null;
-		while(k < player.pokeArr.length){
+		for (int k = 0; k < player.numPokemon(); k++){
 			try {
-				if(player.pokeArr[k] == null) break;
-				instream = pokedraw.open(player.pokeArr[k].getImage());
+				instream = pokedraw.open(player.getPokemon(k).getImage());
 				activepokemon = BitmapFactory.decodeStream(instream);
 				flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
 			} catch (IOException e) {
-			e.printStackTrace();
-			} finally {
+				e.printStackTrace();
 			}
 			if(k==0){
 				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 800, 300, null);
@@ -100,7 +89,6 @@ public class Draw extends Activity{
 					board.drawBitmap(flippedSmallpoke, 50, 50 + (100 * (k-1)), null);
 				}
 			}
-			k++;
 		}
 	}
 }
