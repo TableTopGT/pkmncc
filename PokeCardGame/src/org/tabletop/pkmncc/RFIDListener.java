@@ -9,7 +9,7 @@ import android.content.Context;
 /** This class must be instantiated before any cards are created. */
 public final class RFIDListener extends Thread {
 
-	public static enum Mode {INIT, SILENT};
+	public static enum Mode {INIT, SILENT, ENERGIES};
 	
 	private Mode currMode = Mode.SILENT;
 	private String RFIDTag = null;
@@ -94,9 +94,8 @@ public final class RFIDListener extends Thread {
 			RFIDTag = s; 				// swipe a card
 			dataAvailable = true;		// notify of card swipe
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} // sleep x seconds
+		}
 	}
 	
 	@Override
@@ -104,8 +103,12 @@ public final class RFIDListener extends Thread {
 			while (true)
 				switch(currMode) {
 				case INIT:
-					// swipe a charmander every 3 seconds
-					swipeCard("0222222220", 3);
+					// swipe a charmander every second
+					swipeCard("0222222220", 1);
+					break;
+				case ENERGIES:
+					swipeCard("0777777770", 1); // Fire
+					swipeCard("0131313130", 1); // Water
 					break;
 				case SILENT:
 					//wait()

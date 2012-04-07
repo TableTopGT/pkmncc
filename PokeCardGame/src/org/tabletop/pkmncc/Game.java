@@ -98,12 +98,6 @@ public class Game extends Activity{
         
         // Begin rfid listener
         rfid.start();
-
-        // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
-        energyAdd = new Energy(Element.FIRE);
-        
-        
-        //////////////////////////////////////////
         
         // Setup Asset stream
         assetManager = this.getAssets();
@@ -204,12 +198,9 @@ public class Game extends Activity{
         			case ONE :
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
-        				//energyAdd.setElement(Element.FIRE); //TODO Doesn't work cuz it's the same object
-        				playerOne.getActive().addEnergy(energyAdd);
-        				energyAdd =  new Energy(Element.WATER);
-        				playerOne.getActive().addEnergy(energyAdd);
-        				energyAdd =  new Energy(Element.GRASS);
-        				playerOne.getActive().addEnergy(energyAdd);
+        				playerOne.addCard(new Energy(Element.FIRE));
+        				playerOne.addCard(new Energy(Element.WATER));
+        				playerOne.addCard(new Energy(Element.GRASS));
         				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				playerTurn = Turn.TWO;
@@ -219,15 +210,11 @@ public class Game extends Activity{
         			case TWO :
         				initialPokemon(canvas, playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
-        				energyAdd = new Energy(Element.FIRE);
-        				playerTwo.getActive().addEnergy(energyAdd);
-        				playerTwo.getActive().addEnergy(energyAdd);
-        				energyAdd = new Energy(Element.LIGHTNING);
-        				playerTwo.getActive().addEnergy(energyAdd);
-        				energyAdd = new Energy(Element.PSYCHIC);
-        				playerTwo.getActive().addEnergy(energyAdd);
-        				energyAdd = new Energy(Element.FIGHTING);
-        				playerTwo.getActive().addEnergy(energyAdd);
+        				playerTwo.addCard(new Energy(Element.FIRE));
+        				playerTwo.addCard(new Energy(Element.FIRE));
+        				playerTwo.addCard(new Energy(Element.LIGHTNING));
+        				playerTwo.addCard(new Energy(Element.FIGHTING));
+        				playerTwo.addCard(new Energy(Element.PSYCHIC));
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				mainDialog.setText("Players draw 6 prize cards");
@@ -315,7 +302,7 @@ public class Game extends Activity{
 	public void initialPokemon(Canvas board, Player activePlayer){
 		activePlayer.startTurn();
 		rfid.setMode(Mode.INIT);
-		for (int k = 0; k < activePlayer.pokeArr.length; ) {
+		for (int k = 0; k < Player.fieldSpots; ) {
 			//if(mainDialog.done) {
 				if (rfid.cardSwiped()) {
 					//if(!mainDialog.done) 
