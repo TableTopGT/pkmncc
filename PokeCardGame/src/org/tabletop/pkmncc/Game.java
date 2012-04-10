@@ -58,12 +58,7 @@ public class Game extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
- 
-        // Sets Window to fullscreen and gets rid of top bar on Android device
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        
+
         // Sets the current view to the RenderView of "this"
         setContentView(R.layout.mat);
         mat = (RelativeLayout) findViewById(R.id.mat);
