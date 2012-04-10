@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class Game extends Activity{
     /** Called when the activity is first created. */
@@ -47,28 +48,22 @@ public class Game extends Activity{
 	public float yCoord;
 	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
-	public int i;
 	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
 	public Player playerOne, playerTwo;
-	
-	// Debug variables
-	public Energy energyAdd;
+	RelativeLayout mat;
 
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // Sets Window to fullscreen and gets rid of top bar on Android device
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        
+
         // Sets the current view to the RenderView of "this"
-        setContentView(new RenderView(this));
-        
+        setContentView(R.layout.mat);
+        mat = (RelativeLayout) findViewById(R.id.mat);
+		mat.addView(new RenderView(this));
+
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
         battleMusic.start();
@@ -92,24 +87,15 @@ public class Game extends Activity{
         gameStartingThree = false;
         initiateVars = true;
         initialSwipes = false;
-        i = 0;
         playerOne = new Player(null);
         playerTwo = new Player(playerOne);
         
         // Begin rfid listener
         rfid.start();
-
-        // DEBUG STUFF, NOT NEEDED IN FINAL VERSION////////////////
-        energyAdd = new Energy(Element.FIRE);
-        
-        
-        //////////////////////////////////////////
         
         // Setup Asset stream
         assetManager = this.getAssets();
     	try {
-			inputStream = assetManager.open("images/battlebackground.png");
-			battleGround = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/Charmander.png");
 			charmander = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/Squirtle.png");
@@ -147,10 +133,6 @@ public class Game extends Activity{
     		switch(gameState){
     		case START:
         		if(initiateVars){
-            		// Re-scale background to Canvas resolution, goes off screen, canvas is
-            		// NOT 1280 x 800 because of the tablet's bar at the bottom
-            		battleGround = Bitmap.createScaledBitmap(battleGround, width, height, false);
-            		
             		// scale bench Pokemon
             		benchchar = Bitmap.createScaledBitmap(charmander, 75, 75, false);
             		benchsquir = Bitmap.createScaledBitmap(squirtle, 75, 75, false);
@@ -158,8 +140,7 @@ public class Game extends Activity{
         			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
         			initiateVars = false;
         		}
-        		// Draw the background
-        		canvas.drawBitmap(battleGround, 0, 0, null);
+
         		
         		//Lets draw some Prototype shi; will keep a lot of these placements
  /*       		canvas.drawBitmap(charmander, 800, 300, null);
@@ -204,12 +185,9 @@ public class Game extends Activity{
         			case ONE :
         				initialPokemon(canvas, playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
-        				//energyAdd.setElement(Element.FIRE); //TODO Doesn't work cuz it's the same object
-        				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd =  new Energy(Element.WATER);
-        				playerOne.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd =  new Energy(Element.GRASS);
-        				playerOne.pokeArr[0].addEnergy(energyAdd);
+        				playerOne.addCard(new Energy(Element.FIRE));
+        				playerOne.addCard(new Energy(Element.WATER));
+        				playerOne.addCard(new Energy(Element.GRASS));
         				/////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				playerTurn = Turn.TWO;
@@ -219,15 +197,11 @@ public class Game extends Activity{
         			case TWO :
         				initialPokemon(canvas, playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
-        				energyAdd = new Energy(Element.FIRE);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd = new Energy(Element.LIGHTNING);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd = new Energy(Element.PSYCHIC);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
-        				energyAdd = new Energy(Element.FIGHTING);
-        				playerTwo.pokeArr[0].addEnergy(energyAdd);
+        				playerTwo.addCard(new Energy(Element.FIRE));
+        				playerTwo.addCard(new Energy(Element.FIRE));
+        				playerTwo.addCard(new Energy(Element.LIGHTNING));
+        				playerTwo.addCard(new Energy(Element.FIGHTING));
+        				playerTwo.addCard(new Energy(Element.PSYCHIC));
         				//////////////////////////////////////////////////////////////
         				mainDialog.done = false;
         				mainDialog.setText("Players draw 6 prize cards");
@@ -257,7 +231,6 @@ public class Game extends Activity{
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
     		case BATTLE:
-    			canvas.drawBitmap(battleGround, 0, 0, null);
     			Draw.drawPoke(canvas, playerOne, assetManager);
     			Draw.drawPoke(canvas, playerTwo, assetManager);
     			Draw.drawEnergy(playerOne, canvas, assetManager);
@@ -266,13 +239,13 @@ public class Game extends Activity{
     				case ONE :
     					// New class for the players Turns since there are so many options
     					//rfid.swipeCard(playerOne)
-    					playerOne.pokeArr[0].statusEffect();
+    					playerOne.getActive().statusEffect();
     					playerTurn = Turn.TWO;
     					break;
     				case TWO :
     					// New class for the players Turns since there are so many options
     					//rfid.swipeCard(playerTwo);
-    					playerOne.pokeArr[0].statusEffect();
+    					playerOne.getActive().statusEffect();
     					playerTurn = Turn.ONE;
     					break;
     			}
@@ -315,19 +288,21 @@ public class Game extends Activity{
 	public void initialPokemon(Canvas board, Player activePlayer){
 		activePlayer.startTurn();
 		rfid.setMode(Mode.INIT);
-		for (int k = 0; k < activePlayer.pokeArr.length; ) {
+		for (int k = 0; k < Player.fieldSpots; ) {
 			//if(mainDialog.done) {
 				if (rfid.cardSwiped()) {
 					//if(!mainDialog.done) 
-						activePlayer.pokeArr[k] = (Pokemon) rfid.getCard();
+						activePlayer.addCard(rfid.getCard());
 					//else break;
 						k++;
 						Draw.drawPoke(board, activePlayer, assetManager);
+						
 				}
 			//}
 			//else break;
 		}
 		Draw.drawPoke(board, activePlayer, assetManager);
+		
 	}
 	
 /*	@Override
@@ -342,4 +317,6 @@ public class Game extends Activity{
 		super.onResume();
 		battleMusic.start();
 	}
+
+
 }
