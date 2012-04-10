@@ -23,6 +23,10 @@ public class Magneton extends Pokemon {
 	}
 	
 	public void actionTwo (Player target){
+		
+		int multiplier = target.getActive().getEnergy().size();
+		action2.attack(target, 40 + (10*multiplier));
+		
 		/*Does 40 damage plus 10 more damage for each 
 		 * Energy attached to the Defending Pokémon.
 		 */

@@ -31,8 +31,13 @@ public class Machamp extends Pokemon {
 	@Override
 	public void actionTwo (Player target){
 		
-		/* heads = 0;
-		 * for (count <= 4){
+		
+		int multiplier = getOwner().coinFlip() ? 1 : 1;
+		multiplier += getOwner().coinFlip() ? 1 : 0;
+		multiplier += getOwner().coinFlip() ? 1 : 0;
+		multiplier += getOwner().coinFlip() ? 1 : 0;
+		action1.attack(target, 30*multiplier);
+		 /* for (count <= 4){
 		 * call flipCoin
 		 * if (i == 'heads'){
 		 * heads = heads + 1;

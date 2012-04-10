@@ -16,6 +16,9 @@ public class Vespiquen extends Pokemon {
 	
 	@Override
 	public void actionOne (Player target){
+		
+		getOwner().health += getOwner().health + 20;
+		
 		/* After your attack, remove from Vespiquen the number of 
 		 * damage counters equal to the damage you did to the Defending Pokémon.
 		 */
@@ -23,6 +26,12 @@ public class Vespiquen extends Pokemon {
 
 	@Override
 	public void actionTwo (Player target){
+		if (getOwner().coinFlip() && getOwner().coinFlip()){
+			addStatus(PokemonStatus.POISONED);
+			addStatus(PokemonStatus.BURNED);
+			addStatus(PokemonStatus.PARALYZED);
+			action2.attack(target);
+		}
 		/* Flip 2 coins. If both of them are heads, the Defending Pokémon 
 		 * is now Burned, Paralyzed, and Poisoned.
 		 */

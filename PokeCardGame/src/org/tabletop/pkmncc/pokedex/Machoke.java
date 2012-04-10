@@ -16,11 +16,19 @@ public class Machoke extends Pokemon {
 	
 	@Override
 	public void actionOne (Player target){
+		
+		if (getOwner().coinFlip()){
+			action1.attack(target, 40);
+		}
+		else {
+			action1.attack(target, 20);
+		}
+	
 		/* (Flip a coin. If heads, this attack does 20 damage plus 20 more damage.)
 		call flipCoin
 		if (i == 'heads'){
 		baseAttack = baseAttack + 20;
-		*/	
+		*/
 		}
 	
 	@Override

@@ -26,6 +26,7 @@ public class Skuntank extends Pokemon {
 		 * removeTrainer();
 		 * do damage
 		 */
+		action2.attack(target, 60);
 	}
 
 }

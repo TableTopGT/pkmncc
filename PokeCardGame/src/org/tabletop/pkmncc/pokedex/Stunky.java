@@ -25,6 +25,10 @@ public class Stunky extends Pokemon {
 	
 	@Override
 	public void actionTwo (Player target){
+		
+		int multiplier = getOwner().coinFlip() ? 1 : 1;
+		multiplier += getOwner().coinFlip() ? 1 : 0;
+		action2.attack(target, 20*multiplier);
 		/* heads = 0;
 		 * for (ii <= 2){
 		 * call flipCoin

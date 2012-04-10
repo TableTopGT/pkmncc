@@ -16,14 +16,14 @@ public class Lumineon extends Pokemon{
 	}
 
 	public void actionOne (Player target){
-		/*Choose 1 of your opponent's Pokémon. 
-		 * This attack does 20 damage to that Pokémon. 
-		 * This attack's damage isn't affected by Weakness or Resistance.
+		/* Use DialogBox to choose 1 of your opponent's Pokémon. 
+		 * -- This attack does 20 damage to that Pokémon. 
+		 * -- This attack's damage isn't affected by Weakness or Resistance.
 		 */
 	}
 	
 	public void actionTwo (Player target){
-		/*Flip a coin. If heads, prevent all effects of an attack, 
+		/* Flip a coin. If heads, prevent all effects of an attack, 
 		 * including damage, done to Lumineon during your opponent’s next turn.
 		 */
 	}

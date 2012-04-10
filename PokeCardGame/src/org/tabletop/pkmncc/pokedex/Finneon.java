@@ -24,8 +24,9 @@ public class Finneon extends Pokemon{
 	
 	public void actionTwo (Player target){
 		//Flip a coin. If heads, this attack does 10 damage plus 10 more damage.
-		int multiplier = getOwner().coinFlip() ? 1 : 1;
-		multiplier += getOwner().coinFlip() ? 1 : 0;
-		action1.attack(target, 10*multiplier);
+		if (getOwner().coinFlip()){
+			action2.attack(target, 20);
+		}
+		
 	}
 }

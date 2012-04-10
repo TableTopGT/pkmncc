@@ -23,6 +23,9 @@ public class Magnezone extends Pokemon {
 	}
 	
 	public void actionTwo (Player target){
+		
+		removeEnergy();
+		action2.attack(target);
 		//Discard an Energy attached to Magnezone.
 	}
 	
