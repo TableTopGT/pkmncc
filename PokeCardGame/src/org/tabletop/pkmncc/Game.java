@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class Game extends Activity{
     /** Called when the activity is first created. */
@@ -47,14 +48,11 @@ public class Game extends Activity{
 	public float yCoord;
 	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
-	public int i;
 	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
 	public Player playerOne, playerTwo;
-	
-	// Debug variables
-	public Energy energyAdd;
+	RelativeLayout mat;
 
 	
     @Override
@@ -67,8 +65,10 @@ public class Game extends Activity{
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         // Sets the current view to the RenderView of "this"
-        setContentView(new RenderView(this));
-        
+        setContentView(R.layout.mat);
+        mat = (RelativeLayout) findViewById(R.id.mat);
+		mat.addView(new RenderView(this));
+
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
         battleMusic.start();
@@ -92,7 +92,6 @@ public class Game extends Activity{
         gameStartingThree = false;
         initiateVars = true;
         initialSwipes = false;
-        i = 0;
         playerOne = new Player(null);
         playerTwo = new Player(playerOne);
         
@@ -102,8 +101,6 @@ public class Game extends Activity{
         // Setup Asset stream
         assetManager = this.getAssets();
     	try {
-			inputStream = assetManager.open("images/battlebackground.png");
-			battleGround = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/Charmander.png");
 			charmander = BitmapFactory.decodeStream(inputStream);
 			inputStream = assetManager.open("images/Squirtle.png");
@@ -141,10 +138,6 @@ public class Game extends Activity{
     		switch(gameState){
     		case START:
         		if(initiateVars){
-            		// Re-scale background to Canvas resolution, goes off screen, canvas is
-            		// NOT 1280 x 800 because of the tablet's bar at the bottom
-            		battleGround = Bitmap.createScaledBitmap(battleGround, width, height, false);
-            		
             		// scale bench Pokemon
             		benchchar = Bitmap.createScaledBitmap(charmander, 75, 75, false);
             		benchsquir = Bitmap.createScaledBitmap(squirtle, 75, 75, false);
@@ -152,8 +145,7 @@ public class Game extends Activity{
         			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
         			initiateVars = false;
         		}
-        		// Draw the background
-        		canvas.drawBitmap(battleGround, 0, 0, null);
+
         		
         		//Lets draw some Prototype shi; will keep a lot of these placements
  /*       		canvas.drawBitmap(charmander, 800, 300, null);
@@ -244,7 +236,6 @@ public class Game extends Activity{
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
     		case BATTLE:
-    			canvas.drawBitmap(battleGround, 0, 0, null);
     			Draw.drawPoke(canvas, playerOne, assetManager);
     			Draw.drawPoke(canvas, playerTwo, assetManager);
     			Draw.drawEnergy(playerOne, canvas, assetManager);
