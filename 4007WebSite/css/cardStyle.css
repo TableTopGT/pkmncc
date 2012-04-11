@@ -36,3 +36,20 @@ ul
 {
 	margin-top: -10px;
 }
+
+#teamPic li
+{
+	list-style-type: none;
+	float: left;
+}
+
+#teamPic ul
+{
+	margin-bottom: 30px;
+}
+
+#teamPic p
+{
+	clear:left;
+	text-align:center;
+}
