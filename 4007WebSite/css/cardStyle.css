@@ -1,55 +1,68 @@
-@CHARSET "UTF-8";
+@CHARSET 
+"UTF-8";
+
 
 html
 {
-	background-image: url(../images/pkbg.png);
-	padding-top: 20px;
+	
+background-image: url(../images/background4.png);
+
+background-repeat:no-repeat;	
+padding-top: 20px;
 }
+
+
 
 h1
 {
-	font-family: Cursive;
-	font-size: 54px;
-	text-align: center;
-	color: black;	
-	border-bottom: solid black 4px;
+	
+font-family: Cursive;
+	
+font-size: 54px;
+	
+text-align: center;
+	
+color: black;	
+	
+border-bottom: solid black 4px;
 	padding-bottom: 25px;
 	
 }
 
+
+
 body
 {
-	background-color: rgb(255, 255, 255);
-	opacity: .9;
-	width: 768px;
-	margin: auto;
-	min-height: 500px;
-	border: ridge black 4px;
+	
+background-color: rgb(255, 255, 255);
+	
+opacity: .8;
+	
+width: 768px;
+	
+margin: auto;
+	
+min-height: 500px;
+	
+border: ridge black 4px;
 }
+
+
 
 h3
 {
-	margin-left: 10px;
+	
+margin-left: 10px;
 }
+
+
 
 ul
 {
-	margin-top: -10px;
+	
+margin-top: -10px;
 }
 
-#teamPic li
-{
-	list-style-type: none;
-	float: left;
-}
 
-#teamPic ul
-{
-	margin-bottom: 30px;
-}
 
-#teamPic p
-{
-	clear:left;
-	text-align:center;
-}
+
