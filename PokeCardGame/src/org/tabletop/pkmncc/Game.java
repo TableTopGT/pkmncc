@@ -24,9 +24,7 @@ import android.widget.RelativeLayout;
 public class Game extends Activity{
     /** Called when the activity is first created. */
 	private MediaPlayer battleMusic;
-	private Bitmap charmander, squirtle, fire, water, pokeball1, pokeball2, retreat1, retreat2;
 	private AssetManager assetManager;
-	private InputStream inputStream;
 	private enum State {START, BATTLE, TURN, END};
 	private State gameState = State.START;
 	private boolean gameStarting, gameStartingTwo, gameStartingThree;
@@ -59,26 +57,7 @@ public class Game extends Activity{
         
         // Setup Asset stream
         assetManager = this.getAssets();
-    	try {
-			inputStream = assetManager.open("images/Charmander.png");
-			charmander = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/Squirtle.png");
-			squirtle = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/fire.png");
-			fire = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/water.png");
-			water = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/pokeball1.png");
-			pokeball1 = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/pokeball2.png");
-			pokeball2 = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/retreat1.png");
-			retreat1 = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/retreat2.png");
-			retreat2 = BitmapFactory.decodeStream(inputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
     	
     	
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -102,33 +81,6 @@ public class Game extends Activity{
     	protected void onDraw(Canvas canvas) {
     		switch(gameState){
     		case START:
-        
-        		//Lets draw some Prototype shi; will keep a lot of these placements
- /*       		canvas.drawBitmap(charmander, 800, 300, null);
-        		canvas.drawBitmap(squirtle, 320, 300, null);
-        		canvas.drawBitmap(fire, 1000, 465, null);
-        		canvas.drawBitmap(fire, 1000, 415, null);
-        		canvas.drawBitmap(water, 280, 350, null);
-        		canvas.drawBitmap(water, 280, 300, null);
-        		canvas.drawBitmap(pokeball1, 925, 500, null);
-        		//canvas.drawBitmap(pokeball1, 1100, 100, null);
-        		//canvas.drawBitmap(pokeball1, 1200, 100, null);
-        		canvas.drawBitmap(pokeball2, 320, 175, null);
-        		//canvas.drawBitmap(pokeball2, 25, 575, null);
-        		//canvas.drawBitmap(pokeball2, 100, 575, null);
-        		canvas.drawBitmap(retreat1, 945, 575, null);
-        		canvas.drawBitmap(retreat2, 335, 50, null);
-        		canvas.drawBitmap(benchchar, 1150, 600, null);
-        		canvas.drawBitmap(benchchar, 1150, 500, null);
-        		canvas.drawBitmap(benchchar, 1150, 400, null);
-        		canvas.drawBitmap(benchchar, 1150, 300, null);
-        		canvas.drawBitmap(benchchar, 1150, 200, null);
-        		canvas.drawBitmap(benchsquir, 50, 50, null);
-        		canvas.drawBitmap(benchsquir, 50, 150, null);
-        		canvas.drawBitmap(benchsquir, 50, 250, null);
-        		canvas.drawBitmap(benchsquir, 50, 350, null);
-        		canvas.drawBitmap(benchsquir, 50, 450, null);        		
- */       		
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
