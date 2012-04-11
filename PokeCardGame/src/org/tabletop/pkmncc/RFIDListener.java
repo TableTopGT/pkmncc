@@ -1,7 +1,8 @@
 package org.tabletop.pkmncc;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.UUID;
 
 import org.tabletop.pkmncc.card.*;
@@ -21,10 +22,10 @@ public final class RFIDListener extends Thread {
     private final BluetoothAdapter mAdapter;
     private final BluetoothDevice pokedex;
     private BluetoothSocket pokeLink;
-    private InputStream inStr;
+    private BufferedReader inStr;
     
 	private Mode currMode = Mode.SILENT;
-	private int RFIDTag;
+	private String RFIDTag;
 	private boolean dataAvailable = false;
 	
 	public RFIDListener(Context context) {
@@ -36,7 +37,7 @@ public final class RFIDListener extends Thread {
 			UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 			pokeLink = pokedex.createInsecureRfcommSocketToServiceRecord(MY_UUID);
 			pokeLink.connect();
-			inStr = pokeLink.getInputStream();
+			inStr =  new BufferedReader(new InputStreamReader(pokeLink.getInputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,64 +55,64 @@ public final class RFIDListener extends Thread {
 		
 		Card swipedCard = null;
 		
-		// Return the swiped card
-		switch (RFIDTag) {
-		case 22378135:
-			swipedCard =  new Charmander();
-			break;
-		case 22365539:
+		if (RFIDTag.equals("O11111110")){
+			swipedCard = new Charizard();
+		}
+		else if (RFIDTag.equals("1395027")){
 			swipedCard = new Charmander();
-			break;
-		case 50:
-			swipedCard =  new Charmander();
-			break;
-		case 22365537:
-			swipedCard =  new Charizard();
-			break;
-		case 22378138:
-			swipedCard =  new Energy(Element.LIGHTNING);
-			break;
-		case 22365530:
+		}
+		else if (RFIDTag.equals("03333333330")){
+			swipedCard = new Charmeleon();
+		}
+		else if (RFIDTag.equals("0444444440")){
 			swipedCard = new Energy(Element.COLORLESS);
-			break;
-		case 22378131:
-			swipedCard = new Energy(Element.COLORLESS);
-			break;
-		case 22365532:
+		}
+		else if (RFIDTag.equals("0555555550")){
 			swipedCard = new Energy(Element.DARKNESS);
-			break;
-		case 22378133:
+		}
+		else if (RFIDTag.equals("0666666660")){
 			swipedCard = new Energy(Element.FIGHTING);
-			break;
-		case 22365534:
+		}
+		else if (RFIDTag.equals("0777777770")){
 			swipedCard = new Energy(Element.FIRE);
-			break;
-		case 22378163:
+		}
+		else if (RFIDTag.equals("0888888880")){
 			swipedCard = new Energy(Element.GRASS);
-			break;
-		case 22365523:
-			swipedCard =  new Trainer(TrainerType.ENERGYREMOVAL);
-			break;
-		case 223789876:
-			swipedCard =  new Trainer(TrainerType.FULLHEAL);
-			break;
-		case 223655:
-			swipedCard =  new Trainer(TrainerType.POTION);
-			break;
+		}
+		else if (RFIDTag.equals("0999999990")){
+			swipedCard = new Energy(Element.LIGHTNING);
+		}
+		else if (RFIDTag.equals("0121212120")){
+			swipedCard = new Energy(Element.METAL);
+		}
+		else if (RFIDTag.equals("0131313130")){
+			swipedCard = new Energy(Element.WATER);
+		}
+		else if (RFIDTag.equals("0141414140")){
+			swipedCard = new Trainer(TrainerType.ENERGYREMOVAL);
+		}
+		else if (RFIDTag.equals("0161616160")){
+			swipedCard = new Trainer(TrainerType.FULLHEAL);
+		}
+		else if (RFIDTag.equals("0171717170")){
+			swipedCard = new Trainer(TrainerType.POTION);
+		}
+		else {
+			swipedCard = null;
 		}
 		
 		// Don't allow main thread to get a new card until next swipe
 		dataAvailable = false;
 
 		// Reset RFIDtag //TODO synchronize
-		RFIDTag = 0;
+		RFIDTag = null;
 
 		// Give the swiped card
 		return swipedCard;
 	}
 
 	/** Swipe a card w/ specified tag after x seconds */
-	private void swipeCard(int s, int seconds) {
+	private void swipeCard(String s, int seconds) {
 		try {
 			Thread.sleep(seconds*1000);
 			RFIDTag = s; 				// swipe a card
@@ -123,18 +124,18 @@ public final class RFIDListener extends Thread {
 	
 	@Override
 	public void run() {
-		byte[] bytes = new byte[128];
 			while (true)
 				switch(currMode) {
 				case INIT:
 					// swipe a charmander every second
-					swipeCard(22378135, 1);
+					swipeCard("1395027", 1);
 					break;
 				case REAL:
 					try {
-						inStr.read(bytes);
-						RFIDTag = byteToInt(bytes);
-						dataAvailable = true;
+						if (inStr.ready()) {
+							RFIDTag = inStr.readLine();
+							dataAvailable = true;
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -143,14 +144,4 @@ public final class RFIDListener extends Thread {
 					break;
 				}
 	}
-	
-	//For now just return the first byte //TODO (how to store 9 bytes???)
-	private int byteToInt(byte[] b) {
-		int i = 0;
-		for (byte group : b) {
-			i <<= group;
-		}
-		return b[0];
-	}
-
 }
