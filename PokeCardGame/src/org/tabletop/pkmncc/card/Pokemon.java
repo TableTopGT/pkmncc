@@ -84,10 +84,10 @@ public abstract class Pokemon extends Card {
 	protected ActionDesc action1;
 	protected ActionDesc action2;
 
+	private int pokedexNumber;
 	private boolean isEvolved;
 	private boolean isEvolvable;
 	private Class<? extends Pokemon> evolution;
-	private String strinvolution;
 
 	private MediaPlayer cry = MediaPlayer.create(getContext(), 
 			getContext().getResources()
@@ -135,7 +135,7 @@ public abstract class Pokemon extends Card {
 		return currentHP;
 	}
 
-	protected final int getDamage() {
+	public final int getDamage() { //TODO protected doesn't work w/ Dusknoir?
 		return HP - currentHP;
 	}
 	
@@ -328,29 +328,14 @@ public abstract class Pokemon extends Card {
 			return true;
 		}
 	}
-
-	/**
-	 * Sets properties related to evolution capabilities.
-	 * @param stage - the Pokemon's stage
-	 * @param string - name of next evolution or null string
-	 * @deprecated use the version that takes in a class object or just a stage
-	 * 				if no evolution
-	 */
-	@Deprecated
-	protected final void setEvolution(PokemonStage stage, String string) { //TODO remove after transition
-		this.isEvolved = !PokemonStage.BASIC.equals(stage);
-
-		try {
-			Class.forName(string);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Evolution " + string + " not found.");
-		}
-
-		this.isEvolvable = string != "";
-		this.strinvolution = string;
-	}
 	
+	/**
+	 * Sets the Pokemon's entry number in the Pokedex.
+	 */
+	protected void setPokedexNumber(int pokedexNumber) {
+		this.pokedexNumber = pokedexNumber;
+	}
+
 	/**
 	 * Sets properties related to evolution state and capabilities.
 	 * @param stage - the Pokemon's stage

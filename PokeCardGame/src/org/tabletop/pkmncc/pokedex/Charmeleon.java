@@ -6,6 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Charmeleon extends Pokemon {
 	
 	public Charmeleon() {
+		setPokedexNumber(5);
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE1, Charizard.class);
 		setDefense(80, 1, Element.WATER, 20, null, 0);

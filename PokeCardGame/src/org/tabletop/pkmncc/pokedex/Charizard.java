@@ -7,6 +7,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Charizard extends Pokemon {
 	
 	public Charizard() {
+		setPokedexNumber(6);
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(120, 3, Element.WATER, 0, Element.FIGHTING, 30);
