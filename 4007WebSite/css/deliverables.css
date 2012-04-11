@@ -1,0 +1,64 @@
+@CHARSET 
+"UTF-8";
+
+
+html
+{
+	
+background-image: url(../images/background4.png);
+
+background-repeat:no-repeat;	
+padding-top: 20px;
+}
+
+
+
+h1
+{
+	
+font-family: Cursive;
+	
+font-size: 54px;
+	
+text-align: center;
+	
+color: black;	
+	
+border-bottom: solid black 4px;
+	padding-bottom: 25px;
+	
+}
+
+
+
+body
+{
+	
+background-color: rgb(255, 255, 255);
+	
+opacity: .8;
+	
+width: 768px;
+	
+margin: auto;
+	
+min-height: 500px;
+	
+border: ridge black 4px;
+}
+
+
+
+h3
+{
+	
+margin-left: 10px;
+}
+
+
+
+ul
+{
+	
+margin-top: -10px;
+}
