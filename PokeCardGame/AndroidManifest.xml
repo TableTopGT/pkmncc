@@ -24,7 +24,10 @@
             android:name=".Game"
             android:label="@string/gamescreen_name"
             android:theme ="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <!-- Allows us to run this directly in eclipse -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
     </application>
-
 </manifest>

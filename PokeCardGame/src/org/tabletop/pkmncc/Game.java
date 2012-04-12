@@ -1,8 +1,5 @@
 package org.tabletop.pkmncc;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
@@ -13,12 +10,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class Game extends Activity{
@@ -27,12 +23,14 @@ public class Game extends Activity{
 	private AssetManager assetManager;
 	private enum State {START, BATTLE, TURN, END};
 	private State gameState = State.START;
-	private boolean gameStarting, gameStartingTwo, gameStartingThree;
+	private boolean gameStartingTwo;
 	private RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	private enum Turn {ONE, TWO};
 	private Turn playerTurn = Turn.ONE;
 	private Player playerOne, playerTwo;
 	RelativeLayout mat;
+	public static LinearLayout p1Bench;
+	public static LinearLayout p2Bench;
 
 	
     @Override
@@ -40,7 +38,10 @@ public class Game extends Activity{
         super.onCreate(savedInstanceState);
 
         // Display mat background
-        setContentView(R.layout.mat);
+        setContentView(R.layout.half_mat);
+        mat = (RelativeLayout) findViewById(R.id.matTwo);
+        p1Bench = (LinearLayout) findViewById(R.id.p1bench);
+        p2Bench = (LinearLayout) findViewById(R.id.p2bench);
 
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
@@ -48,7 +49,6 @@ public class Game extends Activity{
         battleMusic.setLooping(true);
         
         gameStartingTwo = true;
-        gameStartingThree = false;
         playerOne = new Player(null);
         playerTwo = new Player(playerOne);
         
@@ -65,7 +65,6 @@ public class Game extends Activity{
 			
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
-		        mat = (RelativeLayout) findViewById(R.id.mat);
 				mat.addView(new RenderView(builder.getContext()));				
 			}
 		}).show();		
@@ -92,24 +91,22 @@ public class Game extends Activity{
         				playerOne.addCard(new Energy(Element.GRASS));
         				
         				playerTurn = Turn.TWO;
-        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
+//        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
         			case TWO :
         				initialPokemon(canvas, playerTwo);
-        				
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
         				playerTwo.addCard(new Energy(Element.FIRE));
         				playerTwo.addCard(new Energy(Element.FIRE));
         				playerTwo.addCard(new Energy(Element.LIGHTNING));
         				playerTwo.addCard(new Energy(Element.FIGHTING));
         				playerTwo.addCard(new Energy(Element.PSYCHIC));
-        				playerTwo.getActive().removeEnergy();
+        				//playerTwo.getActive().removeEnergy();
 
         				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
         				builder2.setMessage("Players draw 6 prize cards").show();
         				gameStartingTwo = false;
-        				gameStartingThree = true;
         				playerTurn = Turn.ONE;
         				gameState = State.BATTLE;
         				break;
@@ -118,8 +115,8 @@ public class Game extends Activity{
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
     		case BATTLE:
-    			Draw.drawPoke(canvas, playerOne, assetManager);
-    			Draw.drawPoke(canvas, playerTwo, assetManager);
+    			//Draw.drawPoke(canvas, playerOne, assetManager);
+    			//Draw.drawPoke(canvas, playerTwo, assetManager);
     			Draw.drawEnergy(playerOne, canvas, assetManager);
     			Draw.drawEnergy(playerTwo, canvas, assetManager);
     			switch(playerTurn){
@@ -143,6 +140,17 @@ public class Game extends Activity{
     		}
     	}
     	
+    	
+    	private void initialPokemon(Canvas board, Player activePlayer){
+    		activePlayer.startTurn();
+    		rfid.setMode(Mode.INIT);
+    		for (int k = 0; k < 3; ) {
+    			if (rfid.cardSwiped()) {
+    				activePlayer.addCard(rfid.getCard());
+    				++k;
+    			}
+    		}
+    	}
     }
  
     
@@ -152,43 +160,14 @@ public class Game extends Activity{
 		super.onPause();
 		battleMusic.stop();
 	}
+
 	
-//	// This is called every time a touch occurs on screen, gets coords
-//	@Override
-//	public boolean onTouchEvent (MotionEvent event){
-//		xCoord = event.getRawX();
-//		yCoord = event.getRawY();
-//		HandleTouch(event);
-//		return true;
-//	}
-//	
-//	// Handles a touch on the screen
-//	public void HandleTouch(MotionEvent e){
-//		if(!mainDialog.done && checktouch){
-//			if(OverlapTester.pointInRectangle(mainDialog.button, xCoord, yCoord)){
-//				mainDialog.done = true;
-//			}
-//		}
-//	}
-	
-	public void initialPokemon(Canvas board, Player activePlayer){
-		activePlayer.startTurn();
-		rfid.setMode(Mode.INIT);
-		for (int k = 0; k < 3; ) {
-			if (rfid.cardSwiped()) {
-				activePlayer.addCard(rfid.getCard());
-				++k;
-			}
-		}
-		Draw.drawPoke(board, activePlayer, assetManager);
-	}
-	
-/*	@Override
+	@Override
 	public void onStop(){
 		super.onStop();
 		battleMusic.stop();
 		battleMusic.release();
-	}*/
+	}
 	
 	@Override
 	public void onResume(){

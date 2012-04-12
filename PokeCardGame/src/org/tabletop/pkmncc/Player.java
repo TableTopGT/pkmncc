@@ -37,7 +37,15 @@ public class Player {
 			this.playTrainer( (Trainer) playedCard);
 		}
 		else if(playedCard instanceof Pokemon){
-			this.addPokemon( (Pokemon) playedCard);
+			if (addPokemon( (Pokemon) playedCard)) {
+				if (currentPlayer.playerNum == 1) {
+					Game.p1Bench.addView(playedCard);
+				} else {
+					Game.p2Bench.addView(playedCard);
+				}
+			} else {
+				;//TODO Pokemon could not be played...
+			}
 		}
 		else if (playedCard instanceof Energy){
 			this.getActive().addEnergy( (Energy) playedCard);

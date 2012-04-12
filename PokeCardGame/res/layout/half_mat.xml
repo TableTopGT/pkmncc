@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/matTwo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/battlebackground" >
+
+    <RelativeLayout
+        android:id="@+id/rightSide"
+        android:layout_width="640dp"
+        android:layout_height="match_parent" 
+        android:layout_alignParentRight="true" 
+        android:gravity="bottom|right">
+
+        <LinearLayout
+            android:id="@+id/p1bench"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/rightSide"
+            android:layout_alignWithParentIfMissing="true"
+            android:orientation="vertical" 
+			android:layout_marginRight="22dp" android:layout_marginBottom="22dp">
+            
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/leftSide"
+        android:layout_width="640dp"
+        android:layout_height="match_parent"
+        android:gravity="bottom|right"
+        android:rotation="180" >
+
+        <LinearLayout
+            android:id="@+id/p2bench"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+			android:layout_marginRight="22dp" android:layout_marginBottom="22dp">
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

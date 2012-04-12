@@ -6,7 +6,13 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.view.MotionEvent;
+
 import org.tabletop.pkmncc.Player;
 
 
@@ -44,21 +50,24 @@ public abstract class Pokemon extends Card {
 		 * @return the damage done by the attack
 		 */
 		public int attack(Player opponent, int tempAttack) {
-			if (!energy.containsAll(energyCost)) {
-				// Not enough energy!
+			if (!energy.containsAll(energyCost)) { //FIXME might compare references, need to do deepequals (override eauls & toHash inside enrgy class?
+				new AlertDialog.Builder(getContext())
+				.setMessage("Energies missing for this action.").show(); //TODO toast
 				return 0;
 			}
-			
+
 			if (!canMove()) {
-				// Paralyzed/Asleep!
+				new AlertDialog.Builder(getContext())
+				.setMessage("Pokemon can't move...").show();
 				return 0;
 			}
-					
+
 			if (confusedEffect()) {
-				// Hurt by it's confusion
+				new AlertDialog.Builder(getContext())
+				.setMessage("Pokemon was hurt by its confusion!").show(); 
 				return 0;
 			}
-				
+
 			Pokemon enemy = opponent.getActive();
 			int damage = tempAttack;
 			if (enemy.weakness == getElement()) {
@@ -67,7 +76,7 @@ public abstract class Pokemon extends Card {
 						: damage * enemy.weakMod;
 			} else if (enemy.resistance == getElement()) {
 				damage -= enemy.resMod;
-			} 
+			}
 			return enemy.removeHP(damage);
 			//XXX Implement prize cards here?
 		}
@@ -97,10 +106,15 @@ public abstract class Pokemon extends Card {
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
-
+	
+	//Newness
+	private Resources res = getResources();
+	private final int imageid = res.getIdentifier(toString().toLowerCase(), "raw", "org.tabletop.pkmncc");
+	
 
 	protected Pokemon() {
 		setImage(toString());
+		setImageResource(imageid);
 		cry.start();
 	}
 	
@@ -205,8 +219,18 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	//XXX Prototype-only function, dialogBox so player can chose which
 	public final void removeEnergy() {
+		final CharSequence[] items = {"Red", "Green", "Blue"}; //FIXME use energy names
+		boolean[] checkedItems = {true, false, false};
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				removeEnergy(energy.get(which));				
+			}
+		}).create();
+		builder.show();
 		energy.remove(1);
 	}
 	
@@ -365,5 +389,12 @@ public abstract class Pokemon extends Card {
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
 		this.resistance = resistance; 
 		this.resMod = (resMod >= 10) ? resMod : 30; // Default unlisted value
+	}
+	
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		cry.start();
+		return super.onTouchEvent(event);
 	}
 }
