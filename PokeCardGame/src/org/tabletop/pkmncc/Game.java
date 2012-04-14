@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -28,10 +29,9 @@ public class Game extends Activity{
 	private enum Turn {ONE, TWO};
 	private Turn playerTurn = Turn.ONE;
 	private Player playerOne, playerTwo;
-	RelativeLayout mat;
+	FrameLayout mat;
 	public static LinearLayout p1Bench;
 	public static LinearLayout p2Bench;
-
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class Game extends Activity{
 
         // Display mat background
         setContentView(R.layout.half_mat);
-        mat = (RelativeLayout) findViewById(R.id.matTwo);
+        mat = (FrameLayout) findViewById(R.id.frame);
         p1Bench = (LinearLayout) findViewById(R.id.p1bench);
         p2Bench = (LinearLayout) findViewById(R.id.p2bench);
 
