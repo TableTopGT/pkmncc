@@ -10,9 +10,13 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
+import org.tabletop.pkmncc.Game;
 import org.tabletop.pkmncc.Player;
 
 
@@ -100,17 +104,14 @@ public abstract class Pokemon extends Card {
 
 	private MediaPlayer cry = MediaPlayer.create(getContext(), 
 			getContext().getResources()
-			.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
-	//TODO play the pokemon's actual sound, not bulbasaur
-
+			.getIdentifier(toString(), "raw", "org.tabletop.pkmncc"));
+	
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 	
-	//Newness
-	private Resources res = getResources();
-	private final int imageid = res.getIdentifier(toString().toLowerCase(), "raw", "org.tabletop.pkmncc");
-	
+	protected final int imageid = getResources().getIdentifier(toString(), "drawable", "org.tabletop.pkmncc");
+	private Bitmap bc = BitmapFactory.decodeResource(getResources(), imageid);
 
 	protected Pokemon() {
 		setImage(toString());
@@ -138,10 +139,10 @@ public abstract class Pokemon extends Card {
 		action2.attack(target);
 	}
 
-	/** Returns the capitalized class name of the Pokemon */
+	/** Returns the lowercase class name of the Pokemon */
 	@Override
 	public final String toString() {
-		return getClass().getSimpleName();
+		return getClass().getSimpleName().toLowerCase();
 	}
 	
 	/* Health-centered methods */
@@ -396,5 +397,11 @@ public abstract class Pokemon extends Card {
 	public boolean onTouchEvent(MotionEvent event) {
 		cry.start();
 		return super.onTouchEvent(event);
+	}
+
+	@Override
+	public void onDraw(Canvas canvas) {
+		canvas.drawBitmap(bc, getMatrix(), null);
+		super.onDraw(canvas);
 	}
 }
