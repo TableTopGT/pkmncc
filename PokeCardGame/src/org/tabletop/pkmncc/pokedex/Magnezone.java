@@ -11,7 +11,7 @@ public class Magnezone extends Pokemon {
 		setDefense(120, 2, Element.FIRE, 30, Element.PSYCHIC, 20);
 		action1 = new ActionDesc ("Speed Shot", 0, Element.LIGHTNING, Element.COLORLESS);
 		action2 = new ActionDesc ("Crush Volt", 80, Element.LIGHTNING, Element.COLORLESS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void actionOne (Player target){

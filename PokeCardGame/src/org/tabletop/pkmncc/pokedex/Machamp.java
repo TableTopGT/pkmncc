@@ -13,7 +13,7 @@ public class Machamp extends Pokemon {
 		action1 = new ActionDesc("Take Out", 40, Element.FIGHTING);
 		action2 = new ActionDesc("Hurricane Punch", 30, Element.COLORLESS, Element.COLORLESS);
 		// action3 = new ActionDesc("Rage", 60, Element.FIGHTING, Element.FIGHTING, Element.COLORLESS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		// TODO new action3
 	}
 	
 	@Override

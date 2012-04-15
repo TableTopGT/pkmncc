@@ -11,7 +11,7 @@ public class Dusknoir extends Pokemon {
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(120, 2, Element.DARKNESS, 30, Element.COLORLESS, 20);
 		action1 = new ActionDesc("Darkness Mist", 60, Element.PSYCHIC, Element.COLORLESS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override

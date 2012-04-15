@@ -10,7 +10,7 @@ public class Magnemite extends Pokemon {
 		setEvolution(PokemonStage.BASIC, Magneton.class);
 		setDefense(50, 1, Element.FIRE, 10, Element.PSYCHIC, 20);
 		action1 = new ActionDesc("Magnetic Bomb", 30, Element.LIGHTNING, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public void actionOne (Player target){

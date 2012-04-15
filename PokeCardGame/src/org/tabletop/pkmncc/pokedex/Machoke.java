@@ -33,6 +33,8 @@ public class Machoke extends Pokemon {
 	
 	@Override
 	public void actionTwo (Player target){
+		
+		
 		/* This attack's damage isn't affected by Resistance, 
 		 * Poké-Powers, Poké-Bodies, or any other effects on the Defending Pokémon.
 		 */

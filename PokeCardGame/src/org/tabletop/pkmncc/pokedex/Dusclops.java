@@ -11,7 +11,7 @@ public class Dusclops extends Pokemon {
 		setDefense(80, 1, Element.DARKNESS, 20, Element.COLORLESS, 20);
 		action1 = new ActionDesc("Dark One-Eye", 20, Element.PSYCHIC);
 		action2 = new ActionDesc("Ambush", 40, Element.PSYCHIC, Element.COLORLESS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override

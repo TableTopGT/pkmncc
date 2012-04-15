@@ -12,7 +12,7 @@ public class Skuntank extends Pokemon {
 		setDefense(100,2, Element.FIGHTING, 20, Element.PSYCHIC, 20);
 		action1 = new ActionDesc("Poison Claws", 20, Element.COLORLESS, Element.COLORLESS);
 		action2 = new ActionDesc("Plunder", 60, Element.DARKNESS, Element.COLORLESS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override
@@ -26,6 +26,7 @@ public class Skuntank extends Pokemon {
 		 * removeTrainer();
 		 * do damage
 		 */
+		// TODO removeTrainer();
 		action2.attack(target, 60);
 	}
 
