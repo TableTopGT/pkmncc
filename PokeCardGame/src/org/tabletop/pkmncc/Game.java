@@ -134,8 +134,8 @@ public class Game extends Activity{
     		case START:
         		if(initiateVars){
             		// scale bench Pokemon
-            		benchchar = Bitmap.createScaledBitmap(charmander, 75, 75, false);
-            		benchsquir = Bitmap.createScaledBitmap(squirtle, 75, 75, false);
+//            		benchchar = Bitmap.createScaledBitmap(charmander, 75, 75, false);
+//            		benchsquir = Bitmap.createScaledBitmap(squirtle, 75, 75, false);
         			dialogBoxRect = new Rect((width/2)-300, (height/2)+200, (width/2)+300, (height/2)-200);
         			mainDialog = new DialogBox("Both players draw 7 cards", textPaint, dialogBoxRect, dialogBoxPaint, dialogButtonPaint);
         			initiateVars = false;
