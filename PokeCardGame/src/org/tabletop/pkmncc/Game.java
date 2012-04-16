@@ -287,7 +287,7 @@ public class Game extends Activity{
 	
 	public void initialPokemon(Canvas board, Player activePlayer){
 		activePlayer.startTurn();
-		rfid.setMode(Mode.INIT);
+		rfid.setMode(Mode.REAL);
 		for (int k = 0; k < Player.fieldSpots; ) {
 			//if(mainDialog.done) {
 				if (rfid.cardSwiped()) {

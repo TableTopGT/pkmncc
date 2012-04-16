@@ -18,7 +18,7 @@ import android.content.Context;
 /** This class must be instantiated before any cards are created. */
 public final class RFIDListener extends Thread {
 
-	public static enum Mode {INIT, SILENT, REAL};
+	public static enum Mode {INIT, SILENT, REAL, EXIT};
     private final BluetoothAdapter mAdapter;
     private final BluetoothDevice pokedex;
     private BluetoothSocket pokeLink;
@@ -124,7 +124,7 @@ public final class RFIDListener extends Thread {
 	
 	@Override
 	public void run() {
-			while (true)
+			while (currMode != Mode.EXIT)
 				switch(currMode) {
 				case INIT:
 					// swipe a charmander every second
@@ -143,5 +143,15 @@ public final class RFIDListener extends Thread {
 				case SILENT:
 					break;
 				}
+	}
+	
+	public void pause() {
+		setMode(Mode.EXIT);
+		try {
+			join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

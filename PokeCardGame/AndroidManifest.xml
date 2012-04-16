@@ -2,29 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.tabletop.pkmncc"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0" android:installLocation="preferExternal">
 
-	<uses-sdk android:minSdkVersion="12" />
-    
+	<uses-sdk android:minSdkVersion="12" android:targetSdkVersion="13"/>
+
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 	
+	<uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	
 	<application
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:icon="@raw/charmander"
+        android:label="@string/app_name"
+        android:theme ="@android:style/Theme.NoTitleBar.Fullscreen" >
+        
         <activity
-            android:name=".PokeCardGameActivity"
-            android:label="@string/app_name" >
+            android:name=".PokeCardGameActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name=".Game"
-            android:label="@string/gamescreen_name"
-            android:theme ="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:label="@string/gamescreen_name" android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
+        
     </application>
 
 </manifest>
