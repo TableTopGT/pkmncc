@@ -11,11 +11,12 @@ public class Combee extends Pokemon {
 		setEvolution(PokemonStage.BASIC, Vespiquen.class);
 		setDefense(50, 1, Element.FIRE, 10, Element.FIGHTING, 20);
 		action1 = new ActionDesc("Alert", 0, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override
 	public void actionOne (Player target) {
+		
 		/* Player draws a card
 		 * Call DialogBox "Do you want to switch your active pokemon?"
 		 * if (yes){

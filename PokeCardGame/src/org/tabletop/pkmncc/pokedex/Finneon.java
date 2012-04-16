@@ -12,10 +12,11 @@ public class Finneon extends Pokemon{
 		action1 = new ActionDesc("Aqua Linear", 0);
 		action2 = new ActionDesc("Mouth Pump", 10, Element.WATER);
 		
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public void actionOne (Player target){
+		
 		/*Choose 1 of your opponent's Benched Pokémon. 
 		 * This attack does 10 damage to that Pokémon. 
 		 * (Don't apply Weakness and Resistance for Benched Pokémon.)

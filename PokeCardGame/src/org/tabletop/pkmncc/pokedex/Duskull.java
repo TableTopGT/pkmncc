@@ -12,7 +12,7 @@ public class Duskull extends Pokemon {
 		setDefense(50, 1, Element.DARKNESS, 10, Element.COLORLESS, 20);
 		action1 = new ActionDesc("Tackle", 10, Element.COLORLESS);
 		action2 = new ActionDesc("Surprise Attack", 30, Element.PSYCHIC, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override

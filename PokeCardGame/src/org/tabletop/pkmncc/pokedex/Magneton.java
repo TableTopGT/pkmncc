@@ -12,7 +12,7 @@ public class Magneton extends Pokemon {
 		action1 = new ActionDesc ("Magnetic Resonance", 20, Element.COLORLESS, Element.COLORLESS);
 		action2 = new ActionDesc ("Magnetic Release", 40, Element.LIGHTNING, Element.COLORLESS, Element.COLORLESS);
 		
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public void actionOne (Player target){

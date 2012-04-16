@@ -11,7 +11,7 @@ public class Vespiquen extends Pokemon {
 		setDefense(100, 1, Element.FIRE, 20, Element.FIGHTING, 20);
 		action1 = new ActionDesc("Bee Drain", 20, Element.GRASS);
 		action2 = new ActionDesc("Bee Powder", 50, Element.GRASS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override

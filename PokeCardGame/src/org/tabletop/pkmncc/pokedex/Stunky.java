@@ -12,7 +12,7 @@ public class Stunky extends Pokemon {
 		setDefense(60, 1, Element.FIGHTING, 10, Element.PSYCHIC, 20);
 		action1 = new ActionDesc("Gnaw and Run", 10, Element.DARKNESS);
 		action2 = new ActionDesc("Double Scratch", 20, Element.COLORLESS, Element.COLORLESS);
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override
