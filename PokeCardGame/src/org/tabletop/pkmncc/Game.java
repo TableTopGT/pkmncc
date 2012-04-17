@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.tabletop.pkmncc.R;
-import org.tabletop.pkmncc.RFIDListener.Mode;
+//import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
+import org.tabletop.pkmncc.pokedex.Charmander;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,7 +49,7 @@ public class Game extends Activity{
 	public float yCoord;
 	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
-	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
+	//public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
 	public Player playerOne, playerTwo;
@@ -115,7 +116,7 @@ public class Game extends Activity{
     	// ForfeitPly2 45 530
         
         // Begin rfid listener
-        rfid.start();
+        //rfid.start();
         
         // Setup Asset stream
         assetManager = this.getAssets();
@@ -257,8 +258,9 @@ public class Game extends Activity{
     		case BATTLE:
     			Draw.drawPoke(canvas, playerOne, assetManager);
     			Draw.drawPoke(canvas, playerTwo, assetManager);
-    			Draw.drawEnergy(playerOne, canvas, assetManager);
-    			Draw.drawEnergy(playerTwo, canvas, assetManager);
+    			Draw.drawPokestuff(playerOne, canvas, assetManager);
+    			Draw.drawPokestuff(playerTwo, canvas, assetManager);
+    			Draw.drawBoard(canvas, assetManager);
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
@@ -357,15 +359,16 @@ public class Game extends Activity{
 	
 	public void initialPokemon(Canvas board, Player activePlayer){
 		activePlayer.startTurn();
-		rfid.setMode(Mode.INIT);
+		//rfid.setMode(Mode.INIT);
 		for (int k = 0; k < Player.fieldSpots; ) {
+			activePlayer.addPokemon(new Charmander());
 			//if(mainDialog.done) {
-				if (rfid.cardSwiped()) {
+		//		if (rfid.cardSwiped()) {
 					//if(!mainDialog.done) 
-						activePlayer.addCard(rfid.getCard());
+			//			activePlayer.addCard(rfid.getCard());
 					//else break;
 						k++;						
-				}
+		//		}
 			//}
 			//else break;
 		}
