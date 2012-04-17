@@ -134,6 +134,10 @@ public abstract class Pokemon extends Card {
 	public final int getHP() {
 		return currentHP;
 	}
+	
+	public final int getfullHP() {
+		return HP;
+	}
 
 	public final int getDamage() { //TODO protected doesn't work w/ Dusknoir?
 		return HP - currentHP;

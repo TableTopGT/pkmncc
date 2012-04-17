@@ -232,8 +232,9 @@ public class Game extends Activity{
     		case BATTLE:
     			Draw.drawPoke(canvas, playerOne, assetManager);
     			Draw.drawPoke(canvas, playerTwo, assetManager);
-    			Draw.drawEnergy(playerOne, canvas, assetManager);
-    			Draw.drawEnergy(playerTwo, canvas, assetManager);
+    			Draw.drawPokestuff(playerOne, canvas, assetManager);
+    			Draw.drawPokestuff(playerTwo, canvas, assetManager);
+    			Draw.drawBoard(canvas, assetManager);
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
