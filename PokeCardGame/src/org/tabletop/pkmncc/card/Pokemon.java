@@ -181,6 +181,14 @@ public abstract class Pokemon extends Card {
 		return isEvolved && pokemon.isEvolvable
 				&& pokemon.evolution.equals(getClass());
 	}
+
+	/**
+	 * Get the names of this Pokemon's actions in order.
+	 * @return an array of Pokemon action names
+	 */
+	public String[] getActionNames() {
+		return new String[] {action1.actionName, action2.actionName};
+	}
 	
 	/**
 	 * Transfers damage and energies to another pokemon. Use when performing
