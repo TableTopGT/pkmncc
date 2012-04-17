@@ -45,8 +45,8 @@ public class Game extends Activity{
 	public enum State {START, BATTLE, TURN, END};
 	public State gameState = State.START;
 	public Rect dialogBoxRect;
-	public float xCoord;
-	public float yCoord;
+	public float xCoord, xCoordUp;
+	public float yCoord, yCoordUp;
 	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
 	//public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
@@ -56,7 +56,8 @@ public class Game extends Activity{
 	RelativeLayout mat;
 	
 	public Rect retreatButtOne, retreatButtTwo, attkButtOneOne, attkButtOneTwo, attkButtTwoOne, attkButtTwoTwo, ETButtOne, ETButtTwo, ForfButtOne, ForfButtTwo;
-
+	public Rect pokeOneOne, pokeOneTwo, pokeOneThree, pokeOneFour, pokeOneFive;
+	public Rect pokeTwoOne, pokeTwoTwo, pokeTwoThree, pokeTwoFour, pokeTwoFive;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,16 +94,27 @@ public class Game extends Activity{
         playerTwo = new Player(playerOne);
         
         // Intialize button rectangles
-        retreatButtOne = new Rect(905, 500, 75, 75);
-        retreatButtTwo = new Rect(320, 175, 40, 40);
-        attkButtOneOne = new Rect(835, 200, 40, 40);
-        attkButtOneTwo = new Rect(390, 500, 75, 75);
-        attkButtTwoOne = new Rect(905, 200, 75, 75);
-        attkButtTwoTwo = new Rect(320, 500, 75, 75);
-        ETButtOne = new Rect(1125, 180, 75, 75);
-        ETButtTwo = new Rect(100, 530, 75, 75);
-        ForfButtOne = new Rect(1182, 180, 40, 40);
-        ForfButtTwo = new Rect(45, 530, 40, 40);
+        retreatButtOne = new Rect(905, 500, 905+75, 500+75);
+        retreatButtTwo = new Rect(320, 175, 320+40, 175+40);
+        attkButtOneOne = new Rect(835, 200, 835+40, 200+40);
+        attkButtOneTwo = new Rect(390, 500, 390+75, 500+75);
+        attkButtTwoOne = new Rect(905, 200, 905+75, 200+75);
+        attkButtTwoTwo = new Rect(320, 500, 320+75, 500+75);
+        ETButtOne = new Rect(1125, 180, 1125+75, 180+75);
+        ETButtTwo = new Rect(100, 530, 100+75, 530+75);
+        ForfButtOne = new Rect(1182, 180, 1182+40, 180+40);
+        ForfButtTwo = new Rect(45, 530, 45+40, 530+40);
+        
+        pokeOneOne = new Rect(1150, 635, 1150+75, 635+75);
+        pokeOneTwo = new Rect(1150, 535, 1150+75, 535+75);
+        pokeOneThree = new Rect(1150, 435, 1150+75, 435+75);
+        pokeOneFour = new Rect(1150, 335, 1150+75, 335+75);
+        pokeOneFive = new Rect(1150, 235, 1150+75, 235+75);
+        pokeTwoOne = new Rect(50, 40, 50+75, 40+75);
+        pokeTwoTwo = new Rect(50, 140, 50+75, 140+75);
+        pokeTwoThree = new Rect(50, 240, 50+75, 240+75);
+        pokeTwoFour = new Rect(50, 340, 50+75, 340+75);
+        pokeTwoFive = new Rect(50, 440, 50+75, 440+75);
         
     	// Retreat1 905 500
     	// Retreat2 320 175
@@ -264,16 +276,15 @@ public class Game extends Activity{
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
-    					rfid.setMode(Mode.INIT);
+//    					rfid.setMode(Mode.INIT);
     					
     					playerOne.getActive().statusEffect();
-    					playerTurn = Turn.TWO;
     					break;
     				case TWO :
     					// New class for the players Turns since there are so many options
-    					rfid.setMode(Mode.INIT);
+//    					rfid.setMode(Mode.INIT);
+    					
     					playerOne.getActive().statusEffect();
-    					playerTurn = Turn.ONE;
     					break;
     			}
     			invalidate();
@@ -306,9 +317,14 @@ public class Game extends Activity{
 	// This is called every time a touch occurs on screen, gets coords
 	@Override
 	public boolean onTouchEvent (MotionEvent event){
-		xCoord = event.getRawX();
-		yCoord = event.getRawY();
-		HandleTouch(event);
+	    if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+			xCoord = event.getX();
+			yCoord = event.getY();
+	      } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+	  		xCoordUp = event.getX();
+			yCoordUp = event.getY();
+			HandleTouch(event);
+	    }
 		return true;
 	}
 
@@ -319,27 +335,39 @@ public class Game extends Activity{
 				mainDialog.done = true;
 			}
 		}
+		if(gameState == State.BATTLE){
 		switch(playerTurn){
 		case ONE :
 			if(OverlapTester.pointInRectangle(retreatButtOne, xCoord, yCoord)){
-				
+				if(playerOne.getPokemon(0).canRetreat()){
+					chooseNewActive(playerOne);
+				}
+				xCoord = 0;
+				yCoord = 0;
 			}
 			if(OverlapTester.pointInRectangle(attkButtOneOne, xCoord, yCoord)){
-				
+				xCoord = 0;
+				yCoord = 0;
 			}
 			if(OverlapTester.pointInRectangle(attkButtOneTwo, xCoord, yCoord)){
-				
+				xCoord = 0;
+				yCoord = 0;
 			}
 			if(OverlapTester.pointInRectangle(ETButtOne, xCoord, yCoord)){
-				
+				playerTurn = Turn.TWO;
+				xCoord = 0;
+				yCoord = 0;
 			}
 			if(OverlapTester.pointInRectangle(ForfButtOne, xCoord, yCoord)){
-				
+				xCoord = 0;
+				yCoord = 0;
 			}
 			break;
 		case TWO :
 			if(OverlapTester.pointInRectangle(retreatButtTwo, xCoord, yCoord)){
-				
+				if(playerTwo.getPokemon(0).canRetreat()){
+					chooseNewActive(playerTwo);
+				}
 			}
 			if(OverlapTester.pointInRectangle(attkButtTwoOne, xCoord, yCoord)){
 				
@@ -348,12 +376,13 @@ public class Game extends Activity{
 				
 			}
 			if(OverlapTester.pointInRectangle(ETButtTwo, xCoord, yCoord)){
-				
+				playerTurn = Turn.ONE;
 			}
 			if(OverlapTester.pointInRectangle(ForfButtTwo, xCoord, yCoord)){
 				
 			}
 			break;
+		}
 		}
 	}
 	
@@ -373,5 +402,61 @@ public class Game extends Activity{
 			//else break;
 		}
 		Draw.drawPoke(board, activePlayer, assetManager);
+	}
+	
+	public void chooseNewActive(Player player){
+		boolean done = false;
+		
+		for(int i = 0; i < player.getPokemon(0).getRetreat(); i++){
+			player.getPokemon(0).removeEnergy();
+		}
+		while(!done){
+			switch(playerTurn){
+			case ONE:
+				if(OverlapTester.pointInRectangle(pokeOneOne, xCoordUp, yCoordUp)){
+					player.switchActive(1);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeOneTwo, xCoordUp, yCoordUp)){
+					player.switchActive(2);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeOneThree, xCoordUp, yCoordUp)){
+					player.switchActive(3);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeOneFour, xCoordUp, yCoordUp)){
+					player.switchActive(4);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeOneFive, xCoordUp, yCoordUp)){
+					player.switchActive(5);
+					done = true;
+				}
+				break;
+			case TWO:
+				if(OverlapTester.pointInRectangle(pokeTwoOne, xCoordUp, yCoordUp)){
+					player.switchActive(1);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeTwoTwo, xCoordUp, yCoordUp)){
+					player.switchActive(2);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeTwoThree, xCoordUp, yCoordUp)){
+					player.switchActive(3);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeTwoFour, xCoordUp, yCoordUp)){
+					player.switchActive(4);
+					done = true;
+				}
+				if(OverlapTester.pointInRectangle(pokeTwoFive, xCoordUp, yCoordUp)){
+					player.switchActive(5);
+					done = true;
+				}
+				break;
+			}
+		}
 	}
 }
