@@ -206,11 +206,12 @@ public final class RFIDListener extends Thread {
 	
 	public void pause() {
 		setMode(Mode.EXIT);
+		while (true)
 		try {
 			join();
+			break;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// try again
 		}
 	}
 }

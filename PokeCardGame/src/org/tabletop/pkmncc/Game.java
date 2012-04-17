@@ -66,7 +66,6 @@ public class Game extends Activity{
 
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
-        battleMusic.start();
         battleMusic.setLooping(true);
         
         // Setup Paint types
@@ -119,9 +118,9 @@ public class Game extends Activity{
     }
     
     class RenderView extends View {
-    	// The Constructor here calls a super function for View
+    	
     	public RenderView(Context context) {
-    	super(context);
+    		super(context);
     	}
     	
     	// Called to draw things
@@ -264,9 +263,18 @@ public class Game extends Activity{
 	@Override
 	public void onPause(){
 		super.onPause();
-		battleMusic.stop();
+		if (battleMusic != null) {
+			battleMusic.pause();
+		}
 	}
-	
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		if (battleMusic != null)
+			battleMusic.start();
+	}
+
 	// This is called every time a touch occurs on screen, gets coords
 	@Override
 	public boolean onTouchEvent (MotionEvent event){
@@ -275,7 +283,7 @@ public class Game extends Activity{
 		HandleTouch(event);
 		return true;
 	}
-	
+
 	// Handles a touch on the screen
 	public void HandleTouch(MotionEvent e){
 		if(!mainDialog.done && checktouch){
@@ -287,36 +295,18 @@ public class Game extends Activity{
 	
 	public void initialPokemon(Canvas board, Player activePlayer){
 		activePlayer.startTurn();
-		rfid.setMode(Mode.REAL);
+		rfid.setMode(Mode.INIT);
 		for (int k = 0; k < Player.fieldSpots; ) {
 			//if(mainDialog.done) {
 				if (rfid.cardSwiped()) {
 					//if(!mainDialog.done) 
 						activePlayer.addCard(rfid.getCard());
 					//else break;
-						k++;
-						Draw.drawPoke(board, activePlayer, assetManager);
-						
+						k++;						
 				}
 			//}
 			//else break;
 		}
 		Draw.drawPoke(board, activePlayer, assetManager);
-		
 	}
-	
-/*	@Override
-	public void onStop(){
-		super.onStop();
-		battleMusic.stop();
-		battleMusic.release();
-	}*/
-	
-	@Override
-	public void onResume(){
-		super.onResume();
-		battleMusic.start();
-	}
-
-
 }
