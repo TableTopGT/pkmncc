@@ -89,9 +89,9 @@ public abstract class Pokemon extends Card {
 	private boolean isEvolvable;
 	private Class<? extends Pokemon> evolution;
 
-	private MediaPlayer cry = MediaPlayer.create(getContext(), 
-			getContext().getResources()
-			.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
+	//private MediaPlayer cry = MediaPlayer.create(getContext(), 
+			//getContext().getResources()
+			//.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
 	//TODO play the pokemon's actual sound, not bulbasaur
 
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
@@ -101,7 +101,7 @@ public abstract class Pokemon extends Card {
 
 	protected Pokemon() {
 		setImage(toString());
-		cry.start();
+		//cry.start();
 	}
 	
 	/**
@@ -157,9 +157,9 @@ public abstract class Pokemon extends Card {
 	}
 	
 	private void faint() {
-		cry.start();
-		cry.release();
-		cry = null;
+		//cry.start();
+		//cry.release();
+		//cry = null;
 	}
 	
 	public final boolean isFainted() {
