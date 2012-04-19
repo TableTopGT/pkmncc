@@ -6,6 +6,8 @@
 package org.tabletop.pkmncc.card;
 
 import java.util.ArrayList;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 
@@ -20,12 +22,12 @@ public abstract class Pokemon extends Card {
 		public final String actionName;
 		private final int baseAttack;
 		private ArrayList<Energy> energyCost;
+		private final int energyCostSize;
 
 		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost); 
-			//FIXME how does this handle empty or colorless cost?
+			this.energyCostSize = Energy.createCost(this.energyCost, energyCost);
 		}
 
 		/**
@@ -44,7 +46,7 @@ public abstract class Pokemon extends Card {
 		 * @return the damage done by the attack
 		 */
 		public int attack(Player opponent, int tempAttack) {
-			if (!energy.containsAll(energyCost)) {
+			if (!enoughEnergy()) {
 				// Not enough energy!
 				return 0;
 			}
@@ -71,6 +73,11 @@ public abstract class Pokemon extends Card {
 			return enemy.removeHP(damage);
 			//XXX Implement prize cards here?
 		}
+
+		private boolean enoughEnergy() {
+			return energy.containsAll(energyCost) &&
+					(energy.size() >= energyCostSize);
+		}
 	}
 	
 	
@@ -95,7 +102,7 @@ public abstract class Pokemon extends Card {
 	//TODO play the pokemon's actual sound, not bulbasaur
 
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
-	private PokemonStatus[] status = new PokemonStatus[3];
+	private final PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 
 
@@ -181,7 +188,7 @@ public abstract class Pokemon extends Card {
 		return !isEvolved;
 	}
 
-	public boolean isEvolutionOf(Pokemon pokemon) { //XXX will fail if pokemon evolutions not changed
+	public boolean isEvolutionOf(Pokemon pokemon) {
 		return isEvolved && pokemon.isEvolvable
 				&& pokemon.evolution.equals(getClass());
 	}
@@ -201,7 +208,6 @@ public abstract class Pokemon extends Card {
 	public final void transferStatsTo(Pokemon nextForm) {
 		nextForm.removeHP(getDamage());
 		nextForm.energy = energy;
-		energy = null; // Dispose of local reference to the energy object
 	}
 
 	/* Energy-centered methods */
@@ -217,9 +223,23 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	//XXX Prototype-only function, dialogBox so player can chose which
+	//XXX dialogBox so player can chose which
 	public final void removeEnergy() {
-		energy.remove(1);
+		int numEnergies = energy.size();
+		CharSequence[] items = new CharSequence[numEnergies];
+		boolean[] checkedItems = new boolean[numEnergies];
+		for (int i = 0; i < numEnergies; i++)
+			items[i] = energy.get(i).toString();
+		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+		builder.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				removeEnergy(energy.get(which));
+			}
+			
+		}).create();
+		builder.show();
 	}
 	
 	public final void removeEnergy(Energy energyCard) {
@@ -293,7 +313,7 @@ public abstract class Pokemon extends Card {
 	 * confusion are handled here. Confusion is handled automatically before attacks.
 	 */
 	public final void statusEffect() {
-		for (int i = 2; i < 0; i--) {
+		for (int i = 2; i >= 0; i--) {
 			if (status[i] == null) continue;
 			switch(status[i]) {
 			case POISONED:
