@@ -3,6 +3,8 @@ package org.tabletop.pkmncc.pokedex;
 import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Pokemon;
 
+//DO NOT USE
+
 public class Duskull extends Pokemon {
 
 	public Duskull() {
@@ -19,7 +21,7 @@ public class Duskull extends Pokemon {
 	public void actionTwo (Player target) {
 		
 		 if (getOwner().coinFlip()){
-		    action1.attack(target, 30);
+		    action2.attack(target, 30);
 		   }
 		 
 	}
