@@ -8,6 +8,7 @@ package org.tabletop.pkmncc.card;
 import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.media.MediaPlayer;
 import org.tabletop.pkmncc.Player;
 
@@ -75,7 +76,7 @@ public abstract class Pokemon extends Card {
 		}
 
 		private boolean enoughEnergy() {
-			return energy.containsAll(energyCost) &&
+			return (energyCost == null) || energy.containsAll(energyCost) &&
 					(energy.size() >= energyCostSize);
 		}
 	}
@@ -142,7 +143,7 @@ public abstract class Pokemon extends Card {
 		return currentHP;
 	}
 	
-	public final int getfullHP() {
+	public final int getFullHP() {
 		return HP;
 	}
 
@@ -150,7 +151,7 @@ public abstract class Pokemon extends Card {
 		return HP - currentHP;
 	}
 	
-	public final int getRetreat() { //TODO protected doesn't work w/ Dusknoir?
+	public final int getRetreat() {
 		return retreatCost;
 	}
 	
@@ -227,23 +228,38 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
-	//XXX dialogBox so player can chose which
+	/** Provide player dialog to select which energies to remove. */
 	public final void removeEnergy() {
-		int numEnergies = energy.size();
+		final int numEnergies = energy.size();
 		CharSequence[] items = new CharSequence[numEnergies];
-		boolean[] checkedItems = new boolean[numEnergies];
+		final boolean[] checkedItems = new boolean[numEnergies];
+		
+		// Generate list of energy strings to display
 		for (int i = 0; i < numEnergies; i++)
 			items[i] = energy.get(i).toString();
-		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-		builder.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+		
+		// Create and show dialogbox
+		new AlertDialog.Builder(getContext())
+		.setTitle("Select Energies to remove: ")
+		.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-				removeEnergy(energy.get(which));
+				checkedItems[which] = isChecked;
 			}
 			
-		}).create();
-		builder.show();
+			
+		}).setPositiveButton("Done", new OnClickListener() {
+			
+			// Remove selected energies
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				for (int i = numEnergies-1; i >= 0; --i)
+					if (checkedItems[i])
+						energy.remove(i);
+			}
+			
+		}).show();
 	}
 	
 	public final void removeEnergy(Energy energyCard) {
@@ -290,7 +306,7 @@ public abstract class Pokemon extends Card {
 	public final void removeStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
-		switch (stat) { //TODO implement sortable in Status enums
+		switch (stat) {
 		case POISONED:
 			status[2] = null;
 			break;
