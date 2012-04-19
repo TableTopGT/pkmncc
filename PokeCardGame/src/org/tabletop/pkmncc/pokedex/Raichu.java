@@ -9,27 +9,22 @@ public class Raichu extends Pokemon{
 		
 		setElement(Element.LIGHTNING);
 		setEvolution(PokemonStage.STAGE2);
-		setDefense(90, 0, Element.FIGHTING, 10, Element.METAL, 20);
-		action1 = new ActionDesc("Slice", 30);
-		action2 = new ActionDesc("Split Ball", 50, Element.COLORLESS, Element.COLORLESS, Element.COLORLESS);
-		//action3 = new ActionDesc("Burst Ball", 100, Element.LIGHTNING, Element.LIGHTNING, Element.COLORLESS);
+		setDefense(80, 1, Element.FIGHTING, 10, null, 0);
+		action1 = new ActionDesc("Thundershock", 20, Element.COLORLESS, Element.COLORLESS);
+		action2 = new ActionDesc("Pika Bolt", 50, Element.LIGHTNING, Element.COLORLESS, Element.COLORLESS);
+		
 	}
 
 	@Override
+	/** Flip coin, If heads defending pokemon is paralyzed **/
 	public void actionOne (Player target){
-		// Raichu can't use Slice during your next turn.
+		if(getOwner().coinFlip()){
+			target.getActive().addStatus(PokemonStatus.PARALYZED);
+		}
+		action1.attack(target);
 	}
-	
-	@Override
-	public void actionTwo (Player target){
-		// Move an Energy card attached to Raichu to 1 of your Benched Pokémon.
-	}
-	
-	/*@Override
-	 * public void actionThree (Player target{
-		removeEnergy(); // Discard 3 Energy attached to any of your Pokémon in any way you like.
-		action2.attack(target);
-	} */
+
+
 }
 
 

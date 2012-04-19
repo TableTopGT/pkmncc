@@ -139,6 +139,11 @@ public abstract class Pokemon extends Card {
 		return HP - currentHP;
 	}
 	
+	public final int getEnergySize(){
+		return energy.size();
+	}
+	
+	
 	public final int addHP(int hitPoints) {
 		currentHP += hitPoints;
 		if (currentHP > HP) currentHP = HP;

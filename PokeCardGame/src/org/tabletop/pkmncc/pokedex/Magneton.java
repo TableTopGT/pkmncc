@@ -8,28 +8,20 @@ public class Magneton extends Pokemon {
 	public Magneton() {
 		setElement(Element.METAL);
 		setEvolution(PokemonStage.STAGE1, Magnezone.class);
-		setDefense(80, 1, Element.FIRE, 20, Element.PSYCHIC, 20);
-		action1 = new ActionDesc ("Magnetic Resonance", 20, Element.COLORLESS, Element.COLORLESS);
-		action2 = new ActionDesc ("Magnetic Release", 40, Element.LIGHTNING, Element.COLORLESS, Element.COLORLESS);
+		setDefense(80, 1, Element.FIGHTING, 10, Element.METAL, 10);
+		action1 = new ActionDesc ("Supersonic", 20, Element.LIGHTNING, Element.COLORLESS);
+		action2 = new ActionDesc ("Speed Ball", 50, Element.LIGHTNING, Element.COLORLESS, Element.COLORLESS);
 		
 		
 	}
 	
+	/** Flip coins. If heads, opponenet is confused**/
 	public void actionOne (Player target){
-		/*If you have a Stadium card in play, 
-		 * this attack does 20 damage to 2 of your opponent's Benched Pokémon. 
-		 * (Don't apply Weakness and Resistance for Benched Pokémon.)
-		 */
-	}
-	
-	public void actionTwo (Player target){
+		if(getOwner().coinFlip()){
+			target.getActive().addStatus(PokemonStatus.CONFUSED);
+		}
 		
-		int multiplier = target.getActive().getEnergy().size();
-		action2.attack(target, 40 + (10*multiplier));
-		
-		/*Does 40 damage plus 10 more damage for each 
-		 * Energy attached to the Defending Pokémon.
-		 */
+		action1.attack(target);
 	}
 
 }

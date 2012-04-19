@@ -3,6 +3,9 @@ package org.tabletop.pkmncc.pokedex;
 import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Pokemon;
 
+//DO NOT USE
+
+
 public class Dusknoir extends Pokemon {
 
 	public Dusknoir() {
@@ -15,14 +18,11 @@ public class Dusknoir extends Pokemon {
 	}
 	
 	@Override
+	/** If defending pokemon has two or more damage counters, baseAttack = baseAttack + 20 **/
 	public void actionOne (Player target){
 		
-		if ((target.getActive().getDamage())>2){
+		if ((target.getActive().getDamage())>=20){
 		    action1.attack(target, 80);
 		   }
-		/* if (Defending Pokemon has two or more damage counters){
-		 * baseAttack = baseAttack + 20;
-		 * }
-		 */
 	}
 }

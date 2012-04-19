@@ -4,6 +4,8 @@ import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
 
+//DO NOT USE
+
 public class Charizard extends Pokemon {
 	
 	public Charizard() {
