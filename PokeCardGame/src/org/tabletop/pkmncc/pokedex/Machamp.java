@@ -12,43 +12,34 @@ public class Machamp extends Pokemon {
 		setDefense(130, 2, Element.PSYCHIC, 30, null, 0);
 		action1 = new ActionDesc("Take Out", 40, Element.FIGHTING);
 		action2 = new ActionDesc("Hurricane Punch", 30, Element.COLORLESS, Element.COLORLESS);
-		// action3 = new ActionDesc("Rage", 60, Element.FIGHTING, Element.FIGHTING, Element.COLORLESS, Element.COLORLESS);
-		// TODO new action3
+
 	}
 	
 	@Override
+	/** If the defending pokemon is not evolved, KO instead of damage **/
 	public void actionOne (Player target){
 		
-		if(isBasic()){
-			
+		if(target.getActive().isBasic()){
+			action1.attack(target, target.getActive().getHP());
 		}
-		
-		/* If the Defending Pokémon isn't an Evolved Pokémon, 
-		 * that Pokémon is Knocked Out instead of damaged by this attack.
-	   	*/
 	}
 	
 	@Override
+	/** Flip a coin 4 times -- do 30 damage times number of heads flipped **/
 	public void actionTwo (Player target){
 		
+		int count = 0;
 		
-		int multiplier = getOwner().coinFlip() ? 1 : 1;
-		multiplier += getOwner().coinFlip() ? 1 : 0;
-		multiplier += getOwner().coinFlip() ? 1 : 0;
-		multiplier += getOwner().coinFlip() ? 1 : 0;
-		action1.attack(target, 30*multiplier);
-		 /* for (count <= 4){
-		 * call flipCoin
-		 * if (i == 'heads'){
-		 * heads = heads + 1;
-		 * }
-		 * }
-		 * baseAttack = baseAttack * heads
-		 */
+		for (int i = 0; i>4; i++){
+			if(getOwner().coinFlip()){
+				count++;
+			}
+			
+		action2.attack(target, 30*count);
+		}
+		
+
 	}
 	
-	/*public void actionThree (Player target){
-		 // baseAttack = baseAttack + (damageCounters * 10);
-	}
-	*/
+	
 }

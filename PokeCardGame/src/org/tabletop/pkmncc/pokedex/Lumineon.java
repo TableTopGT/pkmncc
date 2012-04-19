@@ -3,6 +3,7 @@ package org.tabletop.pkmncc.pokedex;
 import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Pokemon;
 
+//DO NOT USE
 
 public class Lumineon extends Pokemon{
 
