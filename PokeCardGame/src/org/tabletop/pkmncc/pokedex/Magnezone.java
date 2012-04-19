@@ -15,11 +15,21 @@ public class Magnezone extends Pokemon {
 				
 	}
 
+	@Override
+	/**Metal Blast: Does 50 damage plus 10 more damage for each metal energy attached to Magnezone **/
 	public void actionOne (Player target){
-	
-		//new ArrayList<Pokemon.Energy> thisEnergy;
+		int metalCount = 0;
+		for (int i = 0; i<target.getActive().getEnergySize(); i++){
+
+			if (target.getActive().getEnergy().get(i).getElement() == Element.METAL){
+				metalCount++;
+			}		
+			
+		}
 		
+		action1.attack(target, (50+metalCount*10) );
 	}
+	
 
 	
 }

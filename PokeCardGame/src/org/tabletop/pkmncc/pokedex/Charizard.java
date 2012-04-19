@@ -12,7 +12,7 @@ public class Charizard extends Pokemon {
 		setPokedexNumber(6);
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE2);
-		setDefense(120, 3, Element.WATER, 0, Element.FIGHTING, 30);
+		setDefense(120, 2, Element.WATER, 0, null, 0);
 		action1 = new ActionDesc("Combustion", 30, Element.FIRE);
 		action2 = new ActionDesc("Burning Inferno", 50, Element.FIRE, Element.FIRE,
 												   Element.COLORLESS, Element.COLORLESS);

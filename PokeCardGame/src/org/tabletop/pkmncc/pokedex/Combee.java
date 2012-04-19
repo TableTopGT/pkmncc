@@ -10,7 +10,7 @@ public class Combee extends Pokemon {
 		setElement(Element.GRASS);
 		setEvolution(PokemonStage.BASIC, Vespiquen.class);
 		setDefense(50, 1, Element.FIRE, 10, Element.FIGHTING, 20);
-		action1 = new ActionDesc("Nap", 0, Element.COLORLESS);
+		action1 = new ActionDesc("Nap", 0, Element.GRASS);
 		action2 = new ActionDesc("Zzzt", 20, Element.COLORLESS, Element.COLORLESS);
 		
 	}
