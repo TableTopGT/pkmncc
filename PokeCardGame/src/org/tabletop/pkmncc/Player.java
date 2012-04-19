@@ -8,6 +8,7 @@ public class Player {
 
 	public static final int fieldSpots = 6;
 	public static Player currentPlayer;
+	private static final Random RNG = new Random();
 	private static int playerCount;
 
 	public final int playerNum = ++playerCount;
@@ -28,7 +29,7 @@ public class Player {
 
 	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
-		return (new Random()).nextBoolean();
+		return RNG.nextBoolean();
 	}
 
 	/**Check to see what kind of card the player has scanned**/

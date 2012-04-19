@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.tabletop.pkmncc.R;
+import org.tabletop.pkmncc.RFIDListener.Mode;
 //import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
@@ -49,24 +50,31 @@ public class Game extends Activity{
 	public float yCoord, yCoordUp;
 	public boolean gameStarting, gameStartingTwo, gameStartingThree, initiateVars, initialSwipes;
 	public DialogBox mainDialog;
-	//public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
+	public RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	public enum Turn {ONE, TWO};
 	public Turn playerTurn = Turn.ONE;
-	public Player playerOne, playerTwo;
+	public static Player playerOne;
+	public static Player playerTwo;
 	RelativeLayout mat;
 	
 	public Rect retreatButtOne, retreatButtTwo, attkButtOneOne, attkButtOneTwo, attkButtTwoOne, attkButtTwoTwo, ETButtOne, ETButtTwo, ForfButtOne, ForfButtTwo;
 	public Rect pokeOneOne, pokeOneTwo, pokeOneThree, pokeOneFour, pokeOneFive;
 	public Rect pokeTwoOne, pokeTwoTwo, pokeTwoThree, pokeTwoFour, pokeTwoFive;
+	private Draw renderThread;
+	private GameLoop gameLoop;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Sets the current view to the RenderView of "this"
-        setContentView(R.layout.mat);
-        mat = (RelativeLayout) findViewById(R.id.mat);
-		mat.addView(new RenderView(this));
+//        setContentView(R.layout.mat);
+//        mat = (RelativeLayout) findViewById(R.id.mat);
+//		mat.addView(new RenderView(this));
+        gameLoop = new GameLoop(this);
+    	// Draw the game
+        renderThread = new Draw(this);
+        setContentView(renderThread);
 
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
@@ -128,45 +136,64 @@ public class Game extends Activity{
     	// ForfeitPly2 45 530
         
         // Begin rfid listener
-        //rfid.start();
+        rfid.start();
         
         // Setup Asset stream
         assetManager = this.getAssets();
-    	try {
-			inputStream = assetManager.open("images/Charmander.png");
-			charmander = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/Squirtle.png");
-			squirtle = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/fire.png");
-			fire = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/water.png");
-			water = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/pokeball1.png");
-			pokeball1 = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/pokeball2.png");
-			pokeball2 = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/retreat1.png");
-			retreat1 = BitmapFactory.decodeStream(inputStream);
-			inputStream = assetManager.open("images/retreat2.png");
-			retreat2 = BitmapFactory.decodeStream(inputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-		}
+//    	try {
+//			inputStream = assetManager.open("images/Charmander.png");
+//			charmander = BitmapFactory.decodeStream(inputStream);
+//			squirtle = BitmapFactory.decodeStream(inputStream);
+//			inputStream = assetManager.open("images/fire.png");
+//			fire = BitmapFactory.decodeStream(inputStream);
+//			inputStream = assetManager.open("images/water.png");
+//			water = BitmapFactory.decodeStream(inputStream);
+//			inputStream = assetManager.open("images/pokeball1.png");
+//			pokeball1 = BitmapFactory.decodeStream(inputStream);
+//			inputStream = assetManager.open("images/pokeball2.png");
+//			pokeball2 = BitmapFactory.decodeStream(inputStream);
+//			inputStream = assetManager.open("images/retreat1.png");
+//			retreat1 = BitmapFactory.decodeStream(inputStream);
+//			inputStream = assetManager.open("images/retreat2.png");
+//			retreat2 = BitmapFactory.decodeStream(inputStream);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//		}
+    	
+
     }
     
-    class RenderView extends View {
+    class GameLoop extends View {
     	
-    	public RenderView(Context context) {
+    	private boolean runOnce = true;
+
+		public GameLoop(Context context) {
     		super(context);
     	}
+		
+		public void start() {
+				initialPokemon(playerOne);
+				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
+				playerOne.addCard(new Energy(Element.FIRE));
+				playerOne.addCard(new Energy(Element.WATER));
+				playerOne.addCard(new Energy(Element.GRASS));
+  				initialPokemon(playerTwo);
+				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
+				playerTwo.addCard(new Energy(Element.FIRE));
+				playerTwo.addCard(new Energy(Element.FIRE));
+				playerTwo.addCard(new Energy(Element.LIGHTNING));
+				playerTwo.addCard(new Energy(Element.FIGHTING));
+				playerTwo.addCard(new Energy(Element.PSYCHIC));
+				playerTwo.getActive().removeEnergy();
+}
     	
-    	// Called to draw things
+    	// Called to draw things 
     	protected void onDraw(Canvas canvas) {
     	// to be implemented
     		int width = canvas.getWidth();  // Width of canvas
     		int height = canvas.getHeight(); // Height of canvas
-    		
+    		while (true)
     		switch(gameState){
     		case START:
         		if(initiateVars){
@@ -220,7 +247,7 @@ public class Game extends Activity{
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
-        				initialPokemon(canvas, playerOne);
+        				initialPokemon(playerOne);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
         				playerOne.addCard(new Energy(Element.FIRE));
         				playerOne.addCard(new Energy(Element.WATER));
@@ -232,7 +259,7 @@ public class Game extends Activity{
         				//mainDialog.draw(canvas);
         				break;
         			case TWO :
-        				initialPokemon(canvas, playerTwo);
+        				initialPokemon(playerTwo);
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
         				playerTwo.addCard(new Energy(Element.FIRE));
         				playerTwo.addCard(new Energy(Element.FIRE));
@@ -268,11 +295,12 @@ public class Game extends Activity{
         		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
     		case BATTLE:
-    			Draw.drawPoke(canvas, playerOne, assetManager);
-    			Draw.drawPoke(canvas, playerTwo, assetManager);
-    			Draw.drawPokestuff(playerOne, canvas, assetManager);
-    			Draw.drawPokestuff(playerTwo, canvas, assetManager);
-    			Draw.drawBoard(canvas, assetManager);
+
+    			if (runOnce) {
+    				playerTwo.getActive().removeEnergy();
+    				playerTwo.getActive().actionOne(playerOne);
+    				runOnce = false;
+    			}
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
@@ -310,8 +338,11 @@ public class Game extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
+		renderThread.resume();
+		while (renderThread.isReady()); // Spin 'till surface is ready
 		if (battleMusic != null)
 			battleMusic.start();
+		gameLoop.start();
 	}
 
 	// This is called every time a touch occurs on screen, gets coords
@@ -330,11 +361,11 @@ public class Game extends Activity{
 
 	// Handles a touch on the screen
 	public void HandleTouch(MotionEvent e){
-		if(!mainDialog.done && checktouch){
-			if(OverlapTester.pointInRectangle(mainDialog.button, xCoord, yCoord)){
-				mainDialog.done = true;
-			}
-		}
+//		if(!mainDialog.done && checktouch){
+//			if(OverlapTester.pointInRectangle(mainDialog.button, xCoord, yCoord)){
+//				mainDialog.done = true;
+//			}
+//		}
 		if(gameState == State.BATTLE){
 		switch(playerTurn){
 		case ONE :
@@ -386,22 +417,21 @@ public class Game extends Activity{
 		}
 	}
 	
-	public void initialPokemon(Canvas board, Player activePlayer){
+	public void initialPokemon(Player activePlayer){
 		activePlayer.startTurn();
-		//rfid.setMode(Mode.INIT);
+	rfid.setMode(Mode.INIT); //XXX fix this
 		for (int k = 0; k < Player.fieldSpots; ) {
-			activePlayer.addPokemon(new Charmander());
 			//if(mainDialog.done) {
-		//		if (rfid.cardSwiped()) {
+			boolean test = rfid.cardSwiped();
+				if (test) {
 					//if(!mainDialog.done) 
-			//			activePlayer.addCard(rfid.getCard());
+						activePlayer.addCard(rfid.getCard());
 					//else break;
 						k++;						
-		//		}
+				}
 			//}
 			//else break;
 		}
-		Draw.drawPoke(board, activePlayer, assetManager);
 	}
 	
 	public void chooseNewActive(Player player){

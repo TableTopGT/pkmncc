@@ -3,19 +3,50 @@ package org.tabletop.pkmncc;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 
-public class Draw {
-	public static AssetManager pokedraw;
+public class Draw extends SurfaceView implements Runnable {
+	private final SurfaceHolder holder;
+	private Thread drawThread;
+	private volatile boolean running;
+	private static Bitmap flippedpokeball;
+	private static Bitmap flippedretreat;
+	private static Bitmap retreat;
+	private static Bitmap flippedgameover;
+	private static Bitmap gameover;
+	private static Bitmap flippedGObutton;
+	private static Bitmap GObutton;
+	private static Bitmap flippedendturn;
+	private static Bitmap endturn;
+	private static Bitmap flippedETbutton;
+	private static Bitmap ETbutton;
+	private static Bitmap battleGround;
+	private static Bitmap pokeball;
+	private static Bitmap healthRed;
+	private static Bitmap health;
+	private static Bitmap HP;
+	private static Bitmap flippedHP;
+	public static AssetManager assetmanager;
 	private static InputStream instream;
 	private static Bitmap activepokemon;
 	
+	public Draw(Context context) {
+		super(context);
+		holder = getHolder();
+		assetmanager = context.getAssets();
+	}
 	
+	public boolean isReady() {
+		return holder.getSurface().isValid();
+	}
 	/*Draws an active Pokemon, based on which player 
 	(must find better way to input which player is active, probably quick fix in player class) */
 /*	public void DrawMain(Pokemon Poke, Player player, Canvas canvas){
@@ -39,14 +70,50 @@ public class Draw {
 	        canvas.drawBitmap(flippedpoke, 320, 300, null);			
 		}
 	} */
+	private void loadAssets() {
+		try{
+			Matrix matrix = getMatrix();
+			matrix.setRotate(180);
+			instream = assetmanager.open("images/HPred.png");
+			healthRed = BitmapFactory.decodeStream(instream);
+			instream = assetmanager.open("images/pokeball.png");
+			pokeball = BitmapFactory.decodeStream(instream);
+			instream = assetmanager.open("images/HPgreen.png");
+			health = BitmapFactory.decodeStream(instream);
+			instream = assetmanager.open("images/battlebackground.png");
+			battleGround = BitmapFactory.decodeStream(instream);
+	        battleGround = Bitmap.createScaledBitmap(battleGround, 1280, 750, false);
+			instream = assetmanager.open("images/ETbutton.png");
+			ETbutton = BitmapFactory.decodeStream(instream);
+			flippedETbutton = Bitmap.createBitmap(ETbutton, 0, 0, ETbutton.getWidth(), ETbutton.getHeight(), matrix, true);
+			instream = assetmanager.open("images/endturn.png");
+			endturn = BitmapFactory.decodeStream(instream);
+			flippedendturn = Bitmap.createBitmap(endturn, 0, 0, endturn.getWidth(), endturn.getHeight(), matrix, true);
+			instream = assetmanager.open("images/GObutton.png");
+			GObutton = BitmapFactory.decodeStream(instream);
+			flippedGObutton = Bitmap.createBitmap(GObutton, 0, 0, GObutton.getWidth(), GObutton.getHeight(), matrix, true);
+			instream = assetmanager.open("images/gameover.png");
+			gameover = BitmapFactory.decodeStream(instream);
+			flippedgameover = Bitmap.createBitmap(gameover, 0, 0, gameover.getWidth(), gameover.getHeight(), matrix, true);
+			instream = assetmanager.open("images/retreat.png");
+			retreat = BitmapFactory.decodeStream(instream);
+			flippedretreat = Bitmap.createBitmap(retreat, 0, 0, retreat.getWidth(), retreat.getHeight(), matrix, true);
+			flippedpokeball = Bitmap.createBitmap(pokeball, 0, 0, pokeball.getWidth(), pokeball.getHeight(), matrix, true);
+			instream = assetmanager.open("images/HP.png");
+			HP = BitmapFactory.decodeStream(instream);
+			flippedHP = Bitmap.createBitmap(HP, 0, 0, HP.getWidth(), HP.getHeight(), matrix, true);
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+	}
 	
 	public static void drawPokestuff( Player player, Canvas canvas, AssetManager pokedraw){
 		Matrix matrix = new Matrix();
 		Bitmap energy = null;
 		Bitmap flippedenergy = null;
 		Bitmap health = null;
-		Bitmap pokeball= null;
 		matrix.postRotate(180);
+		if (player.numPokemon() == 0) return; 	
 		for (int k = 0; k < player.getActive().getEnergy().size(); k++){
 			try {
 				instream = pokedraw.open(player.getActive().getEnergy().get(k).getImage());
@@ -60,24 +127,10 @@ public class Draw {
 				canvas.drawBitmap(flippedenergy, 280, 330+(50*(k-1)), null);
 			}
 		}
-		if (((10*player.getActive().getHP())/player.getActive().getfullHP())< .4){
-			try{
-				instream = pokedraw.open("images/HPred.png");
-				health = BitmapFactory.decodeStream(instream);
-				instream = pokedraw.open("images/pokeball.png");
-				pokeball = BitmapFactory.decodeStream(instream);
-			}catch (IOException e){
-				e.printStackTrace();
-			}
+		if (((10*player.getActive().getHP())/player.getActive().getFullHP())< .4){
+			health = Draw.healthRed;
 		}else{
-			try{
-				instream = pokedraw.open("images/HPgreen.png");
-				health = BitmapFactory.decodeStream(instream);
-				instream = pokedraw.open("images/pokeball.png");
-				pokeball = BitmapFactory.decodeStream(instream);
-			}catch (IOException e){
-				e.printStackTrace();
-			}
+			health = Draw.health;
 		}
 		for (int k=0; (k*10) < player.getActive().getHP(); k++){
 			if((player.playerNum == 1)&&(k<7)) canvas.drawBitmap(health, 768, 180-(30*(k-1)), null);
@@ -122,47 +175,8 @@ public class Draw {
 	
 	public static void drawBoard(Canvas board, AssetManager assetmanager){
 		Matrix matrix = new Matrix();
-		Bitmap ETbutton = null;
-		Bitmap flippedETbutton = null;
-		Bitmap endturn = null;
-		Bitmap flippedendturn = null;
-		Bitmap GObutton = null;
-		Bitmap flippedGObutton = null;
-		Bitmap gameover = null;
-		Bitmap flippedgameover = null;
-		Bitmap retreat = null;
-		Bitmap flippedretreat = null;
-		Bitmap pokeball = null;
-		Bitmap flippedpokeball = null;
-		Bitmap HP= null;
-		Bitmap flippedHP= null;
 		matrix.postRotate(180);
-		try {
-			instream = assetmanager.open("images/ETbutton.png");
-			ETbutton = BitmapFactory.decodeStream(instream);
-			flippedETbutton = Bitmap.createBitmap(ETbutton, 0, 0, ETbutton.getWidth(), ETbutton.getHeight(), matrix, true);
-			instream = assetmanager.open("images/endturn.png");
-			endturn = BitmapFactory.decodeStream(instream);
-			flippedendturn = Bitmap.createBitmap(endturn, 0, 0, endturn.getWidth(), endturn.getHeight(), matrix, true);
-			instream = assetmanager.open("images/GObutton.png");
-			GObutton = BitmapFactory.decodeStream(instream);
-			flippedGObutton = Bitmap.createBitmap(GObutton, 0, 0, GObutton.getWidth(), GObutton.getHeight(), matrix, true);
-			instream = assetmanager.open("images/gameover.png");
-			gameover = BitmapFactory.decodeStream(instream);
-			flippedgameover = Bitmap.createBitmap(gameover, 0, 0, gameover.getWidth(), gameover.getHeight(), matrix, true);
-			instream = assetmanager.open("images/retreat.png");
-			retreat = BitmapFactory.decodeStream(instream);
-			flippedretreat = Bitmap.createBitmap(retreat, 0, 0, retreat.getWidth(), retreat.getHeight(), matrix, true);
-			instream = assetmanager.open("images/pokeball.png");
-			pokeball = BitmapFactory.decodeStream(instream);
-			flippedpokeball = Bitmap.createBitmap(pokeball, 0, 0, pokeball.getWidth(), pokeball.getHeight(), matrix, true);
-			instream = assetmanager.open("images/HP.png");
-			HP = BitmapFactory.decodeStream(instream);
-			flippedHP = Bitmap.createBitmap(HP, 0, 0, HP.getWidth(), HP.getHeight(), matrix, true);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        board.drawBitmap(battleGround, 0, 0, null);
 		board.drawBitmap(ETbutton, 1125, 180, null);
 		board.drawBitmap(flippedETbutton, 100, 530, null);
 		board.drawBitmap(endturn, 1125, 28, null);
@@ -181,5 +195,29 @@ public class Draw {
 		board.drawBitmap(flippedpokeball, 320, 500, null);
 		board.drawBitmap(HP, 765, 240, null);
 		board.drawBitmap(flippedHP, 500, 457, null);
+	}
+
+
+	@Override
+	public void run() {
+		while (running) {
+			if (!isReady())
+				continue;
+			Canvas canvas = holder.lockCanvas();
+			Draw.drawBoard(canvas, assetmanager);		
+			Draw.drawPoke(canvas, Game.playerOne, assetmanager);
+			Draw.drawPoke(canvas, Game.playerTwo, assetmanager);
+			Draw.drawPokestuff(Game.playerOne, canvas, assetmanager);
+			Draw.drawPokestuff(Game.playerTwo, canvas, assetmanager);
+			holder.unlockCanvasAndPost(canvas);
+		}
+	}
+	
+	public void resume() {
+		running = true;
+		drawThread = new Thread(this);
+		loadAssets();
+		drawThread.start();
+		
 	}
 }

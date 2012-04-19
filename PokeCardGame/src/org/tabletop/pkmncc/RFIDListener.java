@@ -20,7 +20,7 @@ public final class RFIDListener extends Thread {
 
 	public static enum Mode {INIT, SILENT, REAL, EXIT};
     private final BluetoothAdapter mAdapter;
-    private final BluetoothDevice pokedex;
+    private BluetoothDevice pokedex;
     private BluetoothSocket pokeLink;
     private BufferedReader inStr;
     
@@ -31,15 +31,17 @@ public final class RFIDListener extends Thread {
 	public RFIDListener(Context context) {
 		Card.setContext(context);
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
-		mAdapter.cancelDiscovery();
-		pokedex = mAdapter.getRemoteDevice("00:06:66:44:E4:99");
-		try {
-			UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-			pokeLink = pokedex.createInsecureRfcommSocketToServiceRecord(MY_UUID);
-			pokeLink.connect();
-			inStr =  new BufferedReader(new InputStreamReader(pokeLink.getInputStream()));
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (mAdapter != null) {
+			mAdapter.cancelDiscovery();
+			pokedex = mAdapter.getRemoteDevice("00:06:66:44:E4:99");
+			try {
+				UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+				pokeLink = pokedex.createInsecureRfcommSocketToServiceRecord(MY_UUID);
+				pokeLink.connect();
+				inStr =  new BufferedReader(new InputStreamReader(pokeLink.getInputStream()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -111,10 +113,10 @@ public final class RFIDListener extends Thread {
 			swipedCard = new Raichu();
 		}
 		else if (RFIDTag.equals("1274227")){
-			swipedCard = new Skuntank();
+//			swipedCard = new Skuntank();
 		}
 		else if (RFIDTag.equals("22365539")){
-			swipedCard = new Stunky();
+//			swipedCard = new Stunky();
 		}
 		else if (RFIDTag.equals("22378135")){
 			swipedCard = new Vespiquen();
@@ -186,8 +188,8 @@ public final class RFIDListener extends Thread {
 			while (currMode != Mode.EXIT)
 				switch(currMode) {
 				case INIT:
-					// swipe a charmander every second
-					swipeCard("1185077", 1);
+					// swipe a charmander every x seconds
+					swipeCard("1185077", 2);
 					break;
 				case REAL:
 					try {
