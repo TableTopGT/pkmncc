@@ -150,6 +150,10 @@ public abstract class Pokemon extends Card {
 		return HP - currentHP;
 	}
 	
+	public final int getRetreat() { //TODO protected doesn't work w/ Dusknoir?
+		return retreatCost;
+	}
+	
 	public final int addHP(int hitPoints) {
 		currentHP += hitPoints;
 		if (currentHP > HP) currentHP = HP;
@@ -318,31 +322,31 @@ public abstract class Pokemon extends Card {
 			switch(status[i]) {
 			case POISONED:
 				
-				/*A Poisoned Pokémon takes damage in-between turns. When a Pokémon is
+				/*A Poisoned Pokï¿½mon takes damage in-between turns. When a Pokï¿½mon is
 				Poisoned, put a Poison marker on it. Put a damage counter on each Poisoned
-				Pokémon during each in-between turns step. */
+				Pokï¿½mon during each in-between turns step. */
 				removeHP(10);
 				break;
 			case BURNED:
 				
-				/*If a Pokémon is Burned, it may take damage in-between turns. When a
-				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
-				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
-				counters on the Burned Pokémon. */
+				/*If a Pokï¿½mon is Burned, it may take damage in-between turns. When a
+				Pokï¿½mon is Burned, put a Burn marker on it. In-between turns, the owner
+				of the Burned Pokï¿½mon flips a coin. If he or she flips tails, put 2 damage
+				counters on the Burned Pokï¿½mon. */
 				if (!getOwner().coinFlip()) // if Tails
 					removeHP(20);
 				break;
 			case ASLEEP:
 				
-				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
+				/*Turn the Pokï¿½mon counterclockwise to show that it is Asleep.*/
 				if (getOwner().coinFlip()) // if Heads
 					status[0] = null;
 				break;
 			case PARALYZED:
 				
-				/*Turn the Paralyzed Pokémon clockwise.
-				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
-				Condition Paralyzed during the in-between turns phase if your Pokémon
+				/*Turn the Paralyzed Pokï¿½mon clockwise.
+				If a Pokï¿½mon is Paralyzed, it cannot attack or retreat. Remove the Special
+				Condition Paralyzed during the in-between turns phase if your Pokï¿½mon
 				was Paralyzed since the beginning of your last turn.*/
 				if (oldStatus == PokemonStatus.PARALYZED)
 					status[0] = null;
