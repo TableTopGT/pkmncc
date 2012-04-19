@@ -91,15 +91,11 @@ public abstract class Pokemon extends Card {
 	protected ActionDesc action1;
 	protected ActionDesc action2;
 
+	private MediaPlayer cry;
 	private int pokedexNumber;
 	private boolean isEvolved;
 	private boolean isEvolvable;
 	private Class<? extends Pokemon> evolution;
-
-	//private MediaPlayer cry = MediaPlayer.create(getContext(), 
-			//getContext().getResources()
-			//.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
-	//TODO play the pokemon's actual sound, not bulbasaur
 
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private final PokemonStatus[] status = new PokemonStatus[3];
@@ -108,7 +104,11 @@ public abstract class Pokemon extends Card {
 
 	protected Pokemon() {
 		setImage(toString());
-		//cry.start();
+	}
+
+	public void cry() {
+		if (cry != null)
+			cry.start();
 	}
 	
 	/**
@@ -164,9 +164,9 @@ public abstract class Pokemon extends Card {
 	}
 	
 	private void faint() {
-		//cry.start();
-		//cry.release();
-		//cry = null;
+		cry.start();
+		cry.release();
+		cry = null;
 	}
 	
 	public final boolean isFainted() {
@@ -366,6 +366,9 @@ public abstract class Pokemon extends Card {
 	 */
 	protected void setPokedexNumber(int pokedexNumber) {
 		this.pokedexNumber = pokedexNumber;
+		cry = MediaPlayer.create(getContext(), 
+				getContext().getResources()
+				.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
 	}
 
 	/**

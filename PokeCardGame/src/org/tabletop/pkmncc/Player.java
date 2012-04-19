@@ -94,12 +94,14 @@ public class Player {
 	public final boolean addPokemon(Pokemon pokemonCard) {
 		if ((pokeArr.size() < fieldSpots) && pokemonCard.isBasic()) {
 			pokeArr.add(pokemonCard);
+			pokemonCard.cry();
 			return true;
 		}
 		for (int i = 0; i < pokeArr.size(); ++i) {
 			if (pokemonCard.isEvolutionOf(pokeArr.get(i))) {
 				pokeArr.get(i).transferStatsTo(pokemonCard);
 				pokeArr.set(i, pokemonCard);
+				pokemonCard.cry();
 				return true;
 			}
 		}
