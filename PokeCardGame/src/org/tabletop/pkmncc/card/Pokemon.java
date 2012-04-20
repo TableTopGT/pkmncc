@@ -110,7 +110,7 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 	
-	protected final int imageid = getResources().getIdentifier(toString(), "drawable", "org.tabletop.pkmncc");
+	protected final int imageid = getResources().getIdentifier("viewover", "drawable", "org.tabletop.pkmncc");
 	private Bitmap bc = BitmapFactory.decodeResource(getResources(), imageid);
 
 	protected Pokemon() {
@@ -397,11 +397,5 @@ public abstract class Pokemon extends Card {
 	public boolean onTouchEvent(MotionEvent event) {
 		cry.start();
 		return super.onTouchEvent(event);
-	}
-
-	@Override
-	public void onDraw(Canvas canvas) {
-		canvas.drawBitmap(bc, getMatrix(), null);
-		super.onDraw(canvas);
 	}
 }

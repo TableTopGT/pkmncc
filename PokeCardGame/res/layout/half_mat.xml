@@ -6,7 +6,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <SurfaceView
+            <org.tabletop.pkmncc.Draw
                 android:id="@+id/surfaceView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -15,24 +15,41 @@
                 android:id="@+id/rightSide"
                 android:layout_width="640dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="640dp"
+                android:layout_gravity="right"
                 android:gravity="bottom|right" >
+                
+ 			<RelativeLayout
+ 			    android:id="@+id/p1Main"
+ 			    android:layout_width="wrap_content"
+ 			    android:layout_height="wrap_content"
+ 			    android:background="@color/red" android:layout_centerInParent="true" android:alpha=".4">
 
+                </RelativeLayout>
+                
                 <include
                     android:id="@+id/p1bench"
                     layout="@layout/bench" />
             </RelativeLayout>
-
+
             <RelativeLayout
                 android:id="@+id/leftSide"
                 android:layout_width="640dp"
                 android:layout_height="match_parent"
-                android:gravity="bottom|right"
+                android:gravity="center"
                 android:rotation="180" >
 
                 <include
                     android:id="@+id/p2bench"
                     layout="@layout/bench" />
+
+			<RelativeLayout
+ 			    android:id="@+id/p2Main"
+ 			    android:layout_width="wrap_content"
+ 			    android:layout_height="wrap_content"
+ 			    android:background="@color/red" android:layout_centerInParent="true" android:alpha=".4">
+
+                </RelativeLayout>
+
             </RelativeLayout>
         </FrameLayout>
 

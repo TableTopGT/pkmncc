@@ -4,45 +4,43 @@ import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
+import org.tabletop.pkmncc.card.Pokemon;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class Game extends Activity{
     /** Called when the activity is first created. */
 	private MediaPlayer battleMusic;
-	private AssetManager assetManager;
 	private enum State {START, BATTLE, TURN, END};
 	private State gameState = State.START;
 	private boolean gameStartingTwo;
 	private RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
 	private enum Turn {ONE, TWO};
 	private Turn playerTurn = Turn.ONE;
-	private Player playerOne, playerTwo;
-	FrameLayout mat;
-	public static LinearLayout p1Bench;
-	public static LinearLayout p2Bench;
+	static Player playerOne;
+	static Player playerTwo;
+	static FrameLayout mat;
+	Draw surf;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Display mat background
-        setContentView(R.layout.half_mat);
-        mat = (FrameLayout) findViewById(R.id.frame);
-        p1Bench = (LinearLayout) findViewById(R.id.p1bench);
-        p2Bench = (LinearLayout) findViewById(R.id.p2bench);
-
+        setContentView(R.layout.mat);
+        mat = (FrameLayout) findViewById(R.id.frame1);
+        surf = (Draw) findViewById(R.id.surfaceView1);
+        
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
         battleMusic.start();
@@ -54,20 +52,6 @@ public class Game extends Activity{
         
         // Begin rfid listener
         rfid.start();
-        
-        // Setup Asset stream
-        assetManager = this.getAssets();
-
-    	
-    	
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Player One choose active pokemon followed by bench pokemon").setNeutralButton("OK", new OnClickListener() {
-			
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-				mat.addView(new RenderView(builder.getContext()));				
-			}
-		}).show();		
     }
     
     class RenderView extends View {
@@ -90,6 +74,18 @@ public class Game extends Activity{
         				playerOne.addCard(new Energy(Element.WATER));
         				playerOne.addCard(new Energy(Element.GRASS));
         				
+        				// Example of running retreat function
+        				playerOne.getActive().setOnTouchListener(new OnTouchListener() {
+							
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								new AlertDialog.Builder(getContext())
+								.setMessage("retreating " + v.toString() + " w/ no 1").show();
+								playerOne.switchActive(1);
+		        				return false;
+							}
+						});
+        				
         				playerTurn = Turn.TWO;
 //        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
@@ -104,6 +100,16 @@ public class Game extends Activity{
         				playerTwo.addCard(new Energy(Element.PSYCHIC));
         				//playerTwo.getActive().removeEnergy();
 
+        				// Example of running custom function
+        				playerTwo.getActive().setOnTouchListener(new OnTouchListener() {
+							
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								new AlertDialog.Builder(getContext())
+								.setMessage("Hi I'm " + v.toString()).show();	
+		        				return false;
+							}
+						});
         				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
         				builder2.setMessage("Players draw 6 prize cards").show();
         				gameStartingTwo = false;
@@ -112,13 +118,8 @@ public class Game extends Activity{
         				break;
         			}
         		}
-        		invalidate();  // <----------THIS REDRAWS EVERYTHING OVER AND OVER
     			break;
     		case BATTLE:
-    			//Draw.drawPoke(canvas, playerOne, assetManager);
-    			//Draw.drawPoke(canvas, playerTwo, assetManager);
-    			Draw.drawEnergy(playerOne, canvas, assetManager);
-    			Draw.drawEnergy(playerTwo, canvas, assetManager);
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
@@ -131,7 +132,6 @@ public class Game extends Activity{
     					playerTurn = Turn.ONE;
     					break;
     			}
-    			invalidate();
     			break;
     		case TURN:
     			break;
@@ -172,6 +172,18 @@ public class Game extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
+		surf.resume();
+		final Context c = this;
+		new AlertDialog.Builder(this)
+		.setMessage("Player One choose active pokemon followed by bench pokemon")
+		.setNeutralButton("OK", new OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+				mat.addView(new RenderView(c));				
+			}
+			
+		}).show();		
 		battleMusic.start();
 	}
 

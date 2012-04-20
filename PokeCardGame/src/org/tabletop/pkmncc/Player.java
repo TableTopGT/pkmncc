@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import org.tabletop.pkmncc.card.*;
 
+import android.widget.LinearLayout;
+
 public class Player {
 
 	public static final int fieldSpots = 6;
 	public static Player currentPlayer;
+	private static final Random RNG = new Random();
 	private static int playerCount;
 
 	public final int playerNum = ++playerCount;
@@ -28,7 +31,7 @@ public class Player {
 
 	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
-		return (new Random()).nextBoolean();
+		return RNG.nextBoolean();
 	}
 
 	/**Check to see what kind of card the player has scanned**/
@@ -37,14 +40,39 @@ public class Player {
 			this.playTrainer( (Trainer) playedCard);
 		}
 		else if(playedCard instanceof Pokemon){
-			if (addPokemon( (Pokemon) playedCard)) {
-				if (currentPlayer.playerNum == 1) {
-					Game.p1Bench.addView(playedCard);
-				} else {
-					Game.p2Bench.addView(playedCard);
+			if(addPokemon( (Pokemon) playedCard)) {
+				int h = 100; 
+				int w = 100;
+				int x;
+				int y;
+				if (!playedCard.equals(getActive())) {
+					if (currentPlayer.playerNum == 1) {
+						x = 1150;
+						y = 635 - (100 * (getIndex((Pokemon) playedCard)-1));
+					} else {
+						x = 50;
+						y = 40 + (100 * (getIndex((Pokemon) playedCard)-1));
+					}
 				}
-			} else {
-				;//TODO Pokemon could not be played...
+				else {
+					h = w = 200;
+					x = (currentPlayer.playerNum == 1) ? 800 : 320;
+					y = 295;
+				}
+			
+				// Set coordinates
+				playedCard.setX(x);
+				playedCard.setY(y);
+				
+				// Shrink images, also adds padding between
+				playedCard.setScaleX((float) 0.75);
+				playedCard.setScaleY((float) 0.75);
+	
+				// Set view height and width
+				playedCard.setLayoutParams(new LinearLayout.LayoutParams(h, w));
+				
+				// Add pokemon to board
+				Game.mat.addView(playedCard);
 			}
 		}
 		else if (playedCard instanceof Energy){
@@ -102,12 +130,14 @@ public class Player {
 	public final boolean addPokemon(Pokemon pokemonCard) {
 		if ((pokeArr.size() < fieldSpots) && pokemonCard.isBasic()) {
 			pokeArr.add(pokemonCard);
+			//pokemonCard.cry();
 			return true;
 		}
 		for (int i = 0; i < pokeArr.size(); ++i) {
 			if (pokemonCard.isEvolutionOf(pokeArr.get(i))) {
 				pokeArr.get(i).transferStatsTo(pokemonCard);
 				pokeArr.set(i, pokemonCard);
+				//pokemonCard.cry();
 				return true;
 			}
 		}
