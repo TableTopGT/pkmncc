@@ -130,7 +130,18 @@ public class Draw extends SurfaceView implements Runnable {
 				canvas.drawBitmap(flippedenergy, 280, 330+(50*(k-1)), null);
 			}
 		}
-		if (((10*player.getActive().getHP())/player.getActive().getHP())< .4){
+		if (((10*player.getActive().getHP())/player.getActive().getFullHP())< .4){
+			health = Draw.healthRed;
+		}else{
+			health = Draw.health;
+		}
+		for (int k=0; (k*10) < player.getActive().getHP(); k++){
+			if((player.playerNum == 1)&&(k<7)) canvas.drawBitmap(health, 768, 180-(30*(k-1)), null);
+			if((player.playerNum == 1)&&(k>=7)) canvas.drawBitmap(health, 797, 180-(30*(k-8)), null);
+			if((player.playerNum == 2)&&(k<7)) canvas.drawBitmap(health, 507, 550+(30*(k-1)), null);
+			if((player.playerNum == 2)&&(k>=7)) canvas.drawBitmap(health, 483, 550+(30*(k-8)), null);
+		}		
+		if (((10*player.getActive().getHP())/player.getActive().getFullHP())< .4){
 			health = Draw.healthRed;
 		}else{
 			health = Draw.health;

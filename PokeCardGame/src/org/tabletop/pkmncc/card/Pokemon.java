@@ -30,12 +30,12 @@ public abstract class Pokemon extends Card {
 		public final String actionName;
 		private final int baseAttack;
 		private ArrayList<Energy> energyCost;
-
+		private final int energyCostSize;
+		
 		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
-			this.energyCost = Energy.listFromArray(energyCost); 
-			//FIXME how does this handle empty or colorless cost?
+			this.energyCostSize = Energy.createCost(this.energyCost, energyCost);
 		}
 
 		/**
@@ -54,7 +54,7 @@ public abstract class Pokemon extends Card {
 		 * @return the damage done by the attack
 		 */
 		public int attack(Player opponent, int tempAttack) {
-			if (!energy.containsAll(energyCost)) { //FIXME might compare references, need to do deepequals (override eauls & toHash inside enrgy class?
+			if (!enoughEnergy()) {
 				new AlertDialog.Builder(getContext())
 				.setMessage("Energies missing for this action.").show(); //TODO toast
 				return 0;
@@ -84,6 +84,11 @@ public abstract class Pokemon extends Card {
 			return enemy.removeHP(damage);
 			//XXX Implement prize cards here?
 		}
+
+		private boolean enoughEnergy() {
+			return (energyCost == null) || energy.containsAll(energyCost) &&
+					(energy.size() >= energyCostSize);
+		}
 	}
 	
 	
@@ -104,7 +109,7 @@ public abstract class Pokemon extends Card {
 
 	private MediaPlayer cry = MediaPlayer.create(getContext(), 
 			getContext().getResources()
-			.getIdentifier(toString(), "raw", "org.tabletop.pkmncc"));
+			.getIdentifier(toString().toLowerCase(), "raw", "org.tabletop.pkmncc"));
 	
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private PokemonStatus[] status = new PokemonStatus[3];
@@ -114,9 +119,14 @@ public abstract class Pokemon extends Card {
 	private Bitmap bc = BitmapFactory.decodeResource(getResources(), imageid);
 
 	protected Pokemon() {
-		setImage(toString());
+		setImage(toString().toLowerCase());
 		setImageResource(imageid);
 		cry.start();
+	}
+
+	public void cry() {
+		if (cry != null)
+			cry.start();
 	}
 	
 	/**
@@ -139,21 +149,33 @@ public abstract class Pokemon extends Card {
 		action2.attack(target);
 	}
 
-	/** Returns the lowercase class name of the Pokemon */
+	/** Returns the capitalized class name of the Pokemon */
 	@Override
 	public final String toString() {
-		return getClass().getSimpleName().toLowerCase();
+		return getClass().getSimpleName();
 	}
 	
 	/* Health-centered methods */
 	public final int getHP() {
 		return currentHP;
 	}
+	
+	public final int getFullHP() {
+		return HP;
+	}
 
 	public final int getDamage() { //TODO protected doesn't work w/ Dusknoir?
 		return HP - currentHP;
 	}
 	
+	public final int getRetreat() {
+		return retreatCost;
+	}
+	
+	public final int getEnergySize(){
+		return energy.size();
+	}
+		
 	public final int addHP(int hitPoints) {
 		currentHP += hitPoints;
 		if (currentHP > HP) currentHP = HP;
@@ -192,9 +214,17 @@ public abstract class Pokemon extends Card {
 		return !isEvolved;
 	}
 
-	public boolean isEvolutionOf(Pokemon pokemon) { //XXX will fail if pokemon evolutions not changed
+	public boolean isEvolutionOf(Pokemon pokemon) {
 		return isEvolved && pokemon.isEvolvable
 				&& pokemon.evolution.equals(getClass());
+	}
+
+	/**
+	 * Get the names of this Pokemon's actions in order.
+	 * @return an array of Pokemon action names
+	 */
+	public String[] getActionNames() {
+		return new String[] {action1.actionName, action2.actionName};
 	}
 	
 	/**
@@ -204,7 +234,6 @@ public abstract class Pokemon extends Card {
 	public final void transferStatsTo(Pokemon nextForm) {
 		nextForm.removeHP(getDamage());
 		nextForm.energy = energy;
-		energy = null; // Dispose of local reference to the energy object
 	}
 
 	/* Energy-centered methods */
@@ -220,19 +249,39 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
+
+	/** Provide player dialog to select which energies to remove. */
 	public final void removeEnergy() {
-		final CharSequence[] items = {"Red", "Green", "Blue"}; //FIXME use energy names
-		boolean[] checkedItems = {true, false, false};
-		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-		builder.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-			
+		final int numEnergies = energy.size();
+		CharSequence[] items = new CharSequence[numEnergies];
+		final boolean[] checkedItems = new boolean[numEnergies];
+		
+		// Generate list of energy strings to display
+		for (int i = 0; i < numEnergies; i++)
+			items[i] = energy.get(i).toString();
+		
+		// Create and show dialogbox
+		new AlertDialog.Builder(getContext())
+		.setTitle("Select Energies to remove: ")
+		.setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-				removeEnergy(energy.get(which));				
+				checkedItems[which] = isChecked;
 			}
-		}).create();
-		builder.show();
-		energy.remove(1);
+			
+			
+		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			
+			// Remove selected energies
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				for (int i = numEnergies-1; i >= 0; --i)
+					if (checkedItems[i])
+						energy.remove(i);
+			}
+			
+		}).show();
 	}
 	
 	public final void removeEnergy(Energy energyCard) {
@@ -279,7 +328,7 @@ public abstract class Pokemon extends Card {
 	public final void removeStatus(PokemonStatus stat) {
 		
 		/* Reserve proper locations */
-		switch (stat) { //TODO implement sortable in Status enums
+		switch (stat) {
 		case POISONED:
 			status[2] = null;
 			break;
@@ -306,7 +355,7 @@ public abstract class Pokemon extends Card {
 	 * confusion are handled here. Confusion is handled automatically before attacks.
 	 */
 	public final void statusEffect() {
-		for (int i = 2; i < 0; i--) {
+		for (int i = 2; i >= 0; i--) {
 			if (status[i] == null) continue;
 			switch(status[i]) {
 			case POISONED:

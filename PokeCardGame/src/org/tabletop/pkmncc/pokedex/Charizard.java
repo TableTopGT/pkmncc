@@ -4,30 +4,27 @@ import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
 
+//DO NOT USE
+
 public class Charizard extends Pokemon {
 	
 	public Charizard() {
 		setPokedexNumber(6);
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE2);
-		setDefense(120, 3, Element.WATER, 0, Element.FIGHTING, 30);
-		action1 = new ActionDesc("PP: Energy Burn", 0);
-		action2 = new ActionDesc("Fire Spin", 100, Element.FIRE, Element.FIRE,
-												   Element.FIRE, Element.FIRE);
+		setDefense(120, 2, Element.WATER, 0, null, 0);
+		action1 = new ActionDesc("Combustion", 30, Element.FIRE);
+		action2 = new ActionDesc("Burning Inferno", 50, Element.FIRE, Element.FIRE,
+												   Element.COLORLESS, Element.COLORLESS);
 	}
 
-	@Override
-	public void actionOne(Player target) {
-		if (getStatus()[0] == null)
-			for (Energy E : getEnergy())
-				E.setElement(Element.FIRE);
-		// Can't undo this yet, might need an endPokePower()
-	}
 	
 	@Override
+	/** Bursting Inferno: Each Defending Pokemon is now burned **/
 	public void actionTwo(Player target) {
-		removeEnergy();
-		removeEnergy();
+		for(int i=0; i< target.numPokemon(); i++){
+			target.getPokemon(i).addStatus(PokemonStatus.BURNED);
+		}
 		action2.attack(target);
 	}
 	

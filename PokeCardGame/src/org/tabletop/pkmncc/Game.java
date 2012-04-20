@@ -168,7 +168,7 @@ public class Game extends Activity{
 		battleMusic.stop();
 		battleMusic.release();
 	}
-	
+
 	@Override
 	public void onResume(){
 		super.onResume();
