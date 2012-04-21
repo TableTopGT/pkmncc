@@ -166,26 +166,32 @@ public class Draw extends SurfaceView implements Runnable {
 		for (int k = 0; k < player.numPokemon(); k++){
 			
 			// get pokemon's image
-			Pokemon p = player.getPokemon(k);
-			Bitmap pkb = getSprite(p.getPokedexNumber());	 
+			Pokemon poke = player.getPokemon(k);
+			Bitmap pkb = getSprite(poke.getPokedexNumber());	 
 						
-			// position image
-			int x = 0, y = 0, scale = 0;
-			if (k==0) {
-				scale = 200;
-				y = 295;
-				x = (player.playerNum == 1) ? 800 : 320;
-			} else {
-				scale = 100;
-				y = (player.playerNum == 1) ? 635 - (100 * (k-1)) : 40 + (100 * (k-1));
-				x = (player.playerNum == 1) ? 1150 : 50;
-			}
+			// get image layout
+			int[] p = getPokemonLayout(player, k);
 
 			// rotate scale and draw pokemon
 			Bitmap flippedpoke = rotate(pkb, degrees);
-			Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, scale, scale, false);
-			board.drawBitmap(scaledPoke, x, y, null);
+			Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, p[2], p[2], false);
+			board.drawBitmap(scaledPoke, p[0], p[1], null);
 		}
+	}
+	
+	public static int[] getPokemonLayout(Player p, int index) {
+		int x = 0, y = 0, scale = 0;
+		int k = index;
+		if (k==0) {
+			scale = 200;
+			y = 295;
+			x = (p.playerNum == 1) ? 800 : 320;
+		} else {
+			scale = 100;
+			y = (p.playerNum == 1) ? 635 - (100 * (k-1)) : 40 + (100 * (k-1));
+			x = (p.playerNum == 1) ? 1150 : 50;
+		}
+		return new int[] {x,y,scale};
 	}
 	
 	private static Rect getSpriteRect(int pokedex) {

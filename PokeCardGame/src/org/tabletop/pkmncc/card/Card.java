@@ -21,7 +21,7 @@ public abstract class Card extends ImageView {
 	protected Card() {
 		super(context);
 		owner = currentPlayer;
-		setWillNotDraw(true);
+		setWillNotDraw(false);
 	}
 	
 	public final Player getOwner() {

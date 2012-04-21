@@ -5,6 +5,7 @@ import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
+import org.tabletop.pkmncc.pokedex.*;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -103,6 +104,9 @@ public class Game extends Activity{
 						});
         				
         				playerTurn = Turn.TWO;
+        				playerOne.addCard(new Charmeleon());
+        				playerOne.addCard(new Pichu());
+        				playerOne.addCard(new Machop());
 //        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
@@ -115,6 +119,8 @@ public class Game extends Activity{
         				playerTwo.addCard(new Energy(Element.FIGHTING));
         				playerTwo.addCard(new Energy(Element.PSYCHIC));
         				//playerTwo.getActive().removeEnergy();
+        				playerTwo.addCard(new Charmeleon());
+        				playerTwo.addCard(new Charizard());
 
         				// Example of running custom function
         				playerTwo.getActive().setOnTouchListener(new OnTouchListener() {

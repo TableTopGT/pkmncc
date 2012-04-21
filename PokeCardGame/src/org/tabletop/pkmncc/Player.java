@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import org.tabletop.pkmncc.card.*;
 
+import android.widget.AbsoluteLayout;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class Player {
 
@@ -41,36 +44,18 @@ public class Player {
 		}
 		else if(playedCard instanceof Pokemon){
 			if(addPokemon( (Pokemon) playedCard)) {
-				int h = 100; 
-				int w = 100;
-				int x;
-				int y;
-				if (!playedCard.equals(getActive())) {
-					if (currentPlayer.playerNum == 1) {
-						x = 1150;
-						y = 635 - (100 * (getIndex((Pokemon) playedCard)-1));
-					} else {
-						x = 50;
-						y = 40 + (100 * (getIndex((Pokemon) playedCard)-1));
-					}
-				}
-				else {
-					h = w = 200;
-					x = (currentPlayer.playerNum == 1) ? 800 : 320;
-					y = 295;
-				}
-			
+				
+				// get image layout
+				int k = getIndex((Pokemon) playedCard);
+				int[] p = Draw.getPokemonLayout(this, k);
+
 				// Set coordinates
-				playedCard.setX(x);
-				playedCard.setY(y);
-				
-				// Shrink images, also adds padding between
-				playedCard.setScaleX((float) 0.75);
-				playedCard.setScaleY((float) 0.75);
-	
+				playedCard.setX(p[0]);
+				playedCard.setY(p[1]);
+
 				// Set view height and width
-				playedCard.setLayoutParams(new LinearLayout.LayoutParams(h, w));
-				
+				playedCard.setLayoutParams(new LinearLayout.LayoutParams(p[2], p[2]));
+				//playedCard.setTag(tag)
 				// Add pokemon to board
 				Game.mat.addView(playedCard);
 			}
@@ -134,8 +119,10 @@ public class Player {
 			return true;
 		}
 		for (int i = 0; i < pokeArr.size(); ++i) {
-			if (pokemonCard.isEvolutionOf(pokeArr.get(i))) {
-				pokeArr.get(i).transferStatsTo(pokemonCard);
+			Pokemon checkPoke = pokeArr.get(i);
+			if (pokemonCard.isEvolutionOf(checkPoke)) {
+				checkPoke.transferStatsTo(pokemonCard);
+				Game.mat.removeView(checkPoke);
 				pokeArr.set(i, pokemonCard);
 				pokemonCard.cry();
 				return true;
