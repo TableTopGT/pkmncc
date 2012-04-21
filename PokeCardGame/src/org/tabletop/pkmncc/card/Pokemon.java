@@ -107,9 +107,7 @@ public abstract class Pokemon extends Card {
 	private boolean isEvolvable;
 	private Class<? extends Pokemon> evolution;
 
-	private MediaPlayer cry = MediaPlayer.create(getContext(), 
-			getContext().getResources()
-			.getIdentifier(toString().toLowerCase(), "raw", "org.tabletop.pkmncc"));
+	private MediaPlayer cry;
 	
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private PokemonStatus[] status = new PokemonStatus[3];
@@ -121,7 +119,6 @@ public abstract class Pokemon extends Card {
 	protected Pokemon() {
 		setImage(toString().toLowerCase());
 		setImageResource(imageid);
-		cry.start();
 	}
 
 	public void cry() {
@@ -408,6 +405,9 @@ public abstract class Pokemon extends Card {
 	 */
 	protected void setPokedexNumber(int pokedexNumber) {
 		this.pokedexNumber = pokedexNumber;
+		this.cry = MediaPlayer.create(getContext(), 
+					getContext().getResources()
+					.getIdentifier("charmander", "raw", "org.tabletop.pkmncc"));
 	}
 
 	/**
@@ -446,5 +446,9 @@ public abstract class Pokemon extends Card {
 	public boolean onTouchEvent(MotionEvent event) {
 		cry.start();
 		return super.onTouchEvent(event);
+	}
+
+	public int getPokedexNumber() {
+		return pokedexNumber;
 	}
 }

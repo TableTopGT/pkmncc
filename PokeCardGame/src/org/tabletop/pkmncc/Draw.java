@@ -11,9 +11,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 
 public class Draw extends SurfaceView implements Runnable {
@@ -40,7 +42,8 @@ public class Draw extends SurfaceView implements Runnable {
 	public static AssetManager assetmanager;
 	private static InputStream instream;
 	private static Bitmap activepokemon;
-	
+	private static Bitmap alphaSprites;
+
 	public Draw (Context context, AttributeSet attrs) {
 		super(context, attrs);
 		holder = getHolder();
@@ -105,6 +108,9 @@ public class Draw extends SurfaceView implements Runnable {
 			instream = assetmanager.open("images/HP.png");
 			HP = BitmapFactory.decodeStream(instream);
 			flippedHP = Bitmap.createBitmap(HP, 0, 0, HP.getWidth(), HP.getHeight(), matrix, true);
+			instream = assetmanager.open("images/alphasprites.png");
+			alphaSprites = BitmapFactory.decodeStream(instream);
+			alphaSprites = Bitmap.createBitmap(alphaSprites);
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -156,49 +162,66 @@ public class Draw extends SurfaceView implements Runnable {
 	
 	
 	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
-		Matrix matrix = new Matrix();
-		Bitmap flippedpoke = null;
-		Bitmap flippedSmallpoke = null;
+		int degrees = (player.playerNum == 1) ? -90 : 90;
 		for (int k = 0; k < player.numPokemon(); k++){
-			try {
-				instream = pokedraw.open(player.getPokemon(k).getImage());
-				activepokemon = BitmapFactory.decodeStream(instream);
-				flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-			} catch (IOException e) {
-				e.printStackTrace();
+			
+			// get pokemon's image
+			Pokemon p = player.getPokemon(k);
+			Bitmap pkb = getSprite(p.getPokedexNumber());	 
+						
+			// position image
+			int x = 0, y = 0, scale = 0;
+			if (k==0) {
+				scale = 200;
+				y = 295;
+				x = (player.playerNum == 1) ? 800 : 320;
+			} else {
+				scale = 100;
+				y = (player.playerNum == 1) ? 635 - (100 * (k-1)) : 40 + (100 * (k-1));
+				x = (player.playerNum == 1) ? 1150 : 50;
 			}
-			if(k==0){
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 800, 295, null);
-				if(player.playerNum == 2){
-					matrix.postRotate(180);
-					flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-					board.drawBitmap(flippedpoke, 320, 295, null);
-				}
-			}
-			else{
-				flippedpoke = Bitmap.createScaledBitmap(activepokemon, 75, 75, true);
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 1150, 635 - (100 * (k-1)), null);
-				else if(player.playerNum == 2){
-					flippedSmallpoke = Bitmap.createBitmap(flippedpoke, 0, 0, flippedpoke.getWidth(), flippedpoke.getHeight(), matrix, true);
-					board.drawBitmap(flippedSmallpoke, 50, 40 + (100 * (k-1)), null);
-				}
-			}
+
+			// rotate scale and draw pokemon
+			Bitmap flippedpoke = rotate(pkb, degrees);
+			Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, scale, scale, false);
+			board.drawBitmap(scaledPoke, x, y, null);
 		}
 	}
 	
+	private static Rect getSpriteRect(int pokedex) {
+		int left = 15;
+		int pad = 2;
+		int dex = pokedex-1;
+		int w = 80;
+		int h = 85;
+		int l = left + pad + dex*w;
+		int r = l+w;
+		int t = dex/24;
+		int b = t + h;
+		return new Rect(l,t, r, b);
+	}
+	
+	private static Bitmap getSprite(int pokedex) {
+		Rect w = getSpriteRect(pokedex);
+		return Bitmap.createBitmap(alphaSprites, w.left, w.top, w.width(), w.height());
+	}
+	
+	private static Bitmap rotate(Bitmap src, int degrees) {
+		Matrix m = new Matrix();
+		m.postRotate(degrees);
+		return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), m, false);
+	}
 	
 	public static void drawBoard(Canvas board, AssetManager assetmanager){
-		Matrix matrix = new Matrix();
-		matrix.postRotate(180);
         board.drawBitmap(battleGround, 0, 0, null);
 		board.drawBitmap(ETbutton, 1125, 180, null);
-		board.drawBitmap(flippedETbutton, 100, 530, null);
+//		board.drawBitmap(flippedETbutton, 100, 530, null);
 		board.drawBitmap(endturn, 1125, 28, null);
-		board.drawBitmap(flippedendturn, 95, 573, null);
+//		board.drawBitmap(flippedendturn, 95, 573, null);
 		board.drawBitmap(GObutton, 1182, 180, null);
-		board.drawBitmap(flippedGObutton, 40, 530, null);
+//		board.drawBitmap(flippedGObutton, 40, 530, null);
 		board.drawBitmap(gameover, 1190, 55, null);
-		board.drawBitmap(flippedgameover, 45, 580, null);
+//		board.drawBitmap(flippedgameover, 45, 580, null);
 		board.drawBitmap(retreat, 925, 575, null);
 		board.drawBitmap(flippedretreat, 335, 50, null);
 		board.drawBitmap(pokeball, 905, 500, null);
@@ -233,5 +256,16 @@ public class Draw extends SurfaceView implements Runnable {
 		loadAssets();
 		drawThread.start();
 		
+	}
+	
+	public void pause() {
+		running = false;
+		while (true)
+			try {
+				drawThread.join();
+				break;
+			} catch (Exception e) {
+				// try again
+			}
 	}
 }
