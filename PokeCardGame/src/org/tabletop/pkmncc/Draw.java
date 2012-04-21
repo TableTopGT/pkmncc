@@ -193,10 +193,10 @@ public class Draw extends SurfaceView implements Runnable {
 		int pad = 2;
 		int dex = pokedex-1;
 		int w = 80;
-		int h = 85;
-		int l = left + pad + dex*w;
+		int h = 82;
+		int l = left + pad + (dex%25)*w;
 		int r = l+w;
-		int t = dex/24;
+		int t = dex/26 * h;
 		int b = t + h;
 		return new Rect(l,t, r, b);
 	}

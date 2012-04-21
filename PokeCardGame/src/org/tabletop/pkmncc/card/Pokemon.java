@@ -5,10 +5,12 @@
 
 package org.tabletop.pkmncc.card;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -102,19 +104,17 @@ public abstract class Pokemon extends Card {
 	protected ActionDesc action1;
 	protected ActionDesc action2;
 
+	private MediaPlayer cry = new MediaPlayer();
 	private int pokedexNumber;
 	private boolean isEvolved;
 	private boolean isEvolvable;
 	private Class<? extends Pokemon> evolution;
-
-	private MediaPlayer cry;
 	
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 	
 	protected final int imageid = getResources().getIdentifier("viewover", "drawable", "org.tabletop.pkmncc");
-	private Bitmap bc = BitmapFactory.decodeResource(getResources(), imageid);
 
 	protected Pokemon() {
 		setImage(toString().toLowerCase());
@@ -405,9 +405,15 @@ public abstract class Pokemon extends Card {
 	 */
 	protected void setPokedexNumber(int pokedexNumber) {
 		this.pokedexNumber = pokedexNumber;
-		this.cry = MediaPlayer.create(getContext(), 
-					getContext().getResources()
-					.getIdentifier("charmander", "raw", "org.tabletop.pkmncc"));
+		try {
+			AssetFileDescriptor afd  = getContext().getAssets().openFd("cries/"+
+										toString()+"_"+pokedexNumber+".mp3");
+			this.cry.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			this.cry.prepare();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

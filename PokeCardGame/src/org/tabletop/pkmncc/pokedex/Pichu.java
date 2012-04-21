@@ -6,7 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Pichu extends Pokemon {
 
 	public Pichu () {
-		setPokedexNumber(24);
+		setPokedexNumber(172);
 		setElement(Element.LIGHTNING);
 		setEvolution(PokemonStage.BASIC, Pikachu.class);
 		setDefense(40, 1, Element.FIGHTING, 10, Element.METAL, 20);
