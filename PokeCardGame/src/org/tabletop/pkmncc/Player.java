@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import org.tabletop.pkmncc.card.*;
 
-import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class Player {
 
@@ -49,13 +46,12 @@ public class Player {
 				int k = getIndex((Pokemon) playedCard);
 				int[] p = Draw.getPokemonLayout(this, k);
 
-				// Set coordinates
+				// Set coordinates, rotation, dimensions
 				playedCard.setX(p[0]);
 				playedCard.setY(p[1]);
+				playedCard.setRotation(p[3]);
+				playedCard.setLayoutParams(new FrameLayout.LayoutParams(p[2], p[2]));
 
-				// Set view height and width
-				playedCard.setLayoutParams(new LinearLayout.LayoutParams(p[2], p[2]));
-				//playedCard.setTag(tag)
 				// Add pokemon to board
 				Game.mat.addView(playedCard);
 			}

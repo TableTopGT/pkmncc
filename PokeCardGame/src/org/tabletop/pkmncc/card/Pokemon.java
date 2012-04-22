@@ -11,14 +11,9 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
-import org.tabletop.pkmncc.Game;
 import org.tabletop.pkmncc.Player;
 
 
@@ -114,10 +109,9 @@ public abstract class Pokemon extends Card {
 	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
 	
-	protected final int imageid = getResources().getIdentifier("viewover", "drawable", "org.tabletop.pkmncc");
 
 	protected Pokemon() {
-		setImage(toString().toLowerCase());
+		int imageid = getResources().getIdentifier("viewover", "drawable", "org.tabletop.pkmncc");
 		setImageResource(imageid);
 	}
 

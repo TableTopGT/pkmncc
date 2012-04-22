@@ -6,6 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Magnemite extends Pokemon {
 
 	public Magnemite() {
+		setPokedexNumber(81);
 		setElement(Element.METAL);
 		setEvolution(PokemonStage.BASIC, Magneton.class);
 		setDefense(40, 1, Element.FIGHTING, 10, Element.METAL, 20);

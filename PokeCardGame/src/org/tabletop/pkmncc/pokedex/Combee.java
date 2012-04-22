@@ -6,7 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Combee extends Pokemon {
 
 	public Combee() {
-		
+		setPokedexNumber(415);
 		setElement(Element.GRASS);
 		setEvolution(PokemonStage.BASIC, Vespiquen.class);
 		setDefense(50, 1, Element.FIRE, 10, Element.FIGHTING, 20);

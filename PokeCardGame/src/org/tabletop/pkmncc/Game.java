@@ -4,7 +4,6 @@ import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
-import org.tabletop.pkmncc.card.Pokemon;
 import org.tabletop.pkmncc.pokedex.*;
 
 import android.app.Activity;
@@ -45,6 +44,27 @@ public class Game extends Activity{
         mat = (FrameLayout) findViewById(R.id.frame1);
         surf = (Draw) findViewById(R.id.surfaceView1);
         
+        // Create endturn views
+        Button et = new Button(this);
+        et.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
+        et.setX(1105);
+        et.setY(20);
+        Game.mat.addView(et);
+        et.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (playerTurn == Turn.ONE) {
+					if (event.getAction() == MotionEvent.ACTION_UP)
+						new AlertDialog.Builder(c)
+						.setMessage("Turn is over ").show();
+					playerTurn = (Player.currentPlayer.playerNum == 1) ? Turn.TWO : Turn.ONE;
+				}
+				return false;
+			}
+		});
+        
+        
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
         battleMusic.start();
@@ -61,11 +81,12 @@ public class Game extends Activity{
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (playerTurn == Turn.TWO)
-				if (event.getAction() == MotionEvent.ACTION_UP)
-					new AlertDialog.Builder(c)
-					.setMessage("Turn is over ").show();
-				//playerTurn = (Player.currentPlayer.playerNum == 1) ? Turn.TWO : Turn.ONE;
+				if (playerTurn == Turn.TWO) {
+					if (event.getAction() == MotionEvent.ACTION_UP)
+						new AlertDialog.Builder(c)
+						.setMessage("Turn is over ").show();
+					playerTurn = (Player.currentPlayer.playerNum == 1) ? Turn.TWO : Turn.ONE;
+				}
 				return false;
 			}
 		});
@@ -107,6 +128,8 @@ public class Game extends Activity{
         				playerOne.addCard(new Charmeleon());
         				playerOne.addCard(new Pichu());
         				playerOne.addCard(new Machop());
+        				playerOne.addCard(new Combee());
+
 //        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
@@ -121,6 +144,9 @@ public class Game extends Activity{
         				//playerTwo.getActive().removeEnergy();
         				playerTwo.addCard(new Charmeleon());
         				playerTwo.addCard(new Charizard());
+        				playerTwo.addCard(new Magnemite());
+        				playerTwo.addCard(new Finneon());
+        				playerTwo.addCard(new Duskull());
 
         				// Example of running custom function
         				playerTwo.getActive().setOnTouchListener(new OnTouchListener() {
@@ -199,17 +225,17 @@ public class Game extends Activity{
 		surf.resume();
 		rfid.start();
 		final Context c = this;
-//		new AlertDialog.Builder(this)
-//		.setMessage("Player One choose active pokemon followed by bench pokemon")
-//		.setNeutralButton("OK", new OnClickListener() {
-//			
-//			public void onClick(DialogInterface dialog, int which) {
-//				dialog.cancel();
-//				mat.addView(new RenderView(c));				
-//			}
-//			
-//		}).show();		
-		mat.addView(new RenderView(c));
+		new AlertDialog.Builder(this)
+		.setMessage("Player One choose active pokemon followed by bench pokemon")
+		.setNeutralButton("OK", new OnClickListener() {
+			
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+				mat.addView(new RenderView(c));				
+			}
+			
+		}).show();		
+//		mat.addView(new RenderView(c));
 		battleMusic.start();
 	}
 

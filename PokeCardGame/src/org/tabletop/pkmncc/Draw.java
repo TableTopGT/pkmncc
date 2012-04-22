@@ -15,7 +15,6 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 
 public class Draw extends SurfaceView implements Runnable {
@@ -41,7 +40,6 @@ public class Draw extends SurfaceView implements Runnable {
 	private static Bitmap flippedHP;
 	public static AssetManager assetmanager;
 	private static InputStream instream;
-	private static Bitmap activepokemon;
 	private static Bitmap alphaSprites;
 
 	public Draw (Context context, AttributeSet attrs) {
@@ -162,24 +160,27 @@ public class Draw extends SurfaceView implements Runnable {
 	
 	
 	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
-		int degrees = (player.playerNum == 1) ? -90 : 90;
 		for (int k = 0; k < player.numPokemon(); k++){
 			
-			// get pokemon's image
 			Pokemon poke = player.getPokemon(k);
-			Bitmap pkb = getSprite(poke.getPokedexNumber());	 
-						
-			// get image layout
-			int[] p = getPokemonLayout(player, k);
+			
+			// wait until added to mat
+			if (poke.isShown()) {
 
-			// rotate scale and draw pokemon
-			Bitmap flippedpoke = rotate(pkb, degrees);
-			Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, p[2], p[2], false);
-			board.drawBitmap(scaledPoke, p[0], p[1], null);
+				// get pokemon's image
+				Bitmap pkb = getSprite(poke.getPokedexNumber());
+	
+				// rotate scale and draw pokemon
+				Bitmap flippedpoke = rotate(pkb, poke.getRotation());
+				int side = poke.getLayoutParams().height;
+				Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, side, side, false);
+				board.drawBitmap(scaledPoke, poke.getX(), poke.getY(), null);
+			}
 		}
 	}
 	
 	public static int[] getPokemonLayout(Player p, int index) {
+		int degrees = (p.playerNum == 1) ? -90 : 90;
 		int x = 0, y = 0, scale = 0;
 		int k = index;
 		if (k==0) {
@@ -191,20 +192,20 @@ public class Draw extends SurfaceView implements Runnable {
 			y = (p.playerNum == 1) ? 635 - (100 * (k-1)) : 40 + (100 * (k-1));
 			x = (p.playerNum == 1) ? 1150 : 50;
 		}
-		return new int[] {x,y,scale};
+		return new int[] {x,y,scale,degrees};
 	}
 	
 	private static Rect getSpriteRect(int pokedex) {
-		int left = 15;
-		int pad = 2;
+		int leftOffset = 17;
+		int topOffset = 3;
 		int dex = pokedex-1;
 		int w = 80;
-		int h = 82;
-		int l = left + pad + (dex%25)*w;
+		int h = 80;
+		int l = leftOffset + dex % 25 *w;
 		int r = l+w;
-		int t = dex/26 * h;
-		int b = t + h;
-		return new Rect(l,t, r, b);
+		int t = topOffset + dex / 25 * h;
+		int b = t+h;
+		return new Rect(l,t,r,b);
 	}
 	
 	private static Bitmap getSprite(int pokedex) {
@@ -212,22 +213,22 @@ public class Draw extends SurfaceView implements Runnable {
 		return Bitmap.createBitmap(alphaSprites, w.left, w.top, w.width(), w.height());
 	}
 	
-	private static Bitmap rotate(Bitmap src, int degrees) {
+	private static Bitmap rotate(Bitmap src, float f) {
 		Matrix m = new Matrix();
-		m.postRotate(degrees);
+		m.postRotate(f);
 		return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), m, false);
 	}
 	
 	public static void drawBoard(Canvas board, AssetManager assetmanager){
         board.drawBitmap(battleGround, 0, 0, null);
 		board.drawBitmap(ETbutton, 1125, 180, null);
-//		board.drawBitmap(flippedETbutton, 100, 530, null);
+		board.drawBitmap(flippedETbutton, 100, 530, null);
 		board.drawBitmap(endturn, 1125, 28, null);
-//		board.drawBitmap(flippedendturn, 95, 573, null);
+		board.drawBitmap(flippedendturn, 95, 573, null);
 		board.drawBitmap(GObutton, 1182, 180, null);
-//		board.drawBitmap(flippedGObutton, 40, 530, null);
+		board.drawBitmap(flippedGObutton, 40, 530, null);
 		board.drawBitmap(gameover, 1190, 55, null);
-//		board.drawBitmap(flippedgameover, 45, 580, null);
+		board.drawBitmap(flippedgameover, 45, 580, null);
 		board.drawBitmap(retreat, 925, 575, null);
 		board.drawBitmap(flippedretreat, 335, 50, null);
 		board.drawBitmap(pokeball, 905, 500, null);
