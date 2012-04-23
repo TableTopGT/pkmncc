@@ -189,7 +189,7 @@ public final class RFIDListener extends Thread {
 				switch(currMode) {
 				case INIT:
 					// swipe a charmander every x seconds
-					swipeCard("1185077", 2);
+					swipeCard("1185077", 1);
 					break;
 				case REAL:
 					try {

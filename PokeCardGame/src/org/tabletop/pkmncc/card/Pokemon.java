@@ -5,11 +5,16 @@
 
 package org.tabletop.pkmncc.card;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.view.MotionEvent;
+
 import org.tabletop.pkmncc.Player;
 
 
@@ -24,7 +29,7 @@ public abstract class Pokemon extends Card {
 		private final int baseAttack;
 		private ArrayList<Energy> energyCost;
 		private final int energyCostSize;
-
+		
 		public ActionDesc(String actionName, int baseAttack, Element... energyCost) {
 			this.actionName = actionName;
 			this.baseAttack = baseAttack;
@@ -48,20 +53,23 @@ public abstract class Pokemon extends Card {
 		 */
 		public int attack(Player opponent, int tempAttack) {
 			if (!enoughEnergy()) {
-				// Not enough energy!
+				new AlertDialog.Builder(getContext())
+				.setMessage("Energies missing for this action.").show(); //TODO toast
 				return 0;
 			}
-			
+
 			if (!canMove()) {
-				// Paralyzed/Asleep!
+				new AlertDialog.Builder(getContext())
+				.setMessage("Pokemon can't move...").show();
 				return 0;
 			}
-					
+
 			if (confusedEffect()) {
-				// Hurt by it's confusion
+				new AlertDialog.Builder(getContext())
+				.setMessage("Pokemon was hurt by its confusion!").show(); 
 				return 0;
 			}
-				
+
 			Pokemon enemy = opponent.getActive();
 			int damage = tempAttack;
 			if (enemy.weakness == getElement()) {
@@ -70,7 +78,7 @@ public abstract class Pokemon extends Card {
 						: damage * enemy.weakMod;
 			} else if (enemy.resistance == getElement()) {
 				damage -= enemy.resMod;
-			} 
+			}
 			return enemy.removeHP(damage);
 			//XXX Implement prize cards here?
 		}
@@ -92,19 +100,20 @@ public abstract class Pokemon extends Card {
 	protected ActionDesc action1;
 	protected ActionDesc action2;
 
-	private MediaPlayer cry;
+	private MediaPlayer cry = new MediaPlayer();
 	private int pokedexNumber;
 	private boolean isEvolved;
 	private boolean isEvolvable;
 	private Class<? extends Pokemon> evolution;
-
+	
 	private ArrayList<Energy> energy = new ArrayList<Energy>();
-	private final PokemonStatus[] status = new PokemonStatus[3];
+	private PokemonStatus[] status = new PokemonStatus[3];
 	private PokemonStatus oldStatus;
-
+	
 
 	protected Pokemon() {
-		setImage(toString());
+		int imageid = getResources().getIdentifier("viewover", "drawable", "org.tabletop.pkmncc");
+		setImageResource(imageid);
 	}
 
 	public void cry() {
@@ -232,6 +241,7 @@ public abstract class Pokemon extends Card {
 		energy.add(energyCard);
 	}
 	
+
 	/** Provide player dialog to select which energies to remove. */
 	public final void removeEnergy() {
 		final int numEnergies = energy.size();
@@ -253,7 +263,7 @@ public abstract class Pokemon extends Card {
 			}
 			
 			
-		}).setPositiveButton("Done", new OnClickListener() {
+		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			
 			// Remove selected energies
 			@Override
@@ -342,31 +352,31 @@ public abstract class Pokemon extends Card {
 			switch(status[i]) {
 			case POISONED:
 				
-				/*A Poisoned Pokï¿½mon takes damage in-between turns. When a Pokï¿½mon is
+				/*A Poisoned Pokémon takes damage in-between turns. When a Pokémon is
 				Poisoned, put a Poison marker on it. Put a damage counter on each Poisoned
-				Pokï¿½mon during each in-between turns step. */
+				Pokémon during each in-between turns step. */
 				removeHP(10);
 				break;
 			case BURNED:
 				
-				/*If a Pokï¿½mon is Burned, it may take damage in-between turns. When a
-				Pokï¿½mon is Burned, put a Burn marker on it. In-between turns, the owner
-				of the Burned Pokï¿½mon flips a coin. If he or she flips tails, put 2 damage
-				counters on the Burned Pokï¿½mon. */
+				/*If a Pokémon is Burned, it may take damage in-between turns. When a
+				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
+				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
+				counters on the Burned Pokémon. */
 				if (!getOwner().coinFlip()) // if Tails
 					removeHP(20);
 				break;
 			case ASLEEP:
 				
-				/*Turn the Pokï¿½mon counterclockwise to show that it is Asleep.*/
+				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
 				if (getOwner().coinFlip()) // if Heads
 					status[0] = null;
 				break;
 			case PARALYZED:
 				
-				/*Turn the Paralyzed Pokï¿½mon clockwise.
-				If a Pokï¿½mon is Paralyzed, it cannot attack or retreat. Remove the Special
-				Condition Paralyzed during the in-between turns phase if your Pokï¿½mon
+				/*Turn the Paralyzed Pokémon clockwise.
+				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
+				Condition Paralyzed during the in-between turns phase if your Pokémon
 				was Paralyzed since the beginning of your last turn.*/
 				if (oldStatus == PokemonStatus.PARALYZED)
 					status[0] = null;
@@ -390,9 +400,15 @@ public abstract class Pokemon extends Card {
 	 */
 	protected void setPokedexNumber(int pokedexNumber) {
 		this.pokedexNumber = pokedexNumber;
-		cry = MediaPlayer.create(getContext(), 
-				getContext().getResources()
-				.getIdentifier("bulbasaur", "raw", "org.tabletop.pkmncc"));
+		try {
+			AssetFileDescriptor afd  = getContext().getAssets().openFd("cries/"+
+										toString()+"_"+pokedexNumber+".mp3");
+			this.cry.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+			this.cry.prepare();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -424,5 +440,22 @@ public abstract class Pokemon extends Card {
 		this.weakMod = (weakMod > 2) ? weakMod : 2; // Default unlisted value
 		this.resistance = resistance; 
 		this.resMod = (resMod >= 10) ? resMod : 30; // Default unlisted value
+	}
+	
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		cry.start();
+		float start = getTranslationX();
+		int jump = (start < 640) ? 20 : -20;
+        ObjectAnimator o = ObjectAnimator.ofFloat(this, "translationX", start, start+jump, start, start+jump/2, start);
+        ObjectAnimator.setFrameDelay(1);
+        o.setDuration(400);
+        o.start();
+		return super.onTouchEvent(event);
+	}
+
+	public int getPokedexNumber() {
+		return pokedexNumber;
 	}
 }

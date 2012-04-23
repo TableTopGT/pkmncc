@@ -8,7 +8,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Duskull extends Pokemon {
 
 	public Duskull() {
-		
+		setPokedexNumber(355);
 		setElement(Element.PSYCHIC);
 		setEvolution(PokemonStage.BASIC, Dusclops.class);
 		setDefense(50, 1, Element.DARKNESS, 10, Element.COLORLESS, 20);

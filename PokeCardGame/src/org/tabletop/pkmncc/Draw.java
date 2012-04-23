@@ -3,12 +3,16 @@ package org.tabletop.pkmncc;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.tabletop.pkmncc.card.Pokemon;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -36,10 +40,10 @@ public class Draw extends SurfaceView implements Runnable {
 	private static Bitmap flippedHP;
 	public static AssetManager assetmanager;
 	private static InputStream instream;
-	private static Bitmap activepokemon;
-	
-	public Draw(Context context) {
-		super(context);
+	private static Bitmap alphaSprites;
+
+	public Draw (Context context, AttributeSet attrs) {
+		super(context, attrs);
 		holder = getHolder();
 		assetmanager = context.getAssets();
 	}
@@ -102,6 +106,9 @@ public class Draw extends SurfaceView implements Runnable {
 			instream = assetmanager.open("images/HP.png");
 			HP = BitmapFactory.decodeStream(instream);
 			flippedHP = Bitmap.createBitmap(HP, 0, 0, HP.getWidth(), HP.getHeight(), matrix, true);
+			instream = assetmanager.open("images/alphasprites.png");
+			alphaSprites = BitmapFactory.decodeStream(instream);
+			alphaSprites = Bitmap.createBitmap(alphaSprites);
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -138,44 +145,81 @@ public class Draw extends SurfaceView implements Runnable {
 			if((player.playerNum == 2)&&(k<7)) canvas.drawBitmap(health, 507, 550+(30*(k-1)), null);
 			if((player.playerNum == 2)&&(k>=7)) canvas.drawBitmap(health, 483, 550+(30*(k-8)), null);
 		}		
+		if (((10*player.getActive().getHP())/player.getActive().getFullHP())< .4){
+			health = Draw.healthRed;
+		}else{
+			health = Draw.health;
+		}
+		for (int k=0; (k*10) < player.getActive().getHP(); k++){
+			if((player.playerNum == 1)&&(k<7)) canvas.drawBitmap(health, 768, 180-(30*(k-1)), null);
+			if((player.playerNum == 1)&&(k>=7)) canvas.drawBitmap(health, 797, 180-(30*(k-8)), null);
+			if((player.playerNum == 2)&&(k<7)) canvas.drawBitmap(health, 507, 550+(30*(k-1)), null);
+			if((player.playerNum == 2)&&(k>=7)) canvas.drawBitmap(health, 483, 550+(30*(k-8)), null);
+		}		
 	} 
 	
 	
 	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
-		Matrix matrix = new Matrix();
-		Bitmap flippedpoke = null;
-		Bitmap flippedSmallpoke = null;
 		for (int k = 0; k < player.numPokemon(); k++){
-			try {
-				instream = pokedraw.open(player.getPokemon(k).getImage());
-				activepokemon = BitmapFactory.decodeStream(instream);
-				flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if(k==0){
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 800, 295, null);
-				if(player.playerNum == 2){
-					matrix.postRotate(180);
-					flippedpoke = Bitmap.createBitmap(activepokemon, 0, 0, activepokemon.getWidth(), activepokemon.getHeight(), matrix, true);
-					board.drawBitmap(flippedpoke, 320, 295, null);
-				}
-			}
-			else{
-				flippedpoke = Bitmap.createScaledBitmap(activepokemon, 75, 75, true);
-				if(player.playerNum == 1) board.drawBitmap(flippedpoke, 1150, 635 - (100 * (k-1)), null);
-				else if(player.playerNum == 2){
-					flippedSmallpoke = Bitmap.createBitmap(flippedpoke, 0, 0, flippedpoke.getWidth(), flippedpoke.getHeight(), matrix, true);
-					board.drawBitmap(flippedSmallpoke, 50, 40 + (100 * (k-1)), null);
-				}
+			
+			Pokemon poke = player.getPokemon(k);
+			
+			// wait until added to mat
+			if (poke.isShown()) {
+
+				// get pokemon's image
+				Bitmap pkb = getSprite(poke.getPokedexNumber());
+	
+				// rotate scale and draw pokemon
+				Bitmap flippedpoke = rotate(pkb, poke.getRotation());
+				int side = poke.getLayoutParams().height;
+				Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, side, side, false);
+				board.drawBitmap(scaledPoke, poke.getX(), poke.getY(), null);
 			}
 		}
 	}
 	
+	public static int[] getPokemonLayout(Player p, int index) {
+		int degrees = (p.playerNum == 1) ? -90 : 90;
+		int x = 0, y = 0, scale = 0;
+		int k = index;
+		if (k==0) {
+			scale = 200;
+			y = 295;
+			x = (p.playerNum == 1) ? 800 : 320;
+		} else {
+			scale = 100;
+			y = (p.playerNum == 1) ? 635 - (100 * (k-1)) : 40 + (100 * (k-1));
+			x = (p.playerNum == 1) ? 1150 : 50;
+		}
+		return new int[] {x,y,scale,degrees};
+	}
+	
+	private static Rect getSpriteRect(int pokedex) {
+		int leftOffset = 17;
+		int topOffset = 3;
+		int dex = pokedex-1;
+		int w = 80;
+		int h = 80;
+		int l = leftOffset + dex % 25 *w;
+		int r = l+w;
+		int t = topOffset + dex / 25 * h;
+		int b = t+h;
+		return new Rect(l,t,r,b);
+	}
+	
+	private static Bitmap getSprite(int pokedex) {
+		Rect w = getSpriteRect(pokedex);
+		return Bitmap.createBitmap(alphaSprites, w.left, w.top, w.width(), w.height());
+	}
+	
+	private static Bitmap rotate(Bitmap src, float f) {
+		Matrix m = new Matrix();
+		m.postRotate(f);
+		return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), m, false);
+	}
 	
 	public static void drawBoard(Canvas board, AssetManager assetmanager){
-		Matrix matrix = new Matrix();
-		matrix.postRotate(180);
         board.drawBitmap(battleGround, 0, 0, null);
 		board.drawBitmap(ETbutton, 1125, 180, null);
 		board.drawBitmap(flippedETbutton, 100, 530, null);
@@ -219,5 +263,16 @@ public class Draw extends SurfaceView implements Runnable {
 		loadAssets();
 		drawThread.start();
 		
+	}
+	
+	public void pause() {
+		running = false;
+		while (true)
+			try {
+				drawThread.join();
+				break;
+			} catch (Exception e) {
+				// try again
+			}
 	}
 }

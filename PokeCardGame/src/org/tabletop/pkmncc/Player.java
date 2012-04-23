@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import org.tabletop.pkmncc.card.*;
 
+import android.widget.FrameLayout;
+
 public class Player {
 
 	public static final int fieldSpots = 6;
@@ -38,7 +40,21 @@ public class Player {
 			this.playTrainer( (Trainer) playedCard);
 		}
 		else if(playedCard instanceof Pokemon){
-			this.addPokemon( (Pokemon) playedCard);
+			if(addPokemon( (Pokemon) playedCard)) {
+				
+				// get image layout
+				int k = getIndex((Pokemon) playedCard);
+				int[] p = Draw.getPokemonLayout(this, k);
+
+				// Set coordinates, rotation, dimensions
+				playedCard.setX(p[0]);
+				playedCard.setY(p[1]);
+				playedCard.setRotation(p[3]);
+				playedCard.setLayoutParams(new FrameLayout.LayoutParams(p[2], p[2]));
+
+				// Add pokemon to board
+				Game.mat.addView(playedCard);
+			}
 		}
 		else if (playedCard instanceof Energy){
 			this.getActive().addEnergy( (Energy) playedCard);
@@ -99,8 +115,10 @@ public class Player {
 			return true;
 		}
 		for (int i = 0; i < pokeArr.size(); ++i) {
-			if (pokemonCard.isEvolutionOf(pokeArr.get(i))) {
-				pokeArr.get(i).transferStatsTo(pokemonCard);
+			Pokemon checkPoke = pokeArr.get(i);
+			if (pokemonCard.isEvolutionOf(checkPoke)) {
+				checkPoke.transferStatsTo(pokemonCard);
+				Game.mat.removeView(checkPoke);
 				pokeArr.set(i, pokemonCard);
 				pokemonCard.cry();
 				return true;
