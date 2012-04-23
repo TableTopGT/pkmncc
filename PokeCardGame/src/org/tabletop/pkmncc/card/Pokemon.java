@@ -8,6 +8,7 @@ package org.tabletop.pkmncc.card;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
@@ -445,6 +446,12 @@ public abstract class Pokemon extends Card {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		cry.start();
+		float start = getTranslationX();
+		int jump = (start < 640) ? 20 : -20;
+        ObjectAnimator o = ObjectAnimator.ofFloat(this, "translationX", start, start+jump, start, start+jump/2, start);
+        ObjectAnimator.setFrameDelay(1);
+        o.setDuration(400);
+        o.start();
 		return super.onTouchEvent(event);
 	}
 
