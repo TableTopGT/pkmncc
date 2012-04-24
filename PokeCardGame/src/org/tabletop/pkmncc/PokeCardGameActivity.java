@@ -24,8 +24,11 @@ public class PokeCardGameActivity extends Activity implements OnClickListener {
         // Set up click listeners for all the buttons
         View beginButton = findViewById(R.id.begin_button);
         beginButton.setOnClickListener(this);
+        View demoButton = findViewById(R.id.demo_button);
+        demoButton.setOnClickListener(this);        
         View exitButton = findViewById(R.id.exit_button);
         exitButton.setOnClickListener(this);
+        
         
         // Setup Music
         music = MediaPlayer.create(this, R.raw.title);
@@ -58,6 +61,10 @@ public class PokeCardGameActivity extends Activity implements OnClickListener {
     	case R.id.begin_button:
     		Intent beginGame = new Intent(this, Game.class);
     		startActivity(beginGame);
+    		break;
+    	case R.id.demo_button:
+    		Intent beginDemo= new Intent(this, Demo.class);
+    		startActivity(beginDemo);
     		break;
     	case R.id.exit_button:
     		music.stop();

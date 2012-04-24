@@ -458,4 +458,6 @@ public abstract class Pokemon extends Card {
 	public int getPokedexNumber() {
 		return pokedexNumber;
 	}
+	
+
 }

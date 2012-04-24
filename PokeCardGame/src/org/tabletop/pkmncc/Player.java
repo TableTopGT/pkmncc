@@ -96,8 +96,25 @@ public class Player {
 	/** Switch player's active Pokemon */
 	public void switchActive(int newActiveIndex){
 		Pokemon holder = pokeArr.get(0);
-		pokeArr.set(0, pokeArr.get(newActiveIndex));
+		Pokemon newActive = pokeArr.get(newActiveIndex);
+		pokeArr.set(0, newActive);
 		pokeArr.set(newActiveIndex, holder);
+		swapLayouts(newActive, holder);
+	}
+
+	private void swapLayouts(Pokemon a, Pokemon b) {
+		int h[] = Draw.getPokemonLayout(this, getIndex(a));
+		int n[] = Draw.getPokemonLayout(this, getIndex(b));
+		Game.mat.removeView(a);
+		Game.mat.removeView(b);
+		a.setX(n[0]);
+		a.setY(n[1]);
+		a.setLayoutParams(new FrameLayout.LayoutParams(n[2], n[2]));
+		b.setX(h[0]);
+		b.setY(h[1]);
+		b.setLayoutParams(new FrameLayout.LayoutParams(h[2], h[2]));
+		Game.mat.addView(a);
+		Game.mat.addView(b);
 	}
 
 	/**

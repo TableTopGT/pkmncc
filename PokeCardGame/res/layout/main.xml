@@ -28,7 +28,17 @@
     		android:textColor="@color/red"
     		android:textSize="70sp"
     		android:background="@drawable/roundedbutton"
-    		android:layout_marginTop="120dip"
+    		android:layout_marginTop="90dip"
+    	/>
+			<Button 
+			android:id="@+id/demo_button"
+    		android:layout_width="fill_parent" 
+    		android:layout_height="90dip"
+    		android:text="Start Demo"
+    		android:textColor="@color/red"
+    		android:textSize="70sp"
+    		android:background="@drawable/roundedbutton"
+    		android:layout_marginTop="90dip"
     	/>
     	<Button
     		android:id="@+id/exit_button"
@@ -38,7 +48,7 @@
     		android:textColor="@color/red"
     		android:textSize="70sp"
     		android:background="@drawable/roundedbutton"
-    		android:layout_marginTop="120dip"
+    		android:layout_marginTop="90dip"
     	/>
     </LinearLayout>
 </LinearLayout>

@@ -173,7 +173,7 @@ public class Draw extends SurfaceView implements Runnable {
 				// rotate scale and draw pokemon
 				Bitmap flippedpoke = rotate(pkb, poke.getRotation());
 				int side = poke.getLayoutParams().height;
-				Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, side, side, false);
+				Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, side+10, side+10, true);
 				board.drawBitmap(scaledPoke, poke.getX(), poke.getY(), null);
 			}
 		}
@@ -189,8 +189,8 @@ public class Draw extends SurfaceView implements Runnable {
 			x = (p.playerNum == 1) ? 800 : 320;
 		} else {
 			scale = 100;
-			y = (p.playerNum == 1) ? 635 - (100 * (k-1)) : 40 + (100 * (k-1));
-			x = (p.playerNum == 1) ? 1150 : 50;
+			y = (p.playerNum == 1) ? 629 - (100 * (k-1)) : 21 + (100 * (k-1));
+			x = (p.playerNum == 1) ? 1159 : 21;
 		}
 		return new int[] {x,y,scale,degrees};
 	}
