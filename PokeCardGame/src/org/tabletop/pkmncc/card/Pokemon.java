@@ -15,6 +15,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
+import org.tabletop.pkmncc.Demo;
 import org.tabletop.pkmncc.Player;
 
 
@@ -99,6 +100,8 @@ public abstract class Pokemon extends Card {
 	private int retreatCost;
 	protected ActionDesc action1;
 	protected ActionDesc action2;
+	
+	public boolean selected = false;
 
 	private MediaPlayer cry = new MediaPlayer();
 	private int pokedexNumber;
@@ -199,7 +202,7 @@ public abstract class Pokemon extends Card {
 	}
 	
 	public final boolean canRetreat() {
-		return canMove() && (energy.size() >= retreatCost);
+		return canMove() && (energy.size() >= retreatCost) && !Demo.retreatUsed;
 	}
 	
 	public final boolean isBasic() {
@@ -248,10 +251,18 @@ public abstract class Pokemon extends Card {
 		CharSequence[] items = new CharSequence[numEnergies];
 		final boolean[] checkedItems = new boolean[numEnergies];
 		
-		// Generate list of energy strings to display
-		for (int i = 0; i < numEnergies; i++)
-			items[i] = energy.get(i).toString();
+		for(int k = 0; k < energy.size(); ++k){
+			if(!energy.get(k).getElement().equals(getElement())){
+				energy.remove(k);
+				break;
+			}
+		}
 		
+		// Generate list of energy strings to display
+/*		for (int i = 0; i < numEnergies; i++){
+			items[i] = energy.get(i).toString();
+		}
+
 		// Create and show dialogbox
 		new AlertDialog.Builder(getContext())
 		.setTitle("Select Energies to remove: ")
@@ -273,7 +284,7 @@ public abstract class Pokemon extends Card {
 						energy.remove(i);
 			}
 			
-		}).show();
+		}).show();*/
 	}
 	
 	public final void removeEnergy(Energy energyCard) {
@@ -352,31 +363,31 @@ public abstract class Pokemon extends Card {
 			switch(status[i]) {
 			case POISONED:
 				
-				/*A Poisoned Pokémon takes damage in-between turns. When a Pokémon is
+				/*A Poisoned Pokï¿½mon takes damage in-between turns. When a Pokï¿½mon is
 				Poisoned, put a Poison marker on it. Put a damage counter on each Poisoned
-				Pokémon during each in-between turns step. */
+				Pokï¿½mon during each in-between turns step. */
 				removeHP(10);
 				break;
 			case BURNED:
 				
-				/*If a Pokémon is Burned, it may take damage in-between turns. When a
-				Pokémon is Burned, put a Burn marker on it. In-between turns, the owner
-				of the Burned Pokémon flips a coin. If he or she flips tails, put 2 damage
-				counters on the Burned Pokémon. */
+				/*If a Pokï¿½mon is Burned, it may take damage in-between turns. When a
+				Pokï¿½mon is Burned, put a Burn marker on it. In-between turns, the owner
+				of the Burned Pokï¿½mon flips a coin. If he or she flips tails, put 2 damage
+				counters on the Burned Pokï¿½mon. */
 				if (!getOwner().coinFlip()) // if Tails
 					removeHP(20);
 				break;
 			case ASLEEP:
 				
-				/*Turn the Pokémon counterclockwise to show that it is Asleep.*/
+				/*Turn the Pokï¿½mon counterclockwise to show that it is Asleep.*/
 				if (getOwner().coinFlip()) // if Heads
 					status[0] = null;
 				break;
 			case PARALYZED:
 				
-				/*Turn the Paralyzed Pokémon clockwise.
-				If a Pokémon is Paralyzed, it cannot attack or retreat. Remove the Special
-				Condition Paralyzed during the in-between turns phase if your Pokémon
+				/*Turn the Paralyzed Pokï¿½mon clockwise.
+				If a Pokï¿½mon is Paralyzed, it cannot attack or retreat. Remove the Special
+				Condition Paralyzed during the in-between turns phase if your Pokï¿½mon
 				was Paralyzed since the beginning of your last turn.*/
 				if (oldStatus == PokemonStatus.PARALYZED)
 					status[0] = null;
@@ -446,6 +457,10 @@ public abstract class Pokemon extends Card {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		cry.start();
+		for(int i = 0; i < getOwner().numPokemon(); ++i){
+			if(getOwner().getPokemon(i).selected == true) getOwner().getPokemon(i).selected = false;
+		}
+		selected = true;
 		float start = getTranslationX();
 		int jump = (start < 640) ? 20 : -20;
         ObjectAnimator o = ObjectAnimator.ofFloat(this, "translationX", start, start+jump, start, start+jump/2, start);

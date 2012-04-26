@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.view.DragEvent;
 
 public class Demo extends Activity{
     /** Called when the activity is first created. */
@@ -32,6 +33,9 @@ public class Demo extends Activity{
 	static Player playerOne;
 	static Player playerTwo;
 	static FrameLayout mat;
+
+	public static boolean retreatUsed = false;
+	
 	Draw surf;
 	Context c = this;
 //	Game Game = new Game();
@@ -56,6 +60,7 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if (playerTurn != Turn.TWO) {
+					retreatUsed = false;
 					playerTurn = Turn.TWO;
 					new AlertDialog.Builder(c)
 					.setMessage("Turn is over ").show();
@@ -74,11 +79,45 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
-//				new AlertDialog.Builder(c)
-//				.setMessage("retreating " + playerOne.getActive().toString() + " w/ no 1").show();
-				playerOne.getActive().removeEnergy();
-
-				playerOne.switchActive(1);
+				if(playerOne.getActive().canRetreat()){
+					switch(playerTurn){
+					case ONE:
+						for(int h = 0; h < playerOne.numPokemon(); ++h){
+							if(playerOne.getPokemon(h).selected == true){
+								retreatUsed = true;
+								playerOne.getActive().removeEnergy();
+								playerOne.switchActive(h);
+								break;
+							}
+						}
+						break;
+					}
+				}
+			}
+		});
+		
+        Button retBTwo = new Button(this);
+        retBTwo.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
+        retBTwo.setX(335);
+        retBTwo.setY(50);
+        Demo.mat.addView(retBTwo);
+		retBTwo.setOnClickListener(new android.view.View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				if(playerTwo.getActive().canRetreat()){
+					switch(playerTurn){
+					case TWO:
+						for(int h = 0; h < playerTwo.numPokemon(); ++h){
+							if(playerTwo.getPokemon(h).selected == true){
+								playerTwo.getActive().removeEnergy();
+								playerTwo.switchActive(h);
+								break;
+							}
+						}
+						break;
+					}
+				}
 			}
 		});
         
@@ -101,6 +140,7 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if (playerTurn != Turn.ONE) {
+					retreatUsed = false;
 					playerTurn = Turn.ONE;
 					new AlertDialog.Builder(c)
 					.setMessage("Turn is over ").show();
@@ -200,6 +240,7 @@ public class Demo extends Activity{
     				++k;
     			}
     		}
+    		playerTurn = Turn.ONE;
     	}
     }
  
