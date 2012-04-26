@@ -41,6 +41,7 @@ public class Draw extends SurfaceView implements Runnable {
 	public static AssetManager assetmanager;
 	private static InputStream instream;
 	private static Bitmap alphaSprites;
+	private static Bitmap scratch;
 
 	public Draw (Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -109,6 +110,8 @@ public class Draw extends SurfaceView implements Runnable {
 			instream = assetmanager.open("images/alphasprites.png");
 			alphaSprites = BitmapFactory.decodeStream(instream);
 			alphaSprites = Bitmap.createBitmap(alphaSprites);
+			instream = assetmanager.open("images/stratch.png");
+			scratch = BitmapFactory.decodeStream(instream);
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -206,6 +209,24 @@ public class Draw extends SurfaceView implements Runnable {
 		int t = topOffset + dex / 25 * h;
 		int b = t+h;
 		return new Rect(l,t,r,b);
+	}
+	
+	private static Rect getAttackRect(int pos) {
+		int leftOffset = 0;
+		int topOffset = 0;
+		int dex = pos-1;
+		int w = 52;
+		int h = 52;
+		int l = leftOffset + dex % 25 *w;
+		int r = l+w;
+		int t = topOffset + dex / 25 * h;
+		int b = t+h;
+		return new Rect(l,t,r,b);
+	}
+	
+	private static Bitmap getAttackSprite(int pokedex) {
+		Rect w = getAttackRect(pokedex);
+		return Bitmap.createBitmap(alphaSprites, w.left, w.top, w.width(), w.height());
 	}
 	
 	private static Bitmap getSprite(int pokedex) {
