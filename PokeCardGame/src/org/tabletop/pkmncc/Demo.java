@@ -4,8 +4,10 @@ import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
+import org.tabletop.pkmncc.card.Pokemon;
 import org.tabletop.pkmncc.pokedex.*;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -76,7 +78,8 @@ public class Demo extends Activity{
 			public void onClick(View arg0) {
 //				new AlertDialog.Builder(c)
 //				.setMessage("retreating " + playerOne.getActive().toString() + " w/ no 1").show();
-				playerOne.getActive().removeEnergy();
+				if (playerOne.getActive().getEnergySize() > 0)
+					playerOne.getActive().removeEnergy();
 
 				playerOne.switchActive(1);
 			}
@@ -133,6 +136,8 @@ public class Demo extends Activity{
         				playerOne.addCard(new Combee());
         				playerTurn = Turn.NONE;
 
+        	
+        				
 //        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
@@ -157,6 +162,31 @@ public class Demo extends Activity{
 								new AlertDialog.Builder(getContext())
 								.setMessage("Hi I'm " + v.toString()).show();	
 		        				return false;
+							}
+						});
+        				
+        				playerOne.getActive().setOnTouchListener(new OnTouchListener() {
+							
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								
+								// Tackle
+								float start = v.getTranslationX();
+								int jump = (start < 640) ? 200 : -200;
+		        		        ObjectAnimator o = ObjectAnimator.ofFloat(v, "translationX", start, start+jump, start);
+		        		        //ObjectAnimator.setFrameDelay(1);
+		        		        o.setDuration(1000);
+		        		        o.start();
+		        		   
+		        		        
+		        		        // Rotate Opposite pokemon
+		        		        Pokemon p2Poke = playerTwo.getActive();
+		        		        float rotStart = p2Poke.getRotation();
+		        		        ObjectAnimator a = ObjectAnimator.ofFloat(p2Poke, "rotation", rotStart, rotStart+30, rotStart-30, rotStart);
+		        		        a.setStartDelay(1000);
+		        		        a.setDuration(500);
+		        		        a.start();
+		        		        return true;
 							}
 						});
         				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
