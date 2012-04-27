@@ -184,10 +184,10 @@ public abstract class Pokemon extends Card {
 		return getHP();
 	}
 	
-	private void faint() {
-		cry.start();
-		cry.release();
-		cry = null;
+	private void faint() { //FIXME
+//		cry.start();
+//		cry.release();
+//		cry = null;
 	}
 	
 	public final boolean isFainted() {
@@ -219,7 +219,7 @@ public abstract class Pokemon extends Card {
 	 * @return an array of Pokemon action names
 	 */
 	public String[] getActionNames() {
-		return new String[] {action1.actionName, action2.actionName};
+		return new String[] {action1.actionName, (action2 != null) ? action2.actionName : null};
 	}
 	
 	/**
@@ -398,12 +398,12 @@ public abstract class Pokemon extends Card {
 	}	 
 	
 	private boolean confusedEffect() {
-		if (getOwner().coinFlip()) { 	// if Heads
-			return false;
-		} else {						// if Tails
-			removeHP(30);
-			return true;
-		}
+		if (status[0] == PokemonStatus.CONFUSED)
+			if (!getOwner().coinFlip()) { // if Tails
+				removeHP(30);
+				return true;
+			}
+		return false;
 	}
 	
 	/**

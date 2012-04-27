@@ -148,7 +148,7 @@ public class Draw extends SurfaceView implements Runnable {
 			if((player.playerNum == 2)&&(k<7)) canvas.drawBitmap(health, 507, 550+(30*(k-1)), null);
 			if((player.playerNum == 2)&&(k>=7)) canvas.drawBitmap(health, 483, 550+(30*(k-8)), null);
 		}		
-		if (((10*player.getActive().getHP())/player.getActive().getFullHP())< .4){
+		if ((player.getActive().getHP()/player.getActive().getFullHP())< .4){
 			health = Draw.healthRed;
 		}else{
 			health = Draw.health;
@@ -176,7 +176,7 @@ public class Draw extends SurfaceView implements Runnable {
 				// rotate scale and draw pokemon
 				Bitmap flippedpoke = rotate(pkb, poke.getRotation());
 				int side = poke.getLayoutParams().height;
-				Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, side+10, side+10, true);
+				Bitmap scaledPoke = Bitmap.createScaledBitmap(flippedpoke, side-10, side-10, true);
 				board.drawBitmap(scaledPoke, poke.getX(), poke.getY(), null);
 			}
 		}

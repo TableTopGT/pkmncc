@@ -6,6 +6,7 @@ import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
 import org.tabletop.pkmncc.pokedex.*;
+import org.w3c.dom.Text;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.view.DragEvent;
 
 public class Demo extends Activity{
@@ -35,6 +38,7 @@ public class Demo extends Activity{
 	static Player playerOne;
 	static Player playerTwo;
 	static FrameLayout mat;
+	static Button tv21, tv22;
 
 	public static boolean retreatUsed = false;
 	
@@ -50,6 +54,10 @@ public class Demo extends Activity{
         setContentView(R.layout.mat);
         mat = (FrameLayout) findViewById(R.id.frame1);
         surf = (Draw) findViewById(R.id.surfaceView1);
+        
+        
+        // Hide menu bar
+        mat.setSystemUiVisibility(View.INVISIBLE);
         
         // Create endturn views
         Button et = new Button(this);
@@ -98,6 +106,8 @@ public class Demo extends Activity{
 			}
 		});
 		
+
+        
         Button retBTwo = new Button(this);
         retBTwo.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
         retBTwo.setX(335);
@@ -123,6 +133,8 @@ public class Demo extends Activity{
 
 			}
 		});
+        
+
         
         // Setup Battle Music
         battleMusic = MediaPlayer.create(this, R.raw.title);
@@ -193,6 +205,49 @@ public class Demo extends Activity{
         				playerTwo.addCard(new Magnemite());
         				playerTwo.addCard(new Finneon());
         				playerTwo.addCard(new Duskull());
+        				Pokemon poke = playerTwo.getActive();
+        				String[]  names = poke.getActionNames();
+        				
+        				tv21 = new Button(c);
+        				tv21.setText(names[0]);
+        				tv21.setTextSize(20);
+        				tv21.setTextColor(Color.BLACK);
+        				//tv21.setBackgroundColor(Color.GREEN);
+        				tv21.setRotation(90);
+        		        tv21.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+        		        tv21.setX(293);
+        		        tv21.setY(587);   
+        		        tv21.setPadding(30,0,0,0);
+        		        tv21.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								playerTwo.getActive().actionOne(playerOne);
+								attackAnim(playerTwo, playerOne);
+							}
+						});
+        		        Demo.mat.addView(tv21);
+        		        if (names[1]!= null){
+	        		        tv22 = new Button(c);
+	        				tv22.setText(names[1]);
+	        				tv22.setTextSize(20);
+	        				tv22.setTextColor(Color.BLACK);
+	        				//tv22.setBackgroundColor(Color.GREEN);
+	        				tv22.setRotation(90);
+	        		        tv22.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+	        		        tv22.setX(223);
+	        		        tv22.setY(587);   
+	        		        tv22.setPadding(30,0,0,0);
+	        		        tv22.setOnClickListener(new OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									playerTwo.getActive().actionTwo(playerOne);
+									attackAnim(playerTwo, playerOne);
+								}
+							});
+        		        }
+        		        Demo.mat.addView(tv22);
 
         				// Example of running custom function
         				playerTwo.getActive().setOnTouchListener(new OnTouchListener() {
@@ -205,30 +260,6 @@ public class Demo extends Activity{
 							}
 						});
         				
-        				playerOne.getActive().setOnTouchListener(new OnTouchListener() {
-							
-							@Override
-							public boolean onTouch(View v, MotionEvent event) {
-								
-								// Tackle
-								float start = v.getTranslationX();
-								int jump = (start < 640) ? 200 : -200;
-		        		        ObjectAnimator o = ObjectAnimator.ofFloat(v, "translationX", start, start+jump, start);
-		        		        //ObjectAnimator.setFrameDelay(1);
-		        		        o.setDuration(1000);
-		        		        o.start();
-		        		   
-		        		        
-		        		        // Rotate Opposite pokemon
-		        		        Pokemon p2Poke = playerTwo.getActive();
-		        		        float rotStart = p2Poke.getRotation();
-		        		        ObjectAnimator a = ObjectAnimator.ofFloat(p2Poke, "rotation", rotStart, rotStart+30, rotStart-30, rotStart);
-		        		        a.setStartDelay(1000);
-		        		        a.setDuration(500);
-		        		        a.start();
-		        		        return true;
-							}
-						});
         				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
         				builder2.setMessage("Players draw 6 prize cards").show();
         				gameStartingTwo = false;
@@ -271,6 +302,25 @@ public class Demo extends Activity{
     			}
     		}
     		playerTurn = Turn.ONE;
+    	}
+    	
+    	private void attackAnim(Player attacker, Player defender) {
+			// Tackle
+	        Pokemon atk = attacker.getActive();
+			float start = atk.getTranslationX();
+			int jump = (start < 640) ? 200 : -200;
+	        ObjectAnimator o = ObjectAnimator.ofFloat(atk, "translationX", start, start+jump, start);
+	        o.setDuration(1000);
+	        o.start();
+	   
+	        
+	        // Rotate Opposite pokemon
+	        Pokemon def = defender.getActive();
+	        float rotStart = def.getRotation();
+	        ObjectAnimator a = ObjectAnimator.ofFloat(def, "rotation", rotStart, rotStart+30, rotStart-30, rotStart);
+	        a.setStartDelay(1000);
+	        a.setDuration(500);
+	        a.start();
     	}
     }
  
