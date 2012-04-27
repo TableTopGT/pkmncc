@@ -107,7 +107,7 @@ public class Draw extends SurfaceView implements Runnable {
 			instream = assetmanager.open("images/HP.png");
 			HP = BitmapFactory.decodeStream(instream);
 			flippedHP = Bitmap.createBitmap(HP, 0, 0, HP.getWidth(), HP.getHeight(), matrix, true);
-			instream = assetmanager.open("images/alphasprites.png");
+			instream = assetmanager.open("images/alphasprites2.png");
 			alphaSprites = BitmapFactory.decodeStream(instream);
 			alphaSprites = Bitmap.createBitmap(alphaSprites);
 			instream = assetmanager.open("images/stratch.png");
