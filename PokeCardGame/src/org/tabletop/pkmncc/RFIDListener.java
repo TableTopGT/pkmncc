@@ -85,14 +85,8 @@ public final class RFIDListener extends Thread {
 		else if (RFIDTag.equals("23490625") || RFIDTag.equals("1258322")){
 			swipedCard = new Duskull();
 		}
-		else if (RFIDTag.equals("1398372")){
-			swipedCard = new Finneon();
-		}
 		else if (RFIDTag.equals("23499558")){
 			swipedCard = new Ivysaur();
-		}
-		else if (RFIDTag.equals("1126994")){
-			swipedCard = new Lumineon();
 		}
 		else if (RFIDTag.equals("23500401")){
 			swipedCard = new Machamp();
@@ -100,46 +94,45 @@ public final class RFIDListener extends Thread {
 		else if (RFIDTag.equals("23497080")){
 			swipedCard = new Machoke();
 		}
-		else if (RFIDTag.equals("23479810") || RFIDTag.equals("1123666")){
+		else if (RFIDTag.equals("23479810")){
 			swipedCard = new Machop();
 		}
-		else if (RFIDTag.equals("9834802") || RFIDTag.equals("22365539")){
+		else if (RFIDTag.equals("9834802")){
 			swipedCard = new Magnemite();
 		}
-		else if (RFIDTag.equals("1127744")){
+		else if (RFIDTag.equals("22365539")){
 			swipedCard = new Magneton();
 		}
-		else if (RFIDTag.equals("1250901")){
+		else if (RFIDTag.equals("1123666")){
 			swipedCard = new Magnezone();
 		}
-		else if (RFIDTag.equals("1123666") || RFIDTag.equals("1140019")){
+		else if (RFIDTag.equals("1140019")){
 			swipedCard = new Pichu();
 		}
 		else if (RFIDTag.equals("1189140")){
 			swipedCard = new Pikachu();
 		}
-		else if (RFIDTag.equals("1267527")){
+		else if (RFIDTag.equals("23532368")){
 			swipedCard = new Raichu();
 		}
 		else if (RFIDTag.equals("1395027") || RFIDTag.equals("1127744")){
 			swipedCard = new Squirtle();
 		}
-		else if (RFIDTag.equals("1274227")){
-//			swipedCard = new Skuntank();
-		}
-		else if (RFIDTag.equals("22365539")){
-//			swipedCard = new Stunky();
-		}
 		else if (RFIDTag.equals("22378135")){
 			swipedCard = new Vespiquen();
 		}
-		
+		else if (RFIDTag.equals("23482945")){
+			swipedCard = new Venusaur();
+		}
+		else if (RFIDTag.equals("283703")){
+			swipedCard = new Wartortle();
+		}
 		// Energy
 		else if (RFIDTag.equals("0444444440")){
-			swipedCard = new Energy(Element.COLORLESS);
+//			swipedCard = new Energy(Element.COLORLESS);
 		}
 		else if (RFIDTag.equals("0555555550")){
-			swipedCard = new Energy(Element.DARKNESS);
+//			swipedCard = new Energy(Element.DARKNESS);
 		}
 		else if (RFIDTag.equals("292201") || RFIDTag.equals("8803862") || RFIDTag.equals("289105") || RFIDTag.equals("1398372")){
 			swipedCard = new Energy(Element.FIGHTING);
@@ -150,7 +143,7 @@ public final class RFIDListener extends Thread {
 		else if (RFIDTag.equals("1250133") || RFIDTag.equals("287794") || RFIDTag.equals("272721") || RFIDTag.equals("282919")){
 			swipedCard = new Energy(Element.GRASS);
 		}
-		else if (RFIDTag.equals("1217281") || RFIDTag.equals("9917750") || RFIDTag.equals("283990") || RFIDTag.equals("291109")){
+		else if (RFIDTag.equals("9917750") || RFIDTag.equals("283990") || RFIDTag.equals("291109")){
 			swipedCard = new Energy(Element.LIGHTNING);
 		}
 		else if (RFIDTag.equals("1126994") || RFIDTag.equals("23479333") || RFIDTag.equals("291639")){
@@ -164,13 +157,13 @@ public final class RFIDListener extends Thread {
 		}
 		
 		// Trainer
-		else if (RFIDTag.equals("23499091") || RFIDTag.equals("23482945")){
+		else if (RFIDTag.equals("23499091")){
 			swipedCard = new Trainer(TrainerType.ENERGYREMOVAL);
 		}
-		else if (RFIDTag.equals("9671958") || RFIDTag.equals("283703") || RFIDTag.equals("23491633")){
+		else if (RFIDTag.equals("9671958") || RFIDTag.equals("23491633")){
 			swipedCard = new Trainer(TrainerType.FULLHEAL);
 		}
-		else if (RFIDTag.equals("9671953") || RFIDTag.equals("1250901") || RFIDTag.equals("1216870") || RFIDTag.equals("23532368")){
+		else if (RFIDTag.equals("9671953") || RFIDTag.equals("1250901") || RFIDTag.equals("1216870")){
 			swipedCard = new Trainer(TrainerType.POTION);
 		}
 		else {
