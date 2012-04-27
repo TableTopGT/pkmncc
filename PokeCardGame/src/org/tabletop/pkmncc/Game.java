@@ -38,11 +38,29 @@ public class Game extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		rfid.start();
 
+		
         // Display mat background
         setContentView(R.layout.mat);
         mat = (FrameLayout) findViewById(R.id.frame1);
         surf = (Draw) findViewById(R.id.surfaceView1);
+        
+        // Hide menu bar
+        mat.setSystemUiVisibility(View.INVISIBLE);
+        
+        
+        
+        
+        // Setup Battle Music
+        battleMusic = MediaPlayer.create(this, R.raw.title);
+        battleMusic.start();
+        battleMusic.setLooping(true);
+        
+        gameStartingTwo = true;
+        playerOne = new Player(null);
+        playerTwo = new Player(playerOne);
+        
         
         // Create endturn views
         Button et = new Button(this);
@@ -64,18 +82,10 @@ public class Game extends Activity{
 			}
 		});
         
+
         
-        // Setup Battle Music
-        battleMusic = MediaPlayer.create(this, R.raw.title);
-        battleMusic.start();
-        battleMusic.setLooping(true);
-        
-        gameStartingTwo = true;
-        playerOne = new Player(null);
-        playerTwo = new Player(playerOne);
-        
-        ImageButton endTurn2 = (ImageButton) findViewById(R.id.endturn);
-        ImageButton forfeit = (ImageButton) findViewById(R.id.quit);
+        Button endTurn2 = (Button) findViewById(R.id.endturn);
+        Button forfeit = (Button) findViewById(R.id.quit);
         
         endTurn2.setOnTouchListener(new View.OnTouchListener() {
 			
@@ -203,7 +213,6 @@ public class Game extends Activity{
 	public void onResume(){
 		super.onResume();
 		surf.resume();
-		rfid.start();
 		final Context c = this;
 		new AlertDialog.Builder(this)
 		.setMessage("Player One choose active pokemon followed by bench pokemon")

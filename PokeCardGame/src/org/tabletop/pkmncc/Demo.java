@@ -4,8 +4,10 @@ import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
+import org.tabletop.pkmncc.card.Pokemon;
 import org.tabletop.pkmncc.pokedex.*;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.view.DragEvent;
 
 public class Demo extends Activity{
     /** Called when the activity is first created. */
@@ -32,6 +35,9 @@ public class Demo extends Activity{
 	static Player playerOne;
 	static Player playerTwo;
 	static FrameLayout mat;
+
+	public static boolean retreatUsed = false;
+	
 	Draw surf;
 	Context c = this;
 //	Game Game = new Game();
@@ -56,6 +62,7 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if (playerTurn != Turn.TWO) {
+					retreatUsed = false;
 					playerTurn = Turn.TWO;
 					new AlertDialog.Builder(c)
 					.setMessage("Turn is over ").show();
@@ -74,11 +81,46 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
-//				new AlertDialog.Builder(c)
-//				.setMessage("retreating " + playerOne.getActive().toString() + " w/ no 1").show();
-				playerOne.getActive().removeEnergy();
+				if(playerOne.getActive().canRetreat()){
+					switch(playerTurn){
+					case ONE:
+						for(int h = 0; h < playerOne.numPokemon(); ++h){
+							if(playerOne.getPokemon(h).selected == true){
+								retreatUsed = true;
+								playerOne.getActive().removeEnergy();
+								playerOne.switchActive(h);
+								break;
+							}
+						}
+						break;
+					}
+				}
+			}
+		});
+		
+        Button retBTwo = new Button(this);
+        retBTwo.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
+        retBTwo.setX(335);
+        retBTwo.setY(50);
+        Demo.mat.addView(retBTwo);
+		retBTwo.setOnClickListener(new android.view.View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				if(playerTwo.getActive().canRetreat()){
+					switch(playerTurn){
+					case TWO:
+						for(int h = 0; h < playerTwo.numPokemon(); ++h){
+							if(playerTwo.getPokemon(h).selected == true){
+								playerTwo.getActive().removeEnergy();
+								playerTwo.switchActive(h);
+								break;
+							}
+						}
+						break;
+					}
+				}
 
-				playerOne.switchActive(1);
 			}
 		});
         
@@ -101,6 +143,7 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if (playerTurn != Turn.ONE) {
+					retreatUsed = false;
 					playerTurn = Turn.ONE;
 					new AlertDialog.Builder(c)
 					.setMessage("Turn is over ").show();
@@ -133,6 +176,8 @@ public class Demo extends Activity{
         				playerOne.addCard(new Combee());
         				playerTurn = Turn.NONE;
 
+        	
+        				
 //        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
@@ -157,6 +202,31 @@ public class Demo extends Activity{
 								new AlertDialog.Builder(getContext())
 								.setMessage("Hi I'm " + v.toString()).show();	
 		        				return false;
+							}
+						});
+        				
+        				playerOne.getActive().setOnTouchListener(new OnTouchListener() {
+							
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								
+								// Tackle
+								float start = v.getTranslationX();
+								int jump = (start < 640) ? 200 : -200;
+		        		        ObjectAnimator o = ObjectAnimator.ofFloat(v, "translationX", start, start+jump, start);
+		        		        //ObjectAnimator.setFrameDelay(1);
+		        		        o.setDuration(1000);
+		        		        o.start();
+		        		   
+		        		        
+		        		        // Rotate Opposite pokemon
+		        		        Pokemon p2Poke = playerTwo.getActive();
+		        		        float rotStart = p2Poke.getRotation();
+		        		        ObjectAnimator a = ObjectAnimator.ofFloat(p2Poke, "rotation", rotStart, rotStart+30, rotStart-30, rotStart);
+		        		        a.setStartDelay(1000);
+		        		        a.setDuration(500);
+		        		        a.start();
+		        		        return true;
 							}
 						});
         				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
@@ -200,6 +270,7 @@ public class Demo extends Activity{
     				++k;
     			}
     		}
+    		playerTurn = Turn.ONE;
     	}
     }
  

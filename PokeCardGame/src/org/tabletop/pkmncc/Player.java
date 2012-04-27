@@ -97,9 +97,9 @@ public class Player {
 	public void switchActive(int newActiveIndex){
 		Pokemon holder = pokeArr.get(0);
 		Pokemon newActive = pokeArr.get(newActiveIndex);
+		swapLayouts(newActive, holder);
 		pokeArr.set(0, newActive);
 		pokeArr.set(newActiveIndex, holder);
-		swapLayouts(newActive, holder);
 	}
 
 	private void swapLayouts(Pokemon a, Pokemon b) {
