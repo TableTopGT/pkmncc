@@ -37,10 +37,11 @@ public class Demo extends Activity{
 	public static Turn playerTurn = Turn.ONE;
 	static Player playerOne;
 	static Player playerTwo;
-	static FrameLayout mat;
+	static public FrameLayout mat;
 	static Button tv11, tv12, tv21, tv22;
 
 	public static boolean retreatUsed = false;
+	public static boolean activeDead = false;
 	
 	Draw surf;
 	Context c = this;
@@ -69,6 +70,11 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View v) {
+				if(activeDead == true){
+					new AlertDialog.Builder(c)
+					.setMessage("Your pokemon has fainted, please retreat").show();
+					return;
+				}
 				if ((playerTurn ==Turn.ONE)||(playerTurn == Turn.ONET)) {
 					retreatUsed = false;
 					playerTurn = Turn.TWO;
@@ -90,13 +96,19 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
+				if(activeDead == true && playerTurn == Turn.TWO){
+					new AlertDialog.Builder(c)
+					.setMessage("Your pokemon has fainted, please retreat").show();
+					return;
+				}
 				if(playerOne.getActive().canRetreat()){
 					switch(playerTurn){
 					case ONE:
 						for(int h = 1; h < playerOne.numPokemon(); ++h){
 							if(playerOne.getPokemon(h).selected == true){
 								retreatUsed = true;
-								playerOne.getActive().removeEnergy();
+								for(int u = 0; u < playerOne.getActive().getRetreat(); ++u)
+									playerOne.getActive().removeEnergy();
 								playerOne.switchActive(h);
 								break;
 							}
@@ -119,13 +131,19 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View arg0) {
+				if(activeDead == true && playerTurn == Turn.ONE){
+					new AlertDialog.Builder(c)
+					.setMessage("Your pokemon has fainted, please retreat").show();
+					return;
+				}
 				if(playerTwo.getActive().canRetreat()){
 					switch(playerTurn){
 					case TWO:
 						for(int h = 1; h < playerTwo.numPokemon(); ++h){
 							if(playerTwo.getPokemon(h).selected == true){
 								retreatUsed = true;
-								playerTwo.getActive().removeEnergy();
+								for(int u = 0; u < playerTwo.getActive().getRetreat(); ++u)
+									playerTwo.getActive().removeEnergy();
 								playerTwo.switchActive(h);
 								
 								
@@ -162,6 +180,11 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View v) {
+				if(activeDead == true){
+					new AlertDialog.Builder(c)
+					.setMessage("Your pokemon has fainted, please retreat").show();
+					return;
+				}
 				if ((playerTurn == Turn.TWO)||(playerTurn == Turn.TWOT)){ 
 					retreatUsed = false;
 					playerTurn = Turn.ONE;
@@ -325,7 +348,7 @@ public class Demo extends Activity{
 
    
         				
-
+        		        gameState = State.BATTLE;
         				break;
         			}
         		}
@@ -333,14 +356,24 @@ public class Demo extends Activity{
     		case BATTLE:
     			switch(playerTurn){
     				case ONE :
-    					// New class for the players Turns since there are so many options
+    					if(playerTwo.getActive().isFainted() && activeDead == false){
+    						new AlertDialog.Builder(c)
+							.setMessage("Your pokemon has fainted, please retreat").show();
+    						activeDead = true;
+    						playerTurn = Turn.TWO;
+    						//playerOne.getActive().Kill();
+    					}
     					//playerOne.getActive().statusEffect();
-    					//playerTurn = Turn.TWO;
     					break;
     				case TWO :
-    					// New class for the players Turns since there are so many options
+    					if(playerOne.getActive().isFainted() && activeDead == false){
+    						new AlertDialog.Builder(c)
+							.setMessage("Your pokemon has fainted, please retreat").show();
+    						activeDead = true;
+    						playerTurn = Turn.ONE;
+    						//playerTwo.getActive().Kill();
+    					}
     					//playerOne.getActive().statusEffect();
-    					//playerTurn = Turn.ONE;
     					break;
     			}
     			break; 
