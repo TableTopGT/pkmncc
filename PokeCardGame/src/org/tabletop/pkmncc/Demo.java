@@ -33,7 +33,7 @@ public class Demo extends Activity{
 	private State gameState = State.START;
 	private boolean gameStartingTwo;
 	private RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
-	public enum Turn {ONE, TWO, NONE};
+	public enum Turn {ONE, TWO, ONET, TWOT};
 	public static Turn playerTurn = Turn.ONE;
 	static Player playerOne;
 	static Player playerTwo;
@@ -69,7 +69,7 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View v) {
-				if (playerTurn != Turn.TWO) {
+				if ((playerTurn ==Turn.ONE)||(playerTurn == Turn.ONET)) {
 					retreatUsed = false;
 					playerTurn = Turn.TWO;
 					new AlertDialog.Builder(c)
@@ -162,7 +162,7 @@ public class Demo extends Activity{
 			
 			@Override
 			public void onClick(View v) {
-				if (playerTurn != Turn.ONE) {
+				if ((playerTurn == Turn.TWO)||(playerTurn == Turn.TWOT)){ 
 					retreatUsed = false;
 					playerTurn = Turn.ONE;
 					if (gameStartingTwo){
@@ -200,7 +200,7 @@ public class Demo extends Activity{
         				playerOne.addCard(new Pichu());
         				playerOne.addCard(new Machop());
         				playerOne.addCard(new Combee());
-        				playerTurn = Turn.NONE;
+        				playerTurn = Turn.ONET;
         				String[]  namesone = playerOne.getActive().getActionNames();
         				
         				tv11 = new Button(c);
@@ -272,7 +272,7 @@ public class Demo extends Activity{
         				playerTwo.addCard(new Finneon());
         				playerTwo.addCard(new Duskull());
         				String[] names = playerTwo.getActive().getActionNames();
-        				playerTurn = Turn.NONE;
+        				playerTurn = Turn.TWOT;
         				tv21 = new Button(c);
         				tv21.setText(names[0]);
         				tv21.setTextSize(20);

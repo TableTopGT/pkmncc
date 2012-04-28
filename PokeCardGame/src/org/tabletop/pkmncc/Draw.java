@@ -290,7 +290,7 @@ public class Draw extends SurfaceView implements Runnable {
 	public static void drawBoard(Canvas board, AssetManager assetmanager){
 		Matrix m = new Matrix();
 		m.postRotate(180);
-		if (Demo.playerTurn==Demo.Turn.TWO){
+		if ((Demo.playerTurn==Demo.Turn.TWO)||(Demo.playerTurn==Demo.Turn.TWOT)){
 			Bitmap battleGround2= Bitmap.createBitmap(battleGround, 0, 0, battleGround.getWidth(), battleGround.getHeight(), m, false);
 			board.drawBitmap(battleGround2, 0, 0, null);
 		}else{
