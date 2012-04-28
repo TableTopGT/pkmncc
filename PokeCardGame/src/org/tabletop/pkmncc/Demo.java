@@ -38,7 +38,7 @@ public class Demo extends Activity{
 	static Player playerOne;
 	static Player playerTwo;
 	static FrameLayout mat;
-	static Button tv11, tv12, tv21, tv22;
+	static Button tv11, tv12, tv21, buttonMake;
 
 	public static boolean retreatUsed = false;
 	
@@ -201,58 +201,15 @@ public class Demo extends Activity{
         				playerOne.addCard(new Machop());
         				playerOne.addCard(new Combee());
         				playerTurn = Turn.ONET;
-        				String[]  namesone = playerOne.getActive().getActionNames();
         				
-        				tv11 = new Button(c);
-        				tv11.setText(namesone[0]);
-        				tv11.setTextSize(20);
-        				tv11.setTextColor(Color.BLACK);
-        				//tv11.setBackgroundColor(Color.GREEN);
-        				tv11.setRotation(270);
-        		        tv11.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
-        		        tv11.setX(742);
-        		        tv11.setY(106);   
-        		        tv11.setPadding(30,0,0,0);
-        		        tv11.setOnClickListener(new OnClickListener() {
-							
-							@Override
-							public void onClick(View v) {
-								if(!gameStartingTwo){
-									playerOne.getActive().actionOne(playerTwo);
-									attackAnim(playerOne, playerTwo);
-								}else{
-									new AlertDialog.Builder(c)
-									.setMessage("Hey bud, calm down, the game hasn't started yet").show();
-								}
-							}
-						});
+        				// Create player 1's attack buttons
+        				String[]  namesone = playerOne.getActive().getActionNames();
+        				tv11 = createAttackButton(playerOne, namesone[0], 0);
         		        Demo.mat.addView(tv11);
         		        if (namesone[1]!= null){
-	        		        tv12 = new Button(c);
-	        				tv12.setText(namesone[1]);
-	        				tv12.setTextSize(20);
-	        				tv12.setTextColor(Color.BLACK);
-	        				//tv12.setBackgroundColor(Color.GREEN);
-	        				tv12.setRotation(270);
-	        		        tv12.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
-	        		        tv12.setX(812);
-	        		        tv12.setY(106);   
-	        		        tv12.setPadding(30,0,0,0);
-	        		        tv12.setOnClickListener(new OnClickListener() {
-								
-								@Override
-								public void onClick(View v) {
-									if(!gameStartingTwo){
-										playerOne.getActive().actionTwo(playerTwo);
-										attackAnim(playerOne, playerTwo);
-									}else{
-										new AlertDialog.Builder(c)
-										.setMessage("Hey bud, calm down, the game hasn't started yet").show();
-									}	
-								}
-							});
+            				tv12 = createAttackButton(playerOne, namesone[1], 1);
+            		        Demo.mat.addView(tv12);
         		        }
-        		        Demo.mat.addView(tv12);
 
         	
         				
@@ -271,57 +228,16 @@ public class Demo extends Activity{
         				playerTwo.addCard(new Magnemite());
         				playerTwo.addCard(new Finneon());
         				playerTwo.addCard(new Duskull());
-        				String[] names = playerTwo.getActive().getActionNames();
         				playerTurn = Turn.TWOT;
-        				tv21 = new Button(c);
-        				tv21.setText(names[0]);
-        				tv21.setTextSize(20);
-        				tv21.setTextColor(Color.BLACK);
-        				//tv21.setBackgroundColor(Color.GREEN);
-        				tv21.setRotation(90);
-        		        tv21.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
-        		        tv21.setX(293);
-        		        tv21.setY(587);   
-        		        tv21.setPadding(30,0,0,0);
-        		        tv21.setOnClickListener(new OnClickListener() {
-							
-							@Override
-							public void onClick(View v) {
-								if(!gameStartingTwo){
-									playerTwo.getActive().actionOne(playerOne);
-									attackAnim(playerTwo, playerOne);
-								}else{
-									new AlertDialog.Builder(c)
-									.setMessage("Hey bud, calm down, the game hasn't started yet").show();
-								}
-							}
-						});
+        				
+        				// Create player 2's attack buttons
+        				String[] names = playerTwo.getActive().getActionNames();
+        				tv21 = createAttackButton(playerTwo, names[0], 0);
         		        Demo.mat.addView(tv21);
         		        if (names[1]!= null){
-	        		        tv22 = new Button(c);
-	        				tv22.setText(names[1]);
-	        				tv22.setTextSize(20);
-	        				tv22.setTextColor(Color.BLACK);
-	        				//tv22.setBackgroundColor(Color.GREEN);
-	        				tv22.setRotation(90);
-	        		        tv22.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
-	        		        tv22.setX(223);
-	        		        tv22.setY(587);   
-	        		        tv22.setPadding(30,0,0,0);
-	        		        tv22.setOnClickListener(new OnClickListener() {
-								
-								@Override
-								public void onClick(View v) {
-									if(!gameStartingTwo){
-										playerTwo.getActive().actionTwo(playerOne);
-										attackAnim(playerTwo, playerOne);
-									}else{
-										new AlertDialog.Builder(c)
-										.setMessage("Hey bud, calm down, the game hasn't started yet").show();
-									}								}
-							});
+	        		        buttonMake = createAttackButton(playerTwo, names[1], 1);
+	        		        Demo.mat.addView(buttonMake);
         		        }
-        		        Demo.mat.addView(tv22);
 
    
         				
@@ -363,25 +279,6 @@ public class Demo extends Activity{
     			}
     		}
     	}
-    	
-    	private void attackAnim(Player attacker, Player defender) {
-			// Tackle
-	        Pokemon atk = attacker.getActive();
-			float start = atk.getTranslationX();
-			int jump = (start < 640) ? 200 : -200;
-	        ObjectAnimator o = ObjectAnimator.ofFloat(atk, "translationX", start, start+jump, start);
-	        o.setDuration(1000);
-	        o.start();
-	   
-	        
-	        // Rotate Opposite pokemon
-	        Pokemon def = defender.getActive();
-	        float rotStart = def.getRotation();
-	        ObjectAnimator a = ObjectAnimator.ofFloat(def, "rotation", rotStart, rotStart+30, rotStart-30, rotStart);
-	        a.setStartDelay(1000);
-	        a.setDuration(500);
-	        a.start();
-    	}
     }
  
     
@@ -418,9 +315,65 @@ public class Demo extends Activity{
 			}
 			
 		}).show();		
-//		mat.addView(new RenderView(c));
 		battleMusic.start();
 	}
-
+	
+	private Button createAttackButton(final Player p, String name, int num) {
+		int degrees = (p.playerNum == 1) ? -90 : 90;
+		int x = 0, y = 0;
+		// First attack
+		if (num == 0) {
+			y = (p.playerNum == 1) ? 106 : 587;
+			x = (p.playerNum == 1) ? 742 : 293;
+		}
+		// Second Attack
+		else {
+			y = (p.playerNum == 1) ? 106 : 587;
+			x = (p.playerNum == 1) ? 812 : 223;
+			
+		}		
+		Button buttonMake = new Button(c);
+		buttonMake.setText(name);
+		buttonMake.setTextSize(20);
+		buttonMake.setTextColor(Color.BLACK);
+		//tv22.setBackgroundColor(Color.GREEN);
+		buttonMake.setRotation(degrees);
+        buttonMake.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+        buttonMake.setY(y);   
+        buttonMake.setX(x);
+        buttonMake.setPadding(30,0,0,0);
+        buttonMake.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(!gameStartingTwo){
+					p.getActive().actionTwo(p.opponent);
+					attackAnim(p, p.opponent);
+				}else{
+					new AlertDialog.Builder(c)
+					.setMessage("Hey bud, calm down, the game hasn't started yet").show();
+				}								}
+		});
+        return buttonMake;
+	}
+	
+	private void attackAnim(Player attacker, Player defender) {
+		// Tackle
+        Pokemon atk = attacker.getActive();
+		float start = atk.getTranslationX();
+		int jump = (start < 640) ? 200 : -200;
+        ObjectAnimator o = ObjectAnimator.ofFloat(atk, "translationX", start, start+jump, start);
+        o.setDuration(1000);
+        o.start();
+   
+        
+        // Rotate Opposite pokemon
+        Pokemon def = defender.getActive();
+        float rotStart = def.getRotation();
+        ObjectAnimator a = ObjectAnimator.ofFloat(def, "rotation", rotStart, rotStart+30, rotStart-30, rotStart);
+        a.setStartDelay(1000);
+        a.setDuration(500);
+        a.start();
+	}
 
 }
