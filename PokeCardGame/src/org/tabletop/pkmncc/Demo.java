@@ -165,6 +165,12 @@ public class Demo extends Activity{
 				if (playerTurn != Turn.ONE) {
 					retreatUsed = false;
 					playerTurn = Turn.ONE;
+					if (gameStartingTwo){
+						AlertDialog.Builder builder2 = new AlertDialog.Builder(c);
+        				builder2.setMessage("Players draw 6 prize cards").show();
+        				gameStartingTwo = false;
+        				gameState = State.BATTLE;
+					}
 					new AlertDialog.Builder(c)
 					.setMessage("Player One Turn").show();
 					playerOne.startTurn();
@@ -211,8 +217,13 @@ public class Demo extends Activity{
 							
 							@Override
 							public void onClick(View v) {
-								playerOne.getActive().actionOne(playerTwo);
-								attackAnim(playerOne, playerTwo);
+								if(!gameStartingTwo){
+									playerOne.getActive().actionOne(playerTwo);
+									attackAnim(playerOne, playerTwo);
+								}else{
+									new AlertDialog.Builder(c)
+									.setMessage("Hey bud, calm down, the game hasn't started yet").show();
+								}
 							}
 						});
         		        Demo.mat.addView(tv11);
@@ -231,8 +242,13 @@ public class Demo extends Activity{
 								
 								@Override
 								public void onClick(View v) {
-									playerOne.getActive().actionTwo(playerTwo);
-									attackAnim(playerOne, playerTwo);
+									if(!gameStartingTwo){
+										playerOne.getActive().actionTwo(playerTwo);
+										attackAnim(playerOne, playerTwo);
+									}else{
+										new AlertDialog.Builder(c)
+										.setMessage("Hey bud, calm down, the game hasn't started yet").show();
+									}	
 								}
 							});
         		        }
@@ -256,7 +272,7 @@ public class Demo extends Activity{
         				playerTwo.addCard(new Finneon());
         				playerTwo.addCard(new Duskull());
         				String[] names = playerTwo.getActive().getActionNames();
-        				
+        				playerTurn = Turn.NONE;
         				tv21 = new Button(c);
         				tv21.setText(names[0]);
         				tv21.setTextSize(20);
@@ -271,8 +287,13 @@ public class Demo extends Activity{
 							
 							@Override
 							public void onClick(View v) {
-								playerTwo.getActive().actionOne(playerOne);
-								attackAnim(playerTwo, playerOne);
+								if(!gameStartingTwo){
+									playerTwo.getActive().actionOne(playerOne);
+									attackAnim(playerTwo, playerOne);
+								}else{
+									new AlertDialog.Builder(c)
+									.setMessage("Hey bud, calm down, the game hasn't started yet").show();
+								}
 							}
 						});
         		        Demo.mat.addView(tv21);
@@ -291,21 +312,20 @@ public class Demo extends Activity{
 								
 								@Override
 								public void onClick(View v) {
-									playerTwo.getActive().actionTwo(playerOne);
-									attackAnim(playerTwo, playerOne);
-								}
+									if(!gameStartingTwo){
+										playerTwo.getActive().actionTwo(playerOne);
+										attackAnim(playerTwo, playerOne);
+									}else{
+										new AlertDialog.Builder(c)
+										.setMessage("Hey bud, calm down, the game hasn't started yet").show();
+									}								}
 							});
         		        }
         		        Demo.mat.addView(tv22);
 
    
         				
-        				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
-        				builder2.setMessage("Players draw 6 prize cards").show();
-        				gameStartingTwo = false;
-        				playerTurn = Turn.ONE;
-        				playerOne.startTurn();
-        				gameState = State.BATTLE;
+
         				break;
         			}
         		}
