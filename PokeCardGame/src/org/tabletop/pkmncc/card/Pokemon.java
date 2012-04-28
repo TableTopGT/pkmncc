@@ -456,17 +456,19 @@ public abstract class Pokemon extends Card {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		cry.start();
-		for(int i = 0; i < getOwner().numPokemon(); ++i){
-			if(getOwner().getPokemon(i).selected == true) getOwner().getPokemon(i).selected = false;
+		if (getOwner()==Player.currentPlayer){
+			cry.start();
+			for(int i = 0; i < getOwner().numPokemon(); ++i){
+				if(getOwner().getPokemon(i).selected == true) getOwner().getPokemon(i).selected = false;
+			}
+			selected = true;
+			float start = getTranslationX();
+			int jump = (start < 640) ? 20 : -20;
+	        ObjectAnimator o = ObjectAnimator.ofFloat(this, "translationX", start, start+jump, start, start+jump/2, start);
+	        ObjectAnimator.setFrameDelay(1);
+	        o.setDuration(400);
+	        o.start();
 		}
-		selected = true;
-		float start = getTranslationX();
-		int jump = (start < 640) ? 20 : -20;
-        ObjectAnimator o = ObjectAnimator.ofFloat(this, "translationX", start, start+jump, start, start+jump/2, start);
-        ObjectAnimator.setFrameDelay(1);
-        o.setDuration(400);
-        o.start();
 		return super.onTouchEvent(event);
 	}
 

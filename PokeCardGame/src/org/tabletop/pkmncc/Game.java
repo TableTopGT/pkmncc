@@ -63,7 +63,7 @@ public class Game extends Activity{
         
         
         // Create endturn views
-        Button et = new Button(this);
+     /*   Button et = new Button(this);
         et.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
         et.setX(1105);
         et.setY(20);
@@ -84,7 +84,7 @@ public class Game extends Activity{
         
 
         
-        Button endTurn2 = (Button) findViewById(R.id.endturn);
+    /*    Button endTurn2 = (Button) findViewById(R.id.endturn);
         Button forfeit = (Button) findViewById(R.id.quit);
         
         endTurn2.setOnTouchListener(new View.OnTouchListener() {
@@ -99,7 +99,7 @@ public class Game extends Activity{
 				}
 				return false;
 			}
-		});
+		});  */
     }
     
     class RenderView extends View {

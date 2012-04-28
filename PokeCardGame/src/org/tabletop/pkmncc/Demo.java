@@ -33,12 +33,12 @@ public class Demo extends Activity{
 	private State gameState = State.START;
 	private boolean gameStartingTwo;
 	private RFIDListener rfid = new RFIDListener(this); //XXX onReCreate behavior?
-	private enum Turn {ONE, TWO, NONE};
-	private Turn playerTurn = Turn.ONE;
+	public enum Turn {ONE, TWO, NONE};
+	public static Turn playerTurn = Turn.ONE;
 	static Player playerOne;
 	static Player playerTwo;
 	static FrameLayout mat;
-	static Button tv21, tv22;
+	static Button tv11, tv12, tv21, tv22;
 
 	public static boolean retreatUsed = false;
 	
@@ -61,9 +61,9 @@ public class Demo extends Activity{
         
         // Create endturn views
         Button et = new Button(this);
-        et.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
-        et.setX(1105);
-        et.setY(20);
+        et.setLayoutParams(new FrameLayout.LayoutParams(45, 208));
+        et.setX(1121);
+        et.setY(18);
         Demo.mat.addView(et);
         et.setOnClickListener(new android.view.View.OnClickListener() {
 			
@@ -73,7 +73,7 @@ public class Demo extends Activity{
 					retreatUsed = false;
 					playerTurn = Turn.TWO;
 					new AlertDialog.Builder(c)
-					.setMessage("Turn is over ").show();
+					.setMessage("Player 2 Turn").show();
 					playerTwo.startTurn();
 				}
 			}
@@ -81,9 +81,10 @@ public class Demo extends Activity{
         
 		// Example of running retreat function
         Button retB = new Button(this);
-        retB.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
-        retB.setX(905);
-        retB.setY(498);
+        retB.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+        retB.setRotation(90);
+        retB.setX(808);
+        retB.setY(587);
         Demo.mat.addView(retB);
 		retB.setOnClickListener(new android.view.View.OnClickListener() {
 			
@@ -92,7 +93,7 @@ public class Demo extends Activity{
 				if(playerOne.getActive().canRetreat()){
 					switch(playerTurn){
 					case ONE:
-						for(int h = 0; h < playerOne.numPokemon(); ++h){
+						for(int h = 1; h < playerOne.numPokemon(); ++h){
 							if(playerOne.getPokemon(h).selected == true){
 								retreatUsed = true;
 								playerOne.getActive().removeEnergy();
@@ -109,9 +110,10 @@ public class Demo extends Activity{
 
         
         Button retBTwo = new Button(this);
-        retBTwo.setLayoutParams(new FrameLayout.LayoutParams(70, 210));
-        retBTwo.setX(335);
-        retBTwo.setY(50);
+        retBTwo.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+        retBTwo.setRotation(90);
+        retBTwo.setX(224);
+        retBTwo.setY(106);
         Demo.mat.addView(retBTwo);
 		retBTwo.setOnClickListener(new android.view.View.OnClickListener() {
 			
@@ -120,10 +122,13 @@ public class Demo extends Activity{
 				if(playerTwo.getActive().canRetreat()){
 					switch(playerTurn){
 					case TWO:
-						for(int h = 0; h < playerTwo.numPokemon(); ++h){
+						for(int h = 1; h < playerTwo.numPokemon(); ++h){
 							if(playerTwo.getPokemon(h).selected == true){
+								retreatUsed = true;
 								playerTwo.getActive().removeEnergy();
 								playerTwo.switchActive(h);
+								
+								
 								break;
 							}
 						}
@@ -147,10 +152,13 @@ public class Demo extends Activity{
         Game.playerOne = playerOne;
         Game.playerTwo = playerTwo;
         Game.mat = mat;
-        Button endTurn2 = (Button) findViewById(R.id.endturn);
-        Button forfeit = (Button) findViewById(R.id.quit);
         
-        endTurn2.setOnClickListener(new android.view.View.OnClickListener() {
+        Button et2 = new Button(this);
+        et2.setLayoutParams(new FrameLayout.LayoutParams(45, 208));
+        et2.setX(96);
+        et2.setY(528);
+        Demo.mat.addView(et2);
+        et2.setOnClickListener(new android.view.View.OnClickListener() { 
 			
 			@Override
 			public void onClick(View v) {
@@ -158,7 +166,7 @@ public class Demo extends Activity{
 					retreatUsed = false;
 					playerTurn = Turn.ONE;
 					new AlertDialog.Builder(c)
-					.setMessage("Turn is over ").show();
+					.setMessage("Player One Turn").show();
 					playerOne.startTurn();
 				}
 			}
@@ -187,6 +195,48 @@ public class Demo extends Activity{
         				playerOne.addCard(new Machop());
         				playerOne.addCard(new Combee());
         				playerTurn = Turn.NONE;
+        				String[]  namesone = playerOne.getActive().getActionNames();
+        				
+        				tv11 = new Button(c);
+        				tv11.setText(namesone[0]);
+        				tv11.setTextSize(20);
+        				tv11.setTextColor(Color.BLACK);
+        				//tv11.setBackgroundColor(Color.GREEN);
+        				tv11.setRotation(270);
+        		        tv11.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+        		        tv11.setX(742);
+        		        tv11.setY(106);   
+        		        tv11.setPadding(30,0,0,0);
+        		        tv11.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								playerOne.getActive().actionOne(playerTwo);
+								attackAnim(playerOne, playerTwo);
+							}
+						});
+        		        Demo.mat.addView(tv11);
+        		        if (namesone[1]!= null){
+	        		        tv12 = new Button(c);
+	        				tv12.setText(namesone[1]);
+	        				tv12.setTextSize(20);
+	        				tv12.setTextColor(Color.BLACK);
+	        				//tv12.setBackgroundColor(Color.GREEN);
+	        				tv12.setRotation(270);
+	        		        tv12.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+	        		        tv12.setX(812);
+	        		        tv12.setY(106);   
+	        		        tv12.setPadding(30,0,0,0);
+	        		        tv12.setOnClickListener(new OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									playerOne.getActive().actionTwo(playerTwo);
+									attackAnim(playerOne, playerTwo);
+								}
+							});
+        		        }
+        		        Demo.mat.addView(tv12);
 
         	
         				
@@ -205,8 +255,7 @@ public class Demo extends Activity{
         				playerTwo.addCard(new Magnemite());
         				playerTwo.addCard(new Finneon());
         				playerTwo.addCard(new Duskull());
-        				Pokemon poke = playerTwo.getActive();
-        				String[]  names = poke.getActionNames();
+        				String[] names = playerTwo.getActive().getActionNames();
         				
         				tv21 = new Button(c);
         				tv21.setText(names[0]);
@@ -249,21 +298,13 @@ public class Demo extends Activity{
         		        }
         		        Demo.mat.addView(tv22);
 
-        				// Example of running custom function
-        				playerTwo.getActive().setOnTouchListener(new OnTouchListener() {
-							
-							@Override
-							public boolean onTouch(View v, MotionEvent event) {
-								new AlertDialog.Builder(getContext())
-								.setMessage("Hi I'm " + v.toString()).show();	
-		        				return false;
-							}
-						});
+   
         				
         				AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
         				builder2.setMessage("Players draw 6 prize cards").show();
         				gameStartingTwo = false;
-//        				playerTurn = Turn.ONE;
+        				playerTurn = Turn.ONE;
+        				playerOne.startTurn();
         				gameState = State.BATTLE;
         				break;
         			}
@@ -273,16 +314,16 @@ public class Demo extends Activity{
     			switch(playerTurn){
     				case ONE :
     					// New class for the players Turns since there are so many options
-    					playerOne.getActive().statusEffect();
-    					playerTurn = Turn.TWO;
+    					//playerOne.getActive().statusEffect();
+    					//playerTurn = Turn.TWO;
     					break;
     				case TWO :
     					// New class for the players Turns since there are so many options
-    					playerOne.getActive().statusEffect();
-    					playerTurn = Turn.ONE;
+    					//playerOne.getActive().statusEffect();
+    					//playerTurn = Turn.ONE;
     					break;
     			}
-    			break;
+    			break; 
     		case TURN:
     			break;
     		case END:
@@ -301,7 +342,6 @@ public class Demo extends Activity{
     				++k;
     			}
     		}
-    		playerTurn = Turn.ONE;
     	}
     	
     	private void attackAnim(Player attacker, Player defender) {

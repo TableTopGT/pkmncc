@@ -17,6 +17,7 @@ public class Player {
 	public int card, health;
 	public Player opponent;
 	public Trainer thisTrainer; //tracks whether a trainer has been used already during a turn	
+	public int Prizeleft= 6;
 	
 	//this array contains all the players pokemon. index 0 is the active pokemon. all the rest are benched
 	private ArrayList<Pokemon> pokeArr = new ArrayList<Pokemon>(fieldSpots);
