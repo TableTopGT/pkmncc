@@ -491,8 +491,8 @@ public abstract class Pokemon extends Card {
 			float start = getTranslationX();
 			int jump = (start < 640) ? 20 : -20;
 	        ObjectAnimator o = ObjectAnimator.ofFloat(this, "translationX", start, start+jump, start, start+jump/2, start);
-	        ObjectAnimator.setFrameDelay(1);
-	        o.setDuration(400);
+	        ObjectAnimator.setFrameDelay(50);
+	        o.setDuration(500);
 	        o.start();
 		}
 		return super.onTouchEvent(event);

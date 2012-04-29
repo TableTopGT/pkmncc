@@ -110,7 +110,7 @@ public class Battle extends Activity {
 		//first move must be to add an active pokemon
 		currentPlayer = player1;
 		while (newCard==null){
-		newCard = cardListener.getCard();
+//		newCard = cardListener.getCard();
 		}
 		if (newCard instanceof Pokemon){
 			player1.addCard(newCard);
@@ -118,7 +118,7 @@ public class Battle extends Activity {
 		}
 		//now player can play either more pokemon or energy until turn is ended
 		while (endTurn==false){
-			newCard = cardListener.getCard();
+//			newCard = cardListener.getCard();
 			if (!(newCard instanceof Trainer)) {
 				player1.addCard(newCard);
 				newCard = null;
@@ -140,7 +140,7 @@ public class Battle extends Activity {
 		
 		while (endTurn == false){
 			//Option 1: swipe a card
-			newCard = cardListener.getCard();
+//			newCard = cardListener.getCard();
 			thisPlayer.addCard(newCard);
 			//if new card is a pokemon, update action buttons
 			if (newCard instanceof Pokemon){

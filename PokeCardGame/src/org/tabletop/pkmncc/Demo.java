@@ -2,6 +2,7 @@ package org.tabletop.pkmncc;
 
 import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
+import org.tabletop.pkmncc.card.Card;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
@@ -38,7 +39,7 @@ public class Demo extends Activity{
 
 	public static boolean retreatUsed = false;
 	public static boolean activeDead = false;
-	
+
 	Draw surf;
 	Context c = this;
 //	Game Game = new Game();
@@ -211,58 +212,45 @@ public class Demo extends Activity{
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
-        				initialPokemon(canvas, playerOne);
-        				updateAttacks();
+        	    		playerOne.startTurn();
+        	    		if (rfid.cardSwiped())
+        	    			playerOne.addCard(rfid.getCard(Pokemon.class));
 
-        				playerOne.addCard(new Energy(Element.FIRE));
-        				playerOne.addCard(new Energy(Element.WATER));
-        				playerOne.addCard(new Energy(Element.GRASS));        				
-        				playerOne.addCard(new Charmeleon());
-        				playerOne.addCard(new Pichu());
-        				playerOne.addCard(new Machop());
-        				playerOne.addCard(new Combee());
-        				playerTurn = Turn.ONET;
-        				
-        				// Create player 1's attack buttons
-//        				String[]  namesone = playerOne.getActive().getActionNames();
-//        				tv11 = createAttackButton(playerOne, namesone[0], 0);
-//        		        Demo.mat.addView(tv11);
-//        		        if (namesone[1]!= null){
-//            				tv12 = createAttackButton(playerOne, namesone[1], 1);
-//            		        Demo.mat.addView(tv12);
-//        		        }
-        	
-        				
+    	    			
+
+//        				playerOne.addCard(new Energy(Element.FIRE));
+//        				playerOne.addCard(new Energy(Element.WATER));
+//        				playerOne.addCard(new Energy(Element.GRASS));        				
+//        				playerOne.addCard(new Charmeleon());
+//        				playerOne.addCard(new Pichu());
+//        				playerOne.addCard(new Machop());
+//        				playerOne.addCard(new Combee());
+//        				playerTurn = Turn.ONET;
+
 //        				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
         			case TWO :
-        				initialPokemon(canvas, playerTwo);
-        				updateAttacks();
+        	    		playerTwo.startTurn();
+        	    		if (rfid.cardSwiped())
+        	    			playerTwo.addCard(rfid.getCard(Pokemon.class));
+    	    			
 
-        				playerTwo.addCard(new Energy(Element.FIRE));
-        				playerTwo.addCard(new Energy(Element.FIRE));
-        				playerTwo.addCard(new Energy(Element.LIGHTNING));
-        				playerTwo.addCard(new Energy(Element.FIGHTING));
-        				playerTwo.addCard(new Energy(Element.PSYCHIC));
-        				playerTwo.addCard(new Charmeleon());
-        				playerTwo.addCard(new Charizard());
-        				playerTwo.addCard(new Magnemite());
-        				playerTwo.addCard(new Finneon());
-        				playerTwo.addCard(new Duskull());
-        				playerTurn = Turn.TWOT;
+//        				playerTwo.addCard(new Energy(Element.FIRE));
+//        				playerTwo.addCard(new Energy(Element.FIRE));
+//        				playerTwo.addCard(new Energy(Element.LIGHTNING));
+//        				playerTwo.addCard(new Energy(Element.FIGHTING));
+//        				playerTwo.addCard(new Energy(Element.PSYCHIC));
+//        				playerTwo.addCard(new Charmeleon());
+//        				playerTwo.addCard(new Charizard());
+//        				playerTwo.addCard(new Magnemite());
+//        				playerTwo.addCard(new Finneon());
+//        				playerTwo.addCard(new Duskull());
+//        				playerTurn = Turn.TWOT;
         				
-        				// Create player 2's attack buttons
-//        				String[] names = playerTwo.getActive().getActionNames();
-//        				tv21 = createAttackButton(playerTwo, names[0], 0);
-//        		        Demo.mat.addView(tv21);
-//        		        if (names[1]!= null){
-//	        		        buttonMake = createAttackButton(playerTwo, names[1], 1);
-//	        		        Demo.mat.addView(buttonMake);
-//        		        }
-        				
-        				
-        		        gameState = State.BATTLE;
+    	    			// End turn if player presses end turn button
+    	    			if (playerTurn == Turn.ONE)
+    	    				gameState = State.BATTLE;
         				break;
         			}
         		}
@@ -301,16 +289,6 @@ public class Demo extends Activity{
     	}
     	
     	
-    	private void initialPokemon(Canvas board, Player activePlayer){
-    		activePlayer.startTurn();
-    		rfid.setMode(Mode.INIT);
-    		for (int k = 0; k < 3; ) {
-    			if (rfid.cardSwiped()) {
-    				activePlayer.addCard(rfid.getCard());
-    				++k;
-    			}
-    		}
-    	}
     }
  
     
@@ -352,9 +330,12 @@ public class Demo extends Activity{
 	
 	public void updateAttacks() {
 		Player p = Player.currentPlayer;
-		Pokemon active = p.getActive();
+		
+		// If there is no pokemon return
+		if (p.numPokemon() == 0) return;
 		
 		// If there is an active pokemon
+		Pokemon active = p.getActive();
 		if (active != null) {
 			
 			// Get names and indices
@@ -369,10 +350,6 @@ public class Demo extends Activity{
 		        Demo.mat.addView(atk[dex-1]);
 			} else {
 				atk[dex-1].setText(names[0]);
-				
-				//TODO Do fun stuff
-//				int fun = Player.RNG.nextInt(255);
-//				atk[dex-1].setBackgroundColor(Color.argb(fun, 165, 248, 78));
 			}
 			
 			// If pokemon has an actionTwo do stuff else hide button
@@ -387,7 +364,7 @@ public class Demo extends Activity{
 		        	atk[dex-2].setVisibility(View.VISIBLE);
 		        	atk[dex-2].setText(names[1]);
 		        }
-			} else {
+			} else if (atk[dex-2] != null) {
 		        if (atk[dex-2].isShown()) {
 		        	atk[dex-2].setVisibility(View.INVISIBLE);
 		        	atk[dex-2].setEnabled(false);
