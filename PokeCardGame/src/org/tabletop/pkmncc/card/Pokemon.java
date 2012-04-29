@@ -228,6 +228,12 @@ public abstract class Pokemon extends Card {
 		return new String[] {action1.actionName, (action2 != null) ? action2.actionName : null};
 	}
 	
+	
+	// Kills the pokemon and gets a new one
+	public void KillActive(Player player){
+		Demo.mat.removeView(player.getActive());
+	}
+	
 	/**
 	 * Transfers damage and energies to another pokemon. Use when performing
 	 * an evolution.
@@ -254,14 +260,17 @@ public abstract class Pokemon extends Card {
 	/** Provide player dialog to select which energies to remove. */
 	public final void removeEnergy() {
 		final int numEnergies = energy.size();
+		boolean found = false;
 		CharSequence[] items = new CharSequence[numEnergies];
 		final boolean[] checkedItems = new boolean[numEnergies];
 		
 		for(int k = 0; k < energy.size(); ++k){
 			if(!energy.get(k).getElement().equals(getElement())){
+				found = true;
 				energy.remove(k);
 				break;
 			}
+			if(found == false) energy.remove(0);
 		}
 		
 		// Generate list of energy strings to display

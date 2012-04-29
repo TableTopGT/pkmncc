@@ -2,6 +2,8 @@ package org.tabletop.pkmncc;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import org.tabletop.pkmncc.Demo.Turn;
 import org.tabletop.pkmncc.card.*;
 
 import android.widget.FrameLayout;
@@ -96,6 +98,17 @@ public class Player {
 
 	/** Switch player's active Pokemon */
 	public void switchActive(int newActiveIndex){
+		if(Demo.activeDead == true){
+			Demo.activeDead = false;
+			switch(Demo.playerTurn){
+			case ONE:
+				Demo.playerTurn = Turn.TWO;
+				break;
+			case TWO:
+				Demo.playerTurn = Turn.ONE;
+				break;
+			}
+		}
 		Pokemon holder = pokeArr.get(0);
 		Pokemon newActive = pokeArr.get(newActiveIndex);
 		swapLayouts(newActive, holder);
