@@ -197,8 +197,14 @@ public abstract class Pokemon extends Card {
 	
 	/* Battle centered methods */
 	private boolean canMove() {
-		return (status[0] != PokemonStatus.ASLEEP)
-				&& (status[0] != PokemonStatus.PARALYZED);
+		if ((status[0] != PokemonStatus.ASLEEP)
+				&& (status[0] != PokemonStatus.PARALYZED)) {
+			return true;
+		} else {
+			new AlertDialog.Builder(getContext())
+			.setMessage(toString() + " can't move!").show(); 
+			return false;
+		}
 	}
 	
 	public final boolean canRetreat() {
@@ -367,6 +373,8 @@ public abstract class Pokemon extends Card {
 				Poisoned, put a Poison marker on it. Put a damage counter on each Poisoned
 				Pok�mon during each in-between turns step. */
 				removeHP(10);
+				new AlertDialog.Builder(getContext())
+				.setMessage(toString() + " was hurt by its poison!").show(); 
 				break;
 			case BURNED:
 				
@@ -374,14 +382,20 @@ public abstract class Pokemon extends Card {
 				Pok�mon is Burned, put a Burn marker on it. In-between turns, the owner
 				of the Burned Pok�mon flips a coin. If he or she flips tails, put 2 damage
 				counters on the Burned Pok�mon. */
-				if (!getOwner().coinFlip()) // if Tails
+				if (!getOwner().coinFlip()) {// if Tails
 					removeHP(20);
+					new AlertDialog.Builder(getContext())
+					.setMessage(toString() + " was hurt by its burn!").show(); 
+				}
 				break;
 			case ASLEEP:
 				
 				/*Turn the Pok�mon counterclockwise to show that it is Asleep.*/
-				if (getOwner().coinFlip()) // if Heads
+				if (getOwner().coinFlip()) {// if Heads
 					status[0] = null;
+					new AlertDialog.Builder(getContext())
+					.setMessage(toString() + " woke up!").show(); 
+				}
 				break;
 			case PARALYZED:
 				
@@ -389,8 +403,11 @@ public abstract class Pokemon extends Card {
 				If a Pok�mon is Paralyzed, it cannot attack or retreat. Remove the Special
 				Condition Paralyzed during the in-between turns phase if your Pok�mon
 				was Paralyzed since the beginning of your last turn.*/
-				if (oldStatus == PokemonStatus.PARALYZED)
+				if (oldStatus == PokemonStatus.PARALYZED) {
 					status[0] = null;
+					new AlertDialog.Builder(getContext())
+					.setMessage(toString() + " is no longer paralyzed!").show(); 
+				}
 				break;
 			}
 		}
