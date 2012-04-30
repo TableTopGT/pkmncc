@@ -215,7 +215,6 @@ public class Demo extends Activity{
         	    		playerOne.startTurn();
         	    		if (rfid.cardSwiped())
         	    			playerOne.addCard(rfid.getCard(Pokemon.class));
-        				updateAttacks();
 
     	    			
 

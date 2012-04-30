@@ -73,7 +73,7 @@ public abstract class Pokemon extends Card {
 			Pokemon enemy = opponent.getActive();
 			int damage = tempAttack;
 			if (enemy.weakness == getElement()) {
-				damage = (weakMod > 10) 
+				damage = (weakMod >= 10) 
 						? damage + enemy.weakMod
 						: damage * enemy.weakMod;
 			} else if (enemy.resistance == getElement()) {
