@@ -6,6 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Charmander extends Pokemon {
 
 	public Charmander() {
+		
 		setPokedexNumber(4);
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.BASIC, Charmeleon.class);

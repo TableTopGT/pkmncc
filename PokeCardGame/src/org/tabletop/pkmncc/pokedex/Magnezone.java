@@ -8,6 +8,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Magnezone extends Pokemon {
 
 	public Magnezone() {
+		setPokedexNumber(462);
 		setElement(Element.METAL);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(120, 4, Element.FIRE, 30, Element.PSYCHIC, 20);

@@ -8,6 +8,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Vespiquen extends Pokemon {
 
 	public Vespiquen() {
+		setPokedexNumber(416);
 		setElement(Element.GRASS);
 		setEvolution(PokemonStage.STAGE1);
 		setDefense(100, 1, Element.FIRE, 20, Element.FIGHTING, 20);

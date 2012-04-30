@@ -7,6 +7,7 @@ public class Machamp extends Pokemon {
 
 	public Machamp() {
 		
+		setPokedexNumber(68);
 		setElement(Element.FIGHTING);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(130, 2, Element.PSYCHIC, 30, null, 0);

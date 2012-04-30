@@ -7,7 +7,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Wartortle extends Pokemon {
 	
 	public Wartortle() {
-		
+		setPokedexNumber(8);
 		setElement(Element.WATER);
 		setEvolution(PokemonStage.STAGE1, Blastoise.class);
 		setDefense(70, 1, Element.LIGHTNING, 10, null, 0);
