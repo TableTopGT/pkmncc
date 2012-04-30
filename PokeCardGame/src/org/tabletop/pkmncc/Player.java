@@ -98,22 +98,28 @@ public class Player {
 
 	/** Switch player's active Pokemon */
 	public void switchActive(int newActiveIndex){
-		if(Demo.activeDead == true){
-			Demo.activeDead = false;
-			switch(Demo.playerTurn){
-			case ONE:
-				Demo.playerTurn = Turn.TWO;
-				break;
-			case TWO:
-				Demo.playerTurn = Turn.ONE;
-				break;
-			}
-		}
 		Pokemon holder = pokeArr.get(0);
 		Pokemon newActive = pokeArr.get(newActiveIndex);
 		swapLayouts(newActive, holder);
 		pokeArr.set(0, newActive);
 		pokeArr.set(newActiveIndex, holder);
+		if(Demo.activeDead == true){
+			Demo.activeDead = false;
+			switch(Demo.playerTurn){
+			case ONE:
+				Demo.mat.removeView(Demo.playerOne.getPokemon(newActiveIndex));
+				Demo.playerOne.pokeArr.remove(newActiveIndex);
+				Demo.playerTurn = Turn.TWO;
+				Demo.playerTwo.startTurn();
+				break;
+			case TWO:
+				Demo.mat.removeView(Demo.playerTwo.getPokemon(newActiveIndex));
+				Demo.playerTwo.pokeArr.remove(newActiveIndex);
+				Demo.playerTurn = Turn.ONE;
+				Demo.playerOne.startTurn();
+				break;
+			}
+		}
 	}
 
 	private void swapLayouts(Pokemon a, Pokemon b) {
