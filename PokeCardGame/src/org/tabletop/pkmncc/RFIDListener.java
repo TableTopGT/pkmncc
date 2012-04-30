@@ -39,10 +39,10 @@ public final class RFIDListener extends Thread {
 				pokeLink = pokedex.createInsecureRfcommSocketToServiceRecord(MY_UUID);
 				pokeLink.connect();
 				inStr =  new BufferedReader(new InputStreamReader(pokeLink.getInputStream()));
+				setMode(Mode.REAL);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			setMode(Mode.REAL);
 		}
 	}
 
@@ -223,11 +223,11 @@ public final class RFIDListener extends Thread {
 	public void pause() {
 		setMode(Mode.EXIT);
 		while (true)
-		try {
-			join();
-			break;
-		} catch (InterruptedException e) {
-			// try again
-		}
+			try {
+				join();
+				break;
+			} catch (InterruptedException e) {
+				// try again
+			}
 	}
 }

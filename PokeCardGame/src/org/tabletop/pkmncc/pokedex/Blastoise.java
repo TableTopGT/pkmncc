@@ -8,6 +8,7 @@ public class Blastoise extends Pokemon{
 	
 	public Blastoise() {
 		
+		setPokedexNumber(9);
 		setElement(Element.WATER);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(150, 3, Element.LIGHTNING, 10, null, 0);

@@ -10,6 +10,7 @@ public class Dusknoir extends Pokemon {
 
 	public Dusknoir() {
 		
+		setPokedexNumber(477);
 		setElement(Element.PSYCHIC);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(120, 2, Element.DARKNESS, 30, Element.COLORLESS, 20);

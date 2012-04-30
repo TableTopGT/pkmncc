@@ -7,6 +7,7 @@ import org.tabletop.pkmncc.card.Pokemon.PokemonStatus;
 public class Venusaur extends Pokemon{
 	
 	public Venusaur() {
+		setPokedexNumber(3);
 		setElement(Element.GRASS);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(150, 3, Element.PSYCHIC, 10, null, 0);

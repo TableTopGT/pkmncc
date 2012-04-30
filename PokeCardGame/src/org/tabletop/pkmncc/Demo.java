@@ -231,6 +231,7 @@ public class Demo extends Activity{
         	    		playerOne.startTurn();
         	    		if (rfid.cardSwiped())
         	    			playerOne.addCard(rfid.getCard(Pokemon.class));
+        				updateAttacks();
 
     	    			
 
@@ -422,11 +423,11 @@ public class Demo extends Activity{
 		buttonMake.setText(name);
 		buttonMake.setTextSize(20);
 		buttonMake.setTextColor(Color.BLACK);
-		buttonMake.setShadowLayer((float) 1, 0, 0, Color.RED);
+//		buttonMake.setShadowLayer((float) 1, 0, 0, Color.RED);
 		
 		// Color the background
-		int lightGreen = Color.rgb(165, 248, 78);
-		buttonMake.getBackground().setColorFilter(lightGreen, PorterDuff.Mode.DST_IN);
+//		int lightGreen = Color.rgb(165, 248, 78);
+//		buttonMake.getBackground().setColorFilter(lightGreen, PorterDuff.Mode.DST_IN);
 //		int alightGreen = Color.argb(200, 165, 248, 78);
 //		buttonMake.setBackgroundColor(alightGreen);
 		
@@ -447,7 +448,7 @@ public class Demo extends Activity{
         buttonMake.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
         
         // Add a pokeball
-        buttonMake.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pokeball, 0, 0, 0);
+//        buttonMake.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pokeball, 0, 0, 0);
 
         
         // Add a listener
@@ -456,10 +457,17 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if(p != Player.currentPlayer){
-					new AlertDialog.Builder(c)
-					.setMessage("It is not your turn silly goose!").show();
-				}
-				else if(activeDead == true){
+					if(!gameStartingTwo){
+						if (num == 0)
+							p.getActive().actionOne(p.opponent);
+						else 
+							p.getActive().actionTwo(p.opponent);
+						attackAnim(p, p.opponent);
+					}else{
+						new AlertDialog.Builder(c)
+						.setMessage("It is not your turn silly goose!").show();
+					}
+				} else if(activeDead == true){
 					new AlertDialog.Builder(c)
 					.setMessage("Your pokemon has fainted, please retreat").show();
 					return;

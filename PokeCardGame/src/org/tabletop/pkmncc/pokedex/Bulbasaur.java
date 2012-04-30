@@ -7,6 +7,8 @@ import org.tabletop.pkmncc.card.Pokemon.PokemonStatus;
 public class Bulbasaur extends Pokemon {
 	
 	public Bulbasaur () {
+		
+		setPokedexNumber(1);
 		setElement(Element.GRASS);
 		setEvolution(PokemonStage.BASIC, Ivysaur.class);
 		setDefense(50, 1, Element.FIRE, 10, null, 0);
