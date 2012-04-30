@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
