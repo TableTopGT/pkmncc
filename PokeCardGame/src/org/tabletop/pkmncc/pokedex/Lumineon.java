@@ -8,6 +8,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Lumineon extends Pokemon{
 
 	public Lumineon() {
+		setPokedexNumber(457);
 		setElement(Element.WATER);
 		setEvolution(PokemonStage.STAGE1);
 		setDefense(80, 0, Element.LIGHTNING, 20, null, 0);

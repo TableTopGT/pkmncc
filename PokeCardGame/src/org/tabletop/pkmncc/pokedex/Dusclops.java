@@ -6,6 +6,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 public class Dusclops extends Pokemon {
 
 	public Dusclops() {
+		setPokedexNumber(356);
 		setElement(Element.PSYCHIC);
 		setEvolution(PokemonStage.STAGE1, Dusknoir.class);
 		setDefense(100, 2, Element.DARKNESS, 10, Element.COLORLESS, 10);

@@ -7,6 +7,7 @@ public class Raichu extends Pokemon{
 
 	public Raichu() {
 		
+		setPokedexNumber(26);
 		setElement(Element.LIGHTNING);
 		setEvolution(PokemonStage.STAGE2);
 		setDefense(80, 1, Element.FIGHTING, 10, null, 0);
