@@ -2,7 +2,6 @@ package org.tabletop.pkmncc.pokedex;
 
 import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Pokemon;
-import org.tabletop.pkmncc.card.Pokemon.PokemonStatus;
 
 public class Ivysaur extends Pokemon {
 	
