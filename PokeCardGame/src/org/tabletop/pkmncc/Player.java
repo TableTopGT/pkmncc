@@ -6,6 +6,7 @@ import java.util.Random;
 import org.tabletop.pkmncc.Demo.Turn;
 import org.tabletop.pkmncc.card.*;
 
+import android.app.AlertDialog;
 import android.widget.FrameLayout;
 
 public class Player {
@@ -60,7 +61,14 @@ public class Player {
 			}
 		}
 		else if (playedCard instanceof Energy){
-			this.getActive().addEnergy( (Energy) playedCard);
+			if(Demo.energyUsed == false){
+				for(int h = 0; h < this.numPokemon(); ++h){
+					if(this.getPokemon(h).selected == true){
+						this.getPokemon(h).addEnergy( (Energy) playedCard);
+					}
+				}
+			}
+			Demo.energyUsed = true;
 		}
 	}
 
@@ -109,12 +117,14 @@ public class Player {
 			case ONE:
 				Demo.mat.removeView(Demo.playerOne.getPokemon(newActiveIndex));
 				Demo.playerOne.pokeArr.remove(newActiveIndex);
+				Demo.attackUsed = true;
 				Demo.playerTurn = Turn.TWO;
 				Demo.playerTwo.startTurn();
 				break;
 			case TWO:
 				Demo.mat.removeView(Demo.playerTwo.getPokemon(newActiveIndex));
 				Demo.playerTwo.pokeArr.remove(newActiveIndex);
+				Demo.attackUsed = true;
 				Demo.playerTurn = Turn.ONE;
 				Demo.playerOne.startTurn();
 				break;

@@ -180,13 +180,13 @@ public class Draw extends SurfaceView implements Runnable {
 	
 	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
 		for (int k = 0; k < player.Prizeleft; k++){
-			if (player.playerNum==1){
+			if (player.playerNum==2){
 					if (k>2){
 						board.drawBitmap(prizecard, 530-(55*(k-3)), 60, null);
 					}else{
 						board.drawBitmap(prizecard, 530-(55*k), 100, null);
 					}
-			}else if (player.playerNum==2){
+			}else if (player.playerNum==1){
 				if (k>2){
 					board.drawBitmap(prizecard, 695+(55*(k-3)), 615, null);
 				}else{
