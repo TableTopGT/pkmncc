@@ -42,6 +42,7 @@ public final class RFIDListener extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			setMode(Mode.REAL);
 		}
 	}
 
@@ -53,9 +54,12 @@ public final class RFIDListener extends Thread {
 		currMode = m;
 	}
 
-	public Card getCard() {
+	public Card getCard(Class<? extends Card> t) {
 		
 		Card swipedCard = null;
+		
+		
+		if (RFIDTag == null) return null;
 		
 		// Pokemon
 		if (RFIDTag.equals("1217281")){
@@ -177,9 +181,11 @@ public final class RFIDListener extends Thread {
 		RFIDTag = null;
 
 		// Give the swiped card
-		return swipedCard;
+		if (t.isInstance(swipedCard))
+			return swipedCard;
+		else return null;
 	}
-
+	
 	/** Swipe a card w/ specified tag after x seconds */
 	private void swipeCard(String s, int seconds) {
 		try {

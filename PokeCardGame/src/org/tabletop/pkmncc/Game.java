@@ -4,6 +4,7 @@ import org.tabletop.pkmncc.R;
 import org.tabletop.pkmncc.RFIDListener.Mode;
 import org.tabletop.pkmncc.card.Card.Element;
 import org.tabletop.pkmncc.card.Energy;
+import org.tabletop.pkmncc.card.Pokemon;
 import org.tabletop.pkmncc.pokedex.*;
 
 import android.app.Activity;
@@ -115,7 +116,6 @@ public class Game extends Activity{
         		if(gameStartingTwo){
         			switch(playerTurn){
         			case ONE :
-        				initialPokemon(canvas, playerOne);
 
         				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE/////////////////////
 //        				playerOne.addCard(new Energy(Element.FIRE));
@@ -129,7 +129,6 @@ public class Game extends Activity{
 //        				builder.setMessage("Player Two choose active pokemon followed by bench pokemon").show();
         				break;
         			case TWO :
-        				initialPokemon(canvas, playerTwo);
 //        				//DEBUG CODE TO ADD ENERGY TO ACTIVE POKE////////////////////////
 //        				playerTwo.addCard(new Energy(Element.FIRE));
 //        				playerTwo.addCard(new Energy(Element.FIRE));
@@ -175,18 +174,6 @@ public class Game extends Activity{
     			break;
     		case END:
     			break;
-    		}
-    	}
-    	
-    	
-    	private void initialPokemon(Canvas board, Player activePlayer){
-    		activePlayer.startTurn();
-    		rfid.setMode(Mode.REAL);
-    		for (int k = 0; k < Player.fieldSpots; ) {
-    			if (rfid.cardSwiped()) {
-    				activePlayer.addCard(rfid.getCard());
-    				++k;
-    			}
     		}
     	}
     }
