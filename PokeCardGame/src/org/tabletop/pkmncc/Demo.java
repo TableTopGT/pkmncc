@@ -263,6 +263,7 @@ public class Demo extends Activity{
 							.setMessage("Your pokemon has fainted, please retreat").show();
     						activeDead = true;
     						playerTurn = Turn.TWO;
+    						playerTwo.startTurn();
     						//playerOne.getActive().Kill();
     					}
     					//playerOne.getActive().statusEffect();
@@ -273,6 +274,7 @@ public class Demo extends Activity{
 							.setMessage("Your pokemon has fainted, please retreat").show();
     						activeDead = true;
     						playerTurn = Turn.ONE;
+    						playerOne.startTurn();
     						//playerTwo.getActive().Kill();
     					}
     					//playerOne.getActive().statusEffect();
