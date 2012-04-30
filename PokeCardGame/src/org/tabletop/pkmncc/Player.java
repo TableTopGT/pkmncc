@@ -163,7 +163,7 @@ public class Player {
 		}
 		for (int i = 0; i < pokeArr.size(); ++i) {
 			Pokemon checkPoke = pokeArr.get(i);
-			if (pokemonCard.isEvolutionOf(checkPoke)) {
+			if (pokemonCard.isEvolutionOf(checkPoke) && this.getPokemon(i).selected == true) {
 				checkPoke.transferStatsTo(pokemonCard);
 				Game.mat.removeView(checkPoke);
 				pokeArr.set(i, pokemonCard);
