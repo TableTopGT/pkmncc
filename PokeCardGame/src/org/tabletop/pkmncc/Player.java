@@ -6,7 +6,6 @@ import java.util.Random;
 import org.tabletop.pkmncc.Demo.Turn;
 import org.tabletop.pkmncc.card.*;
 
-import android.app.AlertDialog;
 import android.widget.FrameLayout;
 
 public class Player {
