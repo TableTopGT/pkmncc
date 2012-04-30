@@ -445,6 +445,7 @@ public class Demo extends Activity{
         buttonMake.setY(y);   
         buttonMake.setX(x);
         buttonMake.setLayoutParams(new FrameLayout.LayoutParams(239, 57));
+        buttonMake.setPadding(30, 0, 0, 0);
         
         // Add a pokeball
 //        buttonMake.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pokeball, 0, 0, 0);

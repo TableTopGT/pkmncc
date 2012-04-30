@@ -308,8 +308,8 @@ public class Draw extends SurfaceView implements Runnable {
 		board.drawBitmap(retreat, 905, 500, null);
 		board.drawBitmap(flippedretreat, 320, 20, null);
 //		if (Demo.atk[0] != null) board.drawBitmap(flippedpokeball, 320, 175, null);
-		if (Demo.atk[0] != null) board.drawBitmap(pokeball, 835, 20, null);
-		if (Demo.atk[1] != null && Demo.atk[1].isShown()) board.drawBitmap(pokeball, 905, 20, null);
+		if (Demo.atk[1] != null) board.drawBitmap(pokeball, 835, 20, null);
+		if (Demo.atk[0] != null && Demo.atk[1].isShown()) board.drawBitmap(pokeball, 905, 20, null);
 		if (Demo.atk[2] != null) board.drawBitmap(flippedpokeball, 320, 500, null);
 		if (Demo.atk[3] != null && Demo.atk[3].isShown()) board.drawBitmap(flippedpokeball, 390, 500, null);
 		board.drawBitmap(HP, 745, 240, null);

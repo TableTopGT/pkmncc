@@ -260,10 +260,10 @@ public abstract class Pokemon extends Card {
 	public final void removeEnergy() {
 		final int numEnergies = energy.size();
 		boolean found = false;
-		CharSequence[] items = new CharSequence[numEnergies];
-		final boolean[] checkedItems = new boolean[numEnergies];
+//		CharSequence[] items = new CharSequence[numEnergies];
+//		final boolean[] checkedItems = new boolean[numEnergies];
 		
-		for(int k = 0; k < energy.size(); ++k){
+		for(int k = 0; k < numEnergies; ++k){
 			if(!energy.get(k).getElement().equals(getElement())){
 				found = true;
 				energy.remove(k);
