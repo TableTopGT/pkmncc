@@ -1,6 +1,5 @@
 package org.tabletop.pkmncc.pokedex;
 
-import org.tabletop.pkmncc.Player;
 import org.tabletop.pkmncc.card.Pokemon;
 
 

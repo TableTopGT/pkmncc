@@ -1,19 +1,15 @@
 package org.tabletop.pkmncc.pokedex;
 
 import org.tabletop.pkmncc.Player;
-import org.tabletop.pkmncc.card.Energy;
 import org.tabletop.pkmncc.card.Pokemon;
-
-//DO NOT USE
 
 public class Charizard extends Pokemon {
 	
 	public Charizard() {
-		
 		setPokedexNumber(6);
 		setElement(Element.FIRE);
 		setEvolution(PokemonStage.STAGE2);
-		setDefense(120, 2, Element.WATER, 0, null, 0);
+		setDefense(120, 1, Element.WATER, 0, null, 0);
 		action1 = new ActionDesc("Combustion", 30, Element.FIRE);
 		action2 = new ActionDesc("Burning Inferno", 50, Element.FIRE, Element.FIRE,
 												   Element.COLORLESS, Element.COLORLESS);

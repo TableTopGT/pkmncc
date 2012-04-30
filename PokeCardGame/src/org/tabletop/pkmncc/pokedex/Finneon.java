@@ -18,6 +18,7 @@ public class Finneon extends Pokemon{
 		
 	}
 	
+	@Override
 	public void actionOne (Player target){
 		
 		/*Choose 1 of your opponent's Benched Pokémon. 
@@ -26,6 +27,7 @@ public class Finneon extends Pokemon{
 		 */
 	}
 	
+	@Override
 	public void actionTwo (Player target){
 		//Flip a coin. If heads, this attack does 10 damage plus 10 more damage.
 		if (getOwner().coinFlip()){

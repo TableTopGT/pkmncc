@@ -17,6 +17,7 @@ public class Lumineon extends Pokemon{
 		
 	}
 
+	@Override
 	public void actionOne (Player target){
 		
 		
@@ -26,6 +27,7 @@ public class Lumineon extends Pokemon{
 		 */
 	}
 	
+	@Override
 	public void actionTwo (Player target){
 		
 		

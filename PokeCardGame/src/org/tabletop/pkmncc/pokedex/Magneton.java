@@ -17,6 +17,7 @@ public class Magneton extends Pokemon {
 	}
 	
 	/** Flip coins. If heads, opponenet is confused**/
+	@Override
 	public void actionOne (Player target){
 		if(getOwner().coinFlip()){
 			target.getActive().addStatus(PokemonStatus.CONFUSED);
