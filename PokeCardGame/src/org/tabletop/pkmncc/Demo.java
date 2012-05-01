@@ -82,6 +82,7 @@ public class Demo extends Activity{
 					new AlertDialog.Builder(c)
 					.setMessage("Player 2 Turn").show();
 					playerTwo.startTurn();
+					if(gameState == State.BATTLE)playerTwo.getActive().statusEffect();
 				}
 			}
 		});
@@ -210,6 +211,7 @@ public class Demo extends Activity{
 					new AlertDialog.Builder(c)
 					.setMessage("Player One Turn").show();
 					playerOne.startTurn();
+					if(gameState == State.BATTLE)playerOne.getActive().statusEffect();
 				}
 			}
 		});
@@ -293,7 +295,6 @@ public class Demo extends Activity{
     							playerTwo.startTurn();
     						}
     					}
-    					//playerOne.getActive().statusEffect();
     					break;
     				case TWO :
     					playerTwo.startTurn();
@@ -315,7 +316,6 @@ public class Demo extends Activity{
     							playerOne.startTurn();
     						}
     					}
-    					//playerOne.getActive().statusEffect();
     					break;
     			}
     			break; 
