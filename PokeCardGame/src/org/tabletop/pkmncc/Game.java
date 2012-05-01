@@ -1,12 +1,6 @@
 package org.tabletop.pkmncc;
 
 import org.tabletop.pkmncc.R;
-import org.tabletop.pkmncc.RFIDListener.Mode;
-import org.tabletop.pkmncc.card.Card.Element;
-import org.tabletop.pkmncc.card.Energy;
-import org.tabletop.pkmncc.card.Pokemon;
-import org.tabletop.pkmncc.pokedex.*;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,9 +11,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 
 public class Game extends Activity{
     /** Called when the activity is first created. */
