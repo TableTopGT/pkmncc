@@ -1,17 +1,17 @@
 package org.tabletop.pkmncc.card;
 
-
 import android.content.Context;
 import android.widget.ImageView;
 
 import org.tabletop.pkmncc.Player;
 import static org.tabletop.pkmncc.Player.currentPlayer;
 
-
 public abstract class Card extends ImageView {
 
 	/** Used by Pokemon and Energy Cards */
-	public static enum Element {GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS};
+	public static enum Element {
+		GRASS, FIRE, WATER, LIGHTNING, PSYCHIC, FIGHTING, DARKNESS, METAL, COLORLESS
+	};
 
 	private Element element;
 	private Player owner;
@@ -21,13 +21,13 @@ public abstract class Card extends ImageView {
 	protected Card() {
 		super(context);
 		owner = currentPlayer;
-//		setWillNotDraw(true);
+		// setWillNotDraw(true);
 	}
-	
+
 	public final Player getOwner() {
 		return owner;
-	} 
-	
+	}
+
 	public final void setOwner(Player owner) {
 		this.owner = owner;
 	}
@@ -35,8 +35,8 @@ public abstract class Card extends ImageView {
 	public final Element getElement() {
 		return element;
 	}
-	
-	public final void setElement(Element element) {	
+
+	public final void setElement(Element element) {
 		this.element = element;
 	}
 

@@ -10,19 +10,19 @@ public class Magneton extends Pokemon {
 		setElement(Element.METAL);
 		setEvolution(PokemonStage.STAGE1, Magnezone.class);
 		setDefense(80, 1, Element.FIGHTING, 10, Element.METAL, 10);
-		action1 = new ActionDesc ("Supersonic", 20, Element.LIGHTNING, Element.COLORLESS);
-		action2 = new ActionDesc ("Speed Ball", 50, Element.LIGHTNING, Element.COLORLESS, Element.COLORLESS);
-		
-		
+		action1 = new ActionDesc("Supersonic", 20, Element.LIGHTNING,
+				Element.COLORLESS);
+		action2 = new ActionDesc("Speed Ball", 50, Element.LIGHTNING,
+				Element.COLORLESS, Element.COLORLESS);
 	}
-	
-	/** Flip coins. If heads, opponenet is confused**/
+
+	/** Flip coins. If heads, opponenet is confused **/
 	@Override
-	public void actionOne (Player target){
-		if(getOwner().coinFlip()){
+	public void actionOne(Player target) {
+		if (getOwner().coinFlip()) {
 			target.getActive().addStatus(PokemonStatus.CONFUSED);
 		}
-		
+
 		action1.attack(target);
 	}
 

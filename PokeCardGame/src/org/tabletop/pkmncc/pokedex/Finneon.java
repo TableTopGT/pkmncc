@@ -5,7 +5,7 @@ import org.tabletop.pkmncc.card.Pokemon;
 
 //DO NOT USE
 
-public class Finneon extends Pokemon{
+public class Finneon extends Pokemon {
 
 	public Finneon() {
 		setPokedexNumber(456);
@@ -14,25 +14,26 @@ public class Finneon extends Pokemon{
 		setDefense(50, 1, Element.LIGHTNING, 10, null, 0);
 		action1 = new ActionDesc("Aqua Linear", 0);
 		action2 = new ActionDesc("Mouth Pump", 10, Element.WATER);
-		
-		
+
 	}
-	
+
 	@Override
-	public void actionOne (Player target){
-		
-		/*Choose 1 of your opponent's Benched Pokémon. 
-		 * This attack does 10 damage to that Pokémon. 
-		 * (Don't apply Weakness and Resistance for Benched Pokémon.)
+	public void actionOne(Player target) {
+
+		/*
+		 * Choose 1 of your opponent's Benched Pokémon. This attack does 10
+		 * damage to that Pokémon. (Don't apply Weakness and Resistance for
+		 * Benched Pokémon.)
 		 */
 	}
-	
+
 	@Override
-	public void actionTwo (Player target){
-		//Flip a coin. If heads, this attack does 10 damage plus 10 more damage.
-		if (getOwner().coinFlip()){
+	public void actionTwo(Player target) {
+		// Flip a coin. If heads, this attack does 10 damage plus 10 more
+		// damage.
+		if (getOwner().coinFlip()) {
 			action2.attack(target, 20);
 		}
-		
+
 	}
 }

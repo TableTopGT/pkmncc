@@ -13,16 +13,17 @@ public class Duskull extends Pokemon {
 		setEvolution(PokemonStage.BASIC, Dusclops.class);
 		setDefense(50, 1, Element.DARKNESS, 10, Element.COLORLESS, 20);
 		action1 = new ActionDesc("Tackle", 10, Element.COLORLESS);
-		action2 = new ActionDesc("Surprise Attack", 30, Element.PSYCHIC, Element.COLORLESS);
-		
+		action2 = new ActionDesc("Surprise Attack", 30, Element.PSYCHIC,
+				Element.COLORLESS);
+
 	}
 
 	@Override
-	public void actionTwo (Player target) {
-		
-		 if (getOwner().coinFlip()){
-		    action2.attack(target, 30);
-		   }
-		 
+	public void actionTwo(Player target) {
+
+		if (getOwner().coinFlip()) {
+			action2.attack(target, 30);
+		}
+
 	}
 }
