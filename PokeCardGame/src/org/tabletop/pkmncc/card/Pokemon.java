@@ -84,8 +84,8 @@ public abstract class Pokemon extends Card {
 		}
 
 		private boolean enoughEnergy() {
-			return (energyCost == null) || energy.containsAll(energyCost) &&
-					(energy.size() >= energyCostSize);
+			return (energy.size() >= energyCostSize) &&
+					(energyCost == null || energy.containsAll(energyCost));
 		}
 	}
 	
