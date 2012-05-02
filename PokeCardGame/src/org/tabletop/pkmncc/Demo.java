@@ -81,6 +81,22 @@ public class Demo extends Activity{
 				}
 			}
 		});
+        Button go = new Button(this);
+        go.setLayoutParams(new FrameLayout.LayoutParams(46, 208));
+        go.setX(1121+56);
+        go.setY(18);
+        Demo.mat.addView(go);
+        go.setOnClickListener(new android.view.View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if ((playerTurn ==Turn.ONE)||(playerTurn == Turn.ONET)) {
+					new AlertDialog.Builder(c)
+					.setMessage("Player 2 Wins").show();
+					
+				}
+			}
+		});
         
 		// Example of running retreat function
         Button retB = new Button(this);
@@ -164,6 +180,24 @@ public class Demo extends Activity{
 			}
 		});
         
+
+       
+        
+        Button go2 = new Button(this);
+        go2.setLayoutParams(new FrameLayout.LayoutParams(46, 208));
+        go2.setX(96-54);
+        go2.setY(528);
+        Demo.mat.addView(go2);
+        go2.setOnClickListener(new android.view.View.OnClickListener() { 
+			
+			@Override
+			public void onClick(View v) {
+				if ((playerTurn == Turn.TWO)||(playerTurn == Turn.TWOT)){
+					new AlertDialog.Builder(c)
+					.setMessage("Player One Wins").show();
+				}
+			}
+		});
 
         
         // Setup Battle Music
