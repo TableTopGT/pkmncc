@@ -18,21 +18,23 @@ public class Lumineon extends Pokemon {
 	}
 
 	@Override
-	public void actionOne(Player target) {
+	public boolean actionOne(Player target) {
 
 		/*
 		 * Use DialogBox to choose 1 of your opponent's Pokémon. -- This attack
 		 * does 20 damage to that Pokémon. -- This attack's damage isn't
 		 * affected by Weakness or Resistance.
 		 */
+		return true;
 	}
 
 	@Override
-	public void actionTwo(Player target) {
+	public boolean actionTwo(Player target) {
 
 		/*
 		 * Flip a coin. If heads, prevent all effects of an attack, including
 		 * damage, done to Lumineon during your opponent’s next turn.
 		 */
+		return true;
 	}
 }

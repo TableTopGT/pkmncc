@@ -44,9 +44,9 @@ public abstract class Pokemon extends Card {
 		 * Attempt an attack on the opponent's active Pokemon.
 		 * 
 		 * @param opponent
-		 * @return the damage done by the attack
+		 * @return true if attack was successful
 		 */
-		public int attack(Player opponent) {
+		public boolean attack(Player opponent) {
 			return attack(opponent, baseAttack);
 		}
 
@@ -56,26 +56,26 @@ public abstract class Pokemon extends Card {
 		 * @param opponent
 		 * @param tempAttack
 		 *            - modified attack strength
-		 * @return the damage done by the attack
+		 * @return true if attack was successful
 		 */
-		public int attack(Player opponent, int tempAttack) {
+		public boolean attack(Player opponent, int tempAttack) {
 			if (!enoughEnergy()) {
 				new AlertDialog.Builder(getContext()).setMessage(
 						"Energies missing for this action.").show(); // TODO
 																		// toast
-				return 0;
+				return false;
 			}
 
 			if (!canMove()) {
 				new AlertDialog.Builder(getContext()).setMessage(
 						"Pokemon can't move...").show();
-				return 0;
+				return false;
 			}
 
 			if (confusedEffect()) {
 				new AlertDialog.Builder(getContext()).setMessage(
 						"Pokemon was hurt by its confusion!").show();
-				return 0;
+				return false;
 			}
 
 			Pokemon enemy = opponent.getActive();
@@ -86,7 +86,8 @@ public abstract class Pokemon extends Card {
 			} else if (enemy.resistance == getElement()) {
 				damage -= enemy.resMod;
 			}
-			return enemy.removeHP(damage);
+			enemy.removeHP(damage);
+			return true;
 		}
 
 		private boolean enoughEnergy() {
@@ -133,10 +134,11 @@ public abstract class Pokemon extends Card {
 	 * behavior.
 	 * 
 	 * @param target
+	 * @return true if attack was successful
 	 */
-	public void actionOne(Player target) {
+	public boolean actionOne(Player target) {
 		assert (action1 != null) : "Action 1 not set";
-		action1.attack(target);
+		return action1.attack(target);
 	}
 
 	/**
@@ -144,10 +146,11 @@ public abstract class Pokemon extends Card {
 	 * behavior.
 	 * 
 	 * @param target
+	 * @return true if attack was successful
 	 */
-	public void actionTwo(Player target) {
+	public boolean actionTwo(Player target) {
 		assert (action2 != null) : "Action 2 not set";
-		action2.attack(target);
+		return action2.attack(target);
 	}
 
 	/** Returns the capitalized class name of the Pokemon */

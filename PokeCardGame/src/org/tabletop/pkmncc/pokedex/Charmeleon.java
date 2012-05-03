@@ -17,10 +17,10 @@ public class Charmeleon extends Pokemon {
 	}
 
 	@Override
-	public void actionOne(Player target) {
+	public boolean actionOne(Player target) {
 		int multiplier = getOwner().coinFlip() ? 1 : 1;
 		multiplier += getOwner().coinFlip() ? 1 : 0;
-		action1.attack(target, 30 * multiplier);
+		return action1.attack(target, 30 * multiplier);
 	}
 
 }

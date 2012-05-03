@@ -18,8 +18,11 @@ public class Ivysaur extends Pokemon {
 
 	@Override
 	/** Poison Seed: Opponent is poisoned **/
-	public void actionOne(Player target) {
-		target.getActive().addStatus(PokemonStatus.POISONED);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able)
+			target.getActive().addStatus(PokemonStatus.POISONED);
+		return able;
 	}
 
 }

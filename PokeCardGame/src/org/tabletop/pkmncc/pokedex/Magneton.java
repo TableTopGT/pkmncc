@@ -18,12 +18,12 @@ public class Magneton extends Pokemon {
 
 	/** Flip coins. If heads, opponenet is confused **/
 	@Override
-	public void actionOne(Player target) {
-		if (getOwner().coinFlip()) {
-			target.getActive().addStatus(PokemonStatus.CONFUSED);
-		}
-
-		action1.attack(target);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able)
+			if (getOwner().coinFlip())
+				target.getActive().addStatus(PokemonStatus.CONFUSED);
+		return able;
 	}
 
 }

@@ -17,11 +17,13 @@ public class Wartortle extends Pokemon {
 
 	@Override
 	/** Pokemon is paralyzed if coin flip -- attack still happens**/
-	public void actionOne(Player target) {
-		if (getOwner().coinFlip()) {
-			target.getActive().addStatus(PokemonStatus.PARALYZED);
-		}
-		action1.attack(target);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able)
+			if (getOwner().coinFlip()) {
+				target.getActive().addStatus(PokemonStatus.PARALYZED);
+			}
+		return able;
 	}
 
 }

@@ -17,11 +17,12 @@ public class Charizard extends Pokemon {
 
 	@Override
 	/** Bursting Inferno: Each Defending Pokemon is now burned **/
-	public void actionTwo(Player target) {
-		for (int i = 0; i < target.numPokemon(); i++) {
-			target.getPokemon(i).addStatus(PokemonStatus.BURNED);
-		}
-		action2.attack(target);
+	public boolean actionTwo(Player target) {
+		boolean able = super.actionTwo(target);
+		if (able)
+			for (int i = 0; i < target.numPokemon(); i++)
+				target.getPokemon(i).addStatus(PokemonStatus.BURNED);
+		return able;
 	}
 
 }

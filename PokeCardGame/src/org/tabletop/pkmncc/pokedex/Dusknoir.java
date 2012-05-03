@@ -16,9 +16,10 @@ public class Dusknoir extends Pokemon {
 
 	@Override
 	/** If defending pokemon has two or more damage counters, baseAttack = baseAttack + 20 **/
-	public void actionOne(Player target) {
-		if ((target.getActive().getDamage()) >= 20) {
-			action1.attack(target, 80);
-		}
+	public boolean actionOne(Player target) {
+		if ((target.getActive().getDamage()) >= 20)
+			return action1.attack(target, 80);
+		else 
+			return super.actionOne(target);
 	}
 }

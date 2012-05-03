@@ -18,22 +18,23 @@ public class Finneon extends Pokemon {
 	}
 
 	@Override
-	public void actionOne(Player target) {
+	public boolean actionOne(Player target) {
 
 		/*
 		 * Choose 1 of your opponent's Benched Pokémon. This attack does 10
 		 * damage to that Pokémon. (Don't apply Weakness and Resistance for
 		 * Benched Pokémon.)
 		 */
+		return true;
 	}
 
 	@Override
-	public void actionTwo(Player target) {
+	public boolean actionTwo(Player target) {
 		// Flip a coin. If heads, this attack does 10 damage plus 10 more
 		// damage.
 		if (getOwner().coinFlip()) {
-			action2.attack(target, 20);
+			return action2.attack(target, 20);
 		}
-
+		return super.actionTwo(target);
 	}
 }

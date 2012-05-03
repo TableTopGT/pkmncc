@@ -19,11 +19,10 @@ public class Duskull extends Pokemon {
 	}
 
 	@Override
-	public void actionTwo(Player target) {
-
+	public boolean actionTwo(Player target) {
 		if (getOwner().coinFlip()) {
-			action2.attack(target, 30);
-		}
-
+			return super.actionTwo(target);
+		} 
+		return action2.attack(target,0);
 	}
 }

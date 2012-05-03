@@ -16,21 +16,22 @@ public class Blastoise extends Pokemon {
 
 	@Override
 	/** Flip until tails and remove energy from defending pokemon for every heads -- attack still happens**/
-	public void actionOne(Player target) {
-
-		int i = 0;
-		boolean coin = getOwner().coinFlip();
-
-		while (coin == true) {
-			i++;
-			coin = getOwner().coinFlip();
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able) {
+			int i = 0;
+			boolean coin = getOwner().coinFlip();
+	
+			while (coin == true) {
+				i++;
+				coin = getOwner().coinFlip();
+			}
+	
+			for (int ii = 1; ii < i; ii++) {
+				target.getActive().removeEnergy();
+			}
 		}
-
-		for (int ii = 1; ii < i; ii++) {
-			target.getActive().removeEnergy();
-		}
-
-		action1.attack(target);
+		return able;
 
 	}
 

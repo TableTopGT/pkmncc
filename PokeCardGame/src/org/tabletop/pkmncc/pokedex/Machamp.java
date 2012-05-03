@@ -17,27 +17,23 @@ public class Machamp extends Pokemon {
 
 	@Override
 	/** If the defending pokemon is not evolved, KO instead of damage **/
-	public void actionOne(Player target) {
-
-		if (target.getActive().isBasic()) {
-			action1.attack(target, target.getActive().getHP());
-		}
+	public boolean actionOne(Player target) {
+		if (target.getActive().isBasic())
+			return action1.attack(target, target.getActive().getHP());
+		else
+			return super.actionOne(target);
 	}
 
 	@Override
 	/** Flip a coin 4 times -- do 30 damage times number of heads flipped **/
-	public void actionTwo(Player target) {
-
+	public boolean actionTwo(Player target) {
 		int count = 0;
-
-		for (int i = 0; i > 4; i++) {
-			if (getOwner().coinFlip()) {
+		
+		for (int i = 0; i < 4; i++)
+			if (getOwner().coinFlip())
 				count++;
-			}
 
-			action2.attack(target, 30 * count);
-		}
-
+		return action2.attack(target, 30 * count);
 	}
 
 }

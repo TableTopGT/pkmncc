@@ -17,7 +17,10 @@ public class Combee extends Pokemon {
 
 	@Override
 	/** Nap: Removes two damage counters **/
-	public void actionOne(Player target) {
-		addHP(20);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able) 
+			addHP(20);
+		return able;
 	}
 }

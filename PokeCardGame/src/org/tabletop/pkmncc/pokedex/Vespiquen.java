@@ -19,20 +19,23 @@ public class Vespiquen extends Pokemon {
 
 	@Override
 	/** Bee Drain: Removes HP from Vespiquen as well as opponent **/
-	public void actionOne(Player target) {
-
-		removeHP(20);
-		action1.attack(target);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able)
+			removeHP(20);
+		return able;
 	}
 
 	@Override
 	/** Bee Powder: Flip 2 coins. If both heads, opponent is now burned, paralyze, and poisoned **/
-	public void actionTwo(Player target) {
-		if (getOwner().coinFlip() && getOwner().coinFlip()) {
-			target.getActive().addStatus(PokemonStatus.POISONED);
-			target.getActive().addStatus(PokemonStatus.BURNED);
-			target.getActive().addStatus(PokemonStatus.PARALYZED);
-			action2.attack(target);
-		}
+	public boolean actionTwo(Player target) {
+		boolean able = super.actionTwo(target);
+		if (able)
+			if (getOwner().coinFlip() && getOwner().coinFlip()) {
+				target.getActive().addStatus(PokemonStatus.POISONED);
+				target.getActive().addStatus(PokemonStatus.BURNED);
+				target.getActive().addStatus(PokemonStatus.PARALYZED);
+			}
+		return able;
 	}
 }

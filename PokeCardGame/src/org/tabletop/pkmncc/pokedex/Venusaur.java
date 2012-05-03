@@ -18,11 +18,14 @@ public class Venusaur extends Pokemon {
 
 	@Override
 	/** Pollen Hazard: Opponent is poisoned, burned, and confused **/
-	public void actionOne(Player target) {
-		target.getActive().addStatus(PokemonStatus.POISONED);
-		target.getActive().addStatus(PokemonStatus.BURNED);
-		target.getActive().addStatus(PokemonStatus.CONFUSED);
-		action1.attack(target);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able) {
+			target.getActive().addStatus(PokemonStatus.POISONED);
+			target.getActive().addStatus(PokemonStatus.BURNED);
+			target.getActive().addStatus(PokemonStatus.CONFUSED);
+		}
+		return able;
 	}
 
 }

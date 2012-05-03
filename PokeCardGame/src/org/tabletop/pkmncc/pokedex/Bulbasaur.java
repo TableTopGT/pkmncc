@@ -17,11 +17,14 @@ public class Bulbasaur extends Pokemon {
 
 	@Override
 	/** Sleep Poison: Flip coin. If heads, opponent is asleep and poisoned **/
-	public void actionOne(Player target) {
-		if (getOwner().coinFlip()) {
-			target.getActive().addStatus(PokemonStatus.POISONED);
-			target.getActive().addStatus(PokemonStatus.ASLEEP);
-		}
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able) 
+			if (getOwner().coinFlip()) {
+				target.getActive().addStatus(PokemonStatus.POISONED);
+				target.getActive().addStatus(PokemonStatus.ASLEEP);
+			}
+		return able;
 	}
 
 }

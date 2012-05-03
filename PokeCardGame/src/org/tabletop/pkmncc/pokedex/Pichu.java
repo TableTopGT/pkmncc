@@ -15,10 +15,11 @@ public class Pichu extends Pokemon {
 
 	@Override
 	/** Only attack if heads.  If tails, do nothing. **/
-	public void actionOne(Player target) {
-		if (getOwner().coinFlip()) {
-			action1.attack(target);
-		}
+	public boolean actionOne(Player target) {
+		if (getOwner().coinFlip())
+			return super.actionOne(target);
+		else
+			return action1.attack(target,0);
 	}
 
 }

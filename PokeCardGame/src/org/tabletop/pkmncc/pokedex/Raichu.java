@@ -18,11 +18,12 @@ public class Raichu extends Pokemon {
 
 	@Override
 	/** Flip coin, If heads defending pokemon is paralyzed **/
-	public void actionOne(Player target) {
-		if (getOwner().coinFlip()) {
-			target.getActive().addStatus(PokemonStatus.PARALYZED);
-		}
-		action1.attack(target);
+	public boolean actionOne(Player target) {
+		boolean able = super.actionOne(target);
+		if (able)
+			if (getOwner().coinFlip())
+				target.getActive().addStatus(PokemonStatus.PARALYZED);
+		return able;
 	}
 
 }
