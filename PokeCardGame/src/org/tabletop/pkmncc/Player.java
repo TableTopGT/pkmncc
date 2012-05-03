@@ -6,6 +6,7 @@ import java.util.Random;
 import org.tabletop.pkmncc.Demo.Turn;
 import org.tabletop.pkmncc.card.*;
 
+import android.app.AlertDialog;
 import android.widget.FrameLayout;
 
 public class Player {
@@ -34,7 +35,13 @@ public class Player {
 
 	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
-		return RNG.nextBoolean();
+		if (RNG.nextBoolean()) {
+			Demo.heads.show();	
+			return true;
+		} else {
+			Demo.tails.show();	
+			return false;
+		}
 	}
 
 	/**Check to see what kind of card the player has scanned**/

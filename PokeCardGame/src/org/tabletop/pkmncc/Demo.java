@@ -30,6 +30,8 @@ public class Demo extends Activity{
 	static Player playerTwo;
 	public static FrameLayout mat;
 	static Button[] atk = new Button[4];
+	public static AlertDialog heads, tails; 
+	private AlertDialog faintedRetreat, faintedPrize, attacked;
 
 
 	public static boolean retreatUsed = false;
@@ -39,7 +41,6 @@ public class Demo extends Activity{
 
 	Draw surf;
 	Context c = this;
-//	Game Game = new Game();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,19 @@ public class Demo extends Activity{
         // Hide menu bar
         mat.setSystemUiVisibility(View.INVISIBLE);
         
+        // Create alert dialogs
+        heads = new AlertDialog.Builder(this)
+        		.setMessage("You flipped Heads!").create();
+        tails = new AlertDialog.Builder(this)
+        		.setMessage("You flipped Tails!").create();
+        faintedRetreat = new AlertDialog.Builder(this)
+        		.setMessage("Your pokemon has fainted, please retreat").create();
+        faintedPrize = new AlertDialog.Builder(this)
+				.setMessage("Your pokemon has fainted, please draw a prize card and retreat")
+				.create();
+        attacked = new AlertDialog.Builder(this)
+				.setMessage("You have attacked, please end turn").create();
+        		
         // Create endturn views
         Button et = new Button(this);
         et.setLayoutParams(new FrameLayout.LayoutParams(45, 208));
@@ -65,8 +79,7 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if(activeDead == true){
-					new AlertDialog.Builder(c)
-					.setMessage("Your pokemon has fainted, please retreat").show();
+					faintedRetreat.show();
 					return;
 				}
 				if ((playerTurn ==Turn.ONE)||(playerTurn == Turn.ONET)) {
@@ -110,13 +123,11 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				if(activeDead == true && playerTurn == Turn.TWO){
-					new AlertDialog.Builder(c)
-					.setMessage("Your pokemon has fainted, please retreat").show();
+					faintedRetreat.show();
 					return;
 				}
 				else if(attackUsed == true && playerTurn == Turn.ONE){
-					new AlertDialog.Builder(c)
-					.setMessage("You have attacked, please end turn").show();
+					attacked.show();
 					return;
 				}
 				if(playerOne.getActive().canRetreat() || (activeDead == true && playerTurn == Turn.ONE)){
@@ -150,13 +161,11 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				if(activeDead == true && playerTurn == Turn.ONE){
-					new AlertDialog.Builder(c)
-					.setMessage("Your pokemon has fainted, please retreat").show();
+					faintedRetreat.show();
 					return;
 				}
 				else if(attackUsed == true && playerTurn == Turn.TWO){
-					new AlertDialog.Builder(c)
-					.setMessage("You have attacked, please end turn").show();
+					attacked.show();
 					return;
 				}
 				if(playerTwo.getActive().canRetreat() || (activeDead == true && playerTurn == Turn.TWO)){
@@ -222,8 +231,7 @@ public class Demo extends Activity{
 			@Override
 			public void onClick(View v) {
 				if(activeDead == true){
-					new AlertDialog.Builder(c)
-					.setMessage("Your pokemon has fainted, please retreat").show();
+					faintedRetreat.show();
 					return;
 				}
 				if ((playerTurn == Turn.TWO)||(playerTurn == Turn.TWOT)){
@@ -316,8 +324,7 @@ public class Demo extends Activity{
     							.setMessage("Player One wins!!!").show();	
     						}
     						else{
-    							new AlertDialog.Builder(c)
-    							.setMessage("Your pokemon has fainted, please draw a prize card and retreat").show();
+    							faintedPrize.show();
     							attackUsed = false;
     							activeDead = true;
     							playerTurn = Turn.TWO;
@@ -337,8 +344,7 @@ public class Demo extends Activity{
     							.setMessage("Player Two wins!!!").show();	
     						}
     						else{
-    							new AlertDialog.Builder(c)
-    							.setMessage("Your pokemon has fainted, please draw a prize card and retreat").show();
+    							faintedPrize.show();
     							attackUsed = false;
     							activeDead = true;
     							playerTurn = Turn.ONE;
@@ -497,13 +503,11 @@ public class Demo extends Activity{
 						.setMessage("It is not your turn silly goose!").show();
 					}
 				} else if(activeDead == true){
-					new AlertDialog.Builder(c)
-					.setMessage("Your pokemon has fainted, please retreat").show();
+					faintedRetreat.show();
 					return;
 				}
 				else if(attackUsed == true){
-					new AlertDialog.Builder(c)
-					.setMessage("You have attacked, please end turn").show();
+					attacked.show();
 					return;
 				}
 				else if(gameState == State.BATTLE && p == Player.currentPlayer){
