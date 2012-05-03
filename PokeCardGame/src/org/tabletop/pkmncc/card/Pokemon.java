@@ -69,24 +69,27 @@ public abstract class Pokemon extends Card {
 			if (!canMove()) {
 				new AlertDialog.Builder(getContext()).setMessage(
 						"Pokemon can't move...").show();
+				Demo.attackUsed = true;
 				return false;
 			}
 
 			if (confusedEffect()) {
 				new AlertDialog.Builder(getContext()).setMessage(
 						"Pokemon was hurt by its confusion!").show();
+				Demo.attackUsed = true;
 				return false;
 			}
 
 			Pokemon enemy = opponent.getActive();
 			int damage = tempAttack;
 			if (enemy.weakness == getElement()) {
-				damage = (weakMod >= 10) ? damage + enemy.weakMod : damage
+				damage = (enemy.weakMod >= 10) ? damage + enemy.weakMod : damage
 						* enemy.weakMod;
 			} else if (enemy.resistance == getElement()) {
 				damage -= enemy.resMod;
 			}
 			enemy.removeHP(damage);
+			Demo.attackUsed = true;
 			return true;
 		}
 

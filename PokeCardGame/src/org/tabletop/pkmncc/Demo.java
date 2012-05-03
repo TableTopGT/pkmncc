@@ -512,9 +512,9 @@ public class Demo extends Activity{
 				}
 				else if(gameState == State.BATTLE && p == Player.currentPlayer){
 					if (num == 0) {
-						attackUsed = p.getActive().actionOne(p.opponent);
+						p.getActive().actionOne(p.opponent);
 					} else {
-						attackUsed = p.getActive().actionTwo(p.opponent);
+						p.getActive().actionTwo(p.opponent);
 					}
 					if (attackUsed) attackAnim(p, p.opponent);
 				}

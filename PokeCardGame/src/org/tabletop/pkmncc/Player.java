@@ -6,7 +6,6 @@ import java.util.Random;
 import org.tabletop.pkmncc.Demo.Turn;
 import org.tabletop.pkmncc.card.*;
 
-import android.app.AlertDialog;
 import android.widget.FrameLayout;
 
 public class Player {
@@ -36,16 +35,17 @@ public class Player {
 	/** True is Heads, False is Tails */
 	public boolean coinFlip() {
 		if (RNG.nextBoolean()) {
-			Demo.heads.show();	
+			Demo.heads.show();
 			return true;
 		} else {
-			Demo.tails.show();	
+			Demo.tails.show();
 			return false;
 		}
 	}
 
 	/**Check to see what kind of card the player has scanned**/
 	public void addCard(Card playedCard){
+		if (Demo.attackUsed) return;
 		if(playedCard instanceof Trainer){
 			this.playTrainer( (Trainer) playedCard);
 		}
@@ -70,23 +70,23 @@ public class Player {
 			if(Demo.energyUsed == false){
 				for(int h = 0; h < this.numPokemon(); ++h){
 					if(this.getPokemon(h).selected == true){
+						Demo.energyUsed = true;
 						this.getPokemon(h).addEnergy( (Energy) playedCard);
 					}
 				}
 			}
-			Demo.energyUsed = true;
 		}
 	}
 
 	/**Execute when a player wants play a trainer card**/
 	public void playTrainer(Trainer trainerCard){
-		if (thisTrainer == null){
-			thisTrainer = trainerCard;
+//		if (thisTrainer == null){
+//			thisTrainer = trainerCard;
 			trainerCard.useTrainer(opponent);
-		}
-		else {
+//		}
+//		else {
 			//open pop up that says you cannot play another trainer on this turn
-		}
+//		}
 	}
 
 	public Pokemon getPokemon(int index) {

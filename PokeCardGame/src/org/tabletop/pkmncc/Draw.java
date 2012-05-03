@@ -42,7 +42,9 @@ public class Draw extends SurfaceView implements Runnable {
 	public static AssetManager assetmanager;
 	private static InputStream instream;
 	private static Bitmap alphaSprites;
-	private static Bitmap scratch;
+	private static Bitmap asleep;
+	private static Bitmap confuse;
+	private static Bitmap paralyze;
 
 	public Draw (Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -98,8 +100,6 @@ public class Draw extends SurfaceView implements Runnable {
 			instream = assetmanager.open("images/GObutton.png");
 			GObutton = BitmapFactory.decodeStream(instream);
 			flippedGObutton = Bitmap.createBitmap(GObutton, 0, 0, GObutton.getWidth(), GObutton.getHeight(), matrix, true);
-			instream = assetmanager.open("images/prizecard.png");
-			prizecard = BitmapFactory.decodeStream(instream);
 			//flippedgameover = Bitmap.createBitmap(gameover, 0, 0, gameover.getWidth(), gameover.getHeight(), matrix, true);
 			instream = assetmanager.open("images/retreat.png");
 			retreat = BitmapFactory.decodeStream(instream);
@@ -111,8 +111,6 @@ public class Draw extends SurfaceView implements Runnable {
 			instream = assetmanager.open("images/alphasprites2.png");
 			alphaSprites = BitmapFactory.decodeStream(instream);
 			alphaSprites = Bitmap.createBitmap(alphaSprites);
-			instream = assetmanager.open("images/stratch.png");
-			scratch = BitmapFactory.decodeStream(instream);
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -149,36 +147,107 @@ public class Draw extends SurfaceView implements Runnable {
 			if((player.playerNum == 1)&&(k>=7)) canvas.drawBitmap(health, 777, 180-(30*(k-8)), null);
 			if((player.playerNum == 2)&&(k<7)) canvas.drawBitmap(health, 510, 550+(30*(k-1)), null);
 			if((player.playerNum == 2)&&(k>=7)) canvas.drawBitmap(health, 483, 550+(30*(k-8)), null);
-		}	
-		if (player.getActive().getStatus()[1]==Pokemon.PokemonStatus.BURNED){
-			try {
-				instream = pokedraw.open("images/burned.png");
-				burn = BitmapFactory.decodeStream(instream);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (player.playerNum==1) canvas.drawBitmap(burn, 793, 483, null);
-			if (player.playerNum==2) {
-				burn = Bitmap.createBitmap(burn, 0, 0, burn.getWidth(), burn.getHeight(), matrix, true);
-				canvas.drawBitmap(burn, 450, 250, null);
-			}
-				
 		}
-		if (player.getActive().getStatus()[2]==Pokemon.PokemonStatus.POISONED){
-			try {
-				instream = pokedraw.open("images/poison.png");
-				poison = BitmapFactory.decodeStream(instream);
-			} catch (IOException e) {
-				e.printStackTrace();
+		for (int k=0; k<3; k++){
+			if (player.getActive().getStatus()[k]==Pokemon.PokemonStatus.BURNED){
+				try {
+					instream = pokedraw.open("images/burned.png");
+					burn = BitmapFactory.decodeStream(instream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (player.playerNum==1) canvas.drawBitmap(burn, 793, 483, null);
+				if (player.playerNum==2) {
+					burn = Bitmap.createBitmap(burn, 0, 0, burn.getWidth(), burn.getHeight(), matrix, true);
+					canvas.drawBitmap(burn, 450, 250, null);
+				}
+					
 			}
-			if (player.playerNum==1) canvas.drawBitmap(poison, 835, 483, null);
-			if (player.playerNum==2) canvas.drawBitmap(poison, 415, 244, null);
-				
+			if (player.getActive().getStatus()[k]==Pokemon.PokemonStatus.POISONED){
+				try {
+					instream = pokedraw.open("images/poison.png");
+					poison = BitmapFactory.decodeStream(instream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (player.playerNum==1) canvas.drawBitmap(poison, 835, 483, null);
+				if (player.playerNum==2) canvas.drawBitmap(poison, 415, 244, null);
+					
+			}
+			if (player.getActive().getStatus()[k]==Pokemon.PokemonStatus.PARALYZED){
+				try {
+					instream = pokedraw.open("images/paralyzed.png");
+					paralyze = BitmapFactory.decodeStream(instream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (player.playerNum==1) canvas.drawBitmap(paralyze, 793, 515, null);
+				if (player.playerNum==2) {
+					paralyze = Bitmap.createBitmap(paralyze, 0, 0, paralyze.getWidth(), paralyze.getHeight(), matrix, true);
+					canvas.drawBitmap(paralyze, 450, 220, null);
+				}
+					
+			}
+			if (player.getActive().getStatus()[k]==Pokemon.PokemonStatus.ASLEEP){
+				try {
+					instream = pokedraw.open("images/asleep.png");
+					asleep = BitmapFactory.decodeStream(instream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (player.playerNum==1) canvas.drawBitmap(asleep, 850, 520, null);
+				if (player.playerNum==2) {
+					asleep = Bitmap.createBitmap(asleep, 0, 0, asleep.getWidth(), asleep.getHeight(), matrix, true);
+					canvas.drawBitmap(asleep, 405, 200, null);
+				}
+					
+			}
+			if (player.getActive().getStatus()[k]==Pokemon.PokemonStatus.CONFUSED){
+				try {
+					instream = pokedraw.open("images/confuse.png");
+					confuse = BitmapFactory.decodeStream(instream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (player.playerNum==1) canvas.drawBitmap(confuse, 793, 440, null);
+				if (player.playerNum==2) {
+					confuse = Bitmap.createBitmap(confuse, 0, 0, confuse.getWidth(), confuse.getHeight(), matrix, true);
+					canvas.drawBitmap(confuse, 450, 285, null);
+				}
+					
+			}
+		}
+
+		for (int k=1; k<player.numPokemon(); k++){
+			for (int j=0; j< player.getPokemon(k).getEnergy().size(); j++){
+				try {
+					instream = pokedraw.open(player.getPokemon(k).getEnergy().get(j).getImage());
+					energy = BitmapFactory.decodeStream(instream);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(player.playerNum == 1){
+					energy=Bitmap.createScaledBitmap(energy, 15, 15, false);
+					canvas.drawBitmap(energy, 1140, 700-(20*j)-(100*(k-1)), null);
+				}
+				if(player.playerNum == 2){
+					energy=Bitmap.createScaledBitmap(energy, 15, 15, false);
+					flippedenergy = Bitmap.createBitmap(energy, 0, 0, energy.getWidth(), energy.getHeight(), matrix, true);
+					canvas.drawBitmap(flippedenergy, 125, 25+(20*j)+(100*(k-1)), null);
+				}
+			}
 		}
 	} 
 	
 	
 	public static void drawPoke(Canvas board, Player player, AssetManager pokedraw){
+		try {
+			instream = assetmanager.open("images/prizecard.png");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		prizecard = BitmapFactory.decodeStream(instream);
 		for (int k = 0; k < player.Prizeleft; k++){
 			if (player.playerNum==2){
 					if (k>2){
